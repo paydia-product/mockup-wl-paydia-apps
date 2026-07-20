@@ -1,0 +1,10 @@
+<svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="75" cy="75" r="70" fill="url(#logoGrad)" />
+  <polygon points="75,10 135,45 135,105 75,140 15,105 15,45" fill="none" stroke="white" stroke-width="6"/><text x="75" y="102" fill="white" font-family="system-ui, sans-serif" font-weight="900" font-size="78" text-anchor="middle">D</text>
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="150" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#818CF8"/>
+    </linearGradient>
+  </defs>
+</svg>

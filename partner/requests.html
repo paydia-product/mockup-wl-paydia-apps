@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Kustomisasi — Dashboard Partner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="partner.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar"></aside>
+
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-breadcrumb">
+                        Dashboard <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                        <span>Request Kustomisasi</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-btn" title="Notifikasi"><i class="fas fa-bell"></i><span class="badge-dot"></span></button>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <div class="d-flex align-center justify-between mb-24">
+                    <div>
+                        <h1 class="page-title" style="margin-bottom:4px">Request Kustomisasi Build</h1>
+                        <p class="page-subtitle" style="margin-bottom:0">Ajukan permintaan perubahan khusus yang tidak tersedia di kustomisasi tampilan.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('newRequestModal')">
+                        <i class="fas fa-plus"></i> Buat Request Baru
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Jenis</th>
+                                    <th>Deskripsi</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <div id="requestsCount">0 request</div>
+                        <div></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Request Modal -->
+    <div class="modal-overlay" id="newRequestModal">
+        <div class="modal-dialog" style="max-width:580px">
+            <div class="modal-header">
+                <div class="modal-title">Buat Request Baru</div>
+                <button class="modal-close" onclick="closeModal('newRequestModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Jenis Kustomisasi <span style="color:var(--danger)">*</span></label>
+                    <select class="form-select" id="reqType">
+                        <option value="">Pilih jenis...</option>
+                        <option value="Font">Font</option>
+                        <option value="Splash Screen">Splash Screen</option>
+                        <option value="Nama Aplikasi">Nama Aplikasi</option>
+                        <option value="Package Name">Package Name</option>
+                        <option value="Logo Aplikasi (Luar)">Logo Aplikasi (Luar)</option>
+                        <option value="Warna & Style Nav Bar">Warna & Style Nav Bar</option>
+                        <option value="Empty State & Error State">Empty State & Error State</option>
+                        <option value="Bahasa">Bahasa</option>
+                        <option value="Copywriting">Copywriting</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Detail <span style="color:var(--danger)">*</span></label>
+                    <textarea class="form-textarea" id="reqDescription" placeholder="Jelaskan perubahan yang diinginkan secara detail..." maxlength="500" oninput="updateCharCount()" style="min-height:100px"></textarea>
+                    <div class="char-counter" id="charCounter">0 / 500 karakter</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">File Lampiran (Opsional)</label>
+                    <div class="attachment-area" id="attachmentArea">
+                        <input type="file" multiple accept=".png,.jpg,.jpeg,.pdf,.svg,.zip" onchange="handleAttachments(this)">
+                        <i class="fas fa-paperclip" style="font-size:1.2rem;color:var(--text-muted);margin-bottom:6px"></i>
+                        <div style="font-size:0.82rem;color:var(--text-secondary)">Klik atau seret file ke sini</div>
+                        <div style="font-size:0.72rem;color:var(--text-muted)">PNG, JPG, PDF, SVG, ZIP • Maks 10MB/file • Maks 5 file</div>
+                    </div>
+                    <div class="attachment-list" id="attachmentList"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('newRequestModal')">Batal</button>
+                <button class="btn btn-primary" onclick="submitRequest()"><i class="fas fa-paper-plane"></i> Kirim Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="requestDetailModal">
+        <div class="modal-dialog" style="max-width:520px">
+            <div class="modal-header">
+                <div class="modal-title">Detail Request</div>
+                <button class="modal-close" onclick="closeModal('requestDetailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="requestDetailBody"></div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirm Modal -->
+    <div class="modal-overlay" id="cancelConfirmModal">
+        <div class="modal-dialog" style="max-width:400px">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <div class="confirm-dialog-icon danger"><i class="fas fa-ban"></i></div>
+                    <div class="confirm-dialog-title">Batalkan Request?</div>
+                    <div class="confirm-dialog-text" id="cancelConfirmText">Request ini akan dibatalkan dan tidak dapat dikembalikan.</div>
+                    <div class="confirm-dialog-actions">
+                        <button class="btn btn-secondary" onclick="closeModal('cancelConfirmModal')">Kembali</button>
+                        <button class="btn btn-danger" onclick="executeCancelRequest()"><i class="fas fa-ban"></i> Batalkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="partner.js"></script>
+    <script>
+        let attachments = [];
+        let pendingCancelId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartner();
+            renderSidebar('requests');
+            loadRequests();
+        });
+
+        function loadRequests() {
+            const tenantId = getTenantId();
+            const allReqs = PaydiaData.getRequests().filter(r => r.tenantId === tenantId);
+            const tbody = document.getElementById('requestsTableBody');
+
+            if (allReqs.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-code-pull-request"></i></div>
+                            <div class="empty-state-title">Belum ada request</div>
+                            <div class="empty-state-desc">Buat request kustomisasi baru untuk perubahan khusus pada aplikasi Anda.</div>
+                        </div>
+                    </td></tr>
+                `;
+            } else {
+                tbody.innerHTML = allReqs.map(r => {
+                    const desc = r.description.length > 60 ? r.description.substring(0, 60) + '...' : r.description;
+                    const canCancel = r.status === 'Menunggu Review';
+                    return `
+                        <tr>
+                            <td style="font-family:monospace;font-size:0.78rem;color:var(--text-muted)">${r.id}</td>
+                            <td><strong>${r.type}</strong></td>
+                            <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.description}">${desc}</td>
+                            <td>${statusBadge(r.status)}</td>
+                            <td style="font-size:0.8rem;color:var(--text-secondary)">${r.createdAt.substring(0, 10)}</td>
+                            <td>
+                                <div style="display:flex;gap:6px">
+                                    <button class="btn-icon" onclick="showRequestDetail('${r.id}')" title="Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    ${canCancel ? `
+                                        <button class="btn-icon" onclick="confirmCancelRequest('${r.id}')" title="Batalkan" style="color:var(--danger)">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('requestsCount').textContent = allReqs.length + ' request';
+        }
+
+        function updateCharCount() {
+            const textarea = document.getElementById('reqDescription');
+            const counter = document.getElementById('charCounter');
+            const len = textarea.value.length;
+            counter.textContent = `${len} / 500 karakter`;
+            counter.className = 'char-counter' + (len > 500 ? ' over' : '');
+        }
+
+        function handleAttachments(input) {
+            const files = Array.from(input.files);
+            files.forEach(f => {
+                if (attachments.length >= 5) {
+                    showToast('Peringatan', 'Maksimal 5 file lampiran.', 'warning');
+                    return;
+                }
+                if (f.size > 10 * 1024 * 1024) {
+                    showToast('Error', `File ${f.name} melebihi 10MB.`, 'error');
+                    return;
+                }
+                const validTypes = ['image/png', 'image/jpeg', 'application/pdf', 'image/svg+xml', 'application/zip', 'application/x-zip-compressed'];
+                if (!validTypes.includes(f.type)) {
+                    showToast('Error', `Format file ${f.name} tidak didukung.`, 'error');
+                    return;
+                }
+                attachments.push(f.name);
+            });
+            renderAttachments();
+            input.value = '';
+        }
+
+        function renderAttachments() {
+            const container = document.getElementById('attachmentList');
+            container.innerHTML = attachments.map((name, i) => `
+                <div class="attachment-chip">
+                    <i class="fas fa-file"></i>
+                    ${name}
+                    <button onclick="removeAttachment(${i})" title="Hapus"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function removeAttachment(index) {
+            attachments.splice(index, 1);
+            renderAttachments();
+        }
+
+        function submitRequest() {
+            const type = document.getElementById('reqType').value;
+            const description = document.getElementById('reqDescription').value.trim();
+
+            if (!type) {
+                showToast('Validasi Error', 'Pilih jenis kustomisasi.', 'error');
+                return;
+            }
+            if (!description) {
+                showToast('Validasi Error', 'Deskripsi detail wajib diisi.', 'error');
+                return;
+            }
+            if (description.length > 500) {
+                showToast('Validasi Error', 'Deskripsi maksimal 500 karakter.', 'error');
+                return;
+            }
+
+            const config = getConfig();
+            const tenant = getTenantInfo();
+            const now = PaydiaData.formatDate(new Date());
+
+            const request = {
+                id: PaydiaData.generateId('REQ'),
+                tenantId: getTenantId(),
+                tenantName: config?.appName || tenant?.appName || '',
+                type: type,
+                description: description,
+                attachments: [...attachments],
+                status: 'Menunggu Review',
+                createdAt: now,
+                updatedAt: now,
+                notes: ''
+            };
+
+            PaydiaData.addRequest(request);
+            PaydiaData.writeAuditLog({
+                actor: tenant?.emailPIC || 'partner',
+                actorRole: 'Partner',
+                action: 'add_request',
+                objectType: 'request',
+                objectId: request.id,
+                tenantId: getTenantId(),
+                description: `Buat request kustomisasi: ${type}`,
+                before: null,
+                after: request.id
+            });
+
+            // Reset form
+            document.getElementById('reqType').value = '';
+            document.getElementById('reqDescription').value = '';
+            attachments = [];
+            renderAttachments();
+            updateCharCount();
+            closeModal('newRequestModal');
+            loadRequests();
+            showToast('Berhasil', 'Request kustomisasi berhasil dikirim.', 'success');
+        }
+
+        function showRequestDetail(id) {
+            const req = PaydiaData.getRequests().find(r => r.id === id);
+            if (!req) return;
+
+            document.getElementById('requestDetailBody').innerHTML = `
+                <dl class="detail-grid">
+                    <dt>ID Request</dt><dd style="font-family:monospace">${req.id}</dd>
+                    <dt>Jenis</dt><dd>${req.type}</dd>
+                    <dt>Deskripsi</dt><dd style="white-space:normal;word-break:break-word">${req.description}</dd>
+                    <dt>Status</dt><dd>${statusBadge(req.status)}</dd>
+                    <dt>Lampiran</dt><dd>${req.attachments.length > 0 ? req.attachments.map(a => `<span class="badge badge-neutral" style="margin-right:4px"><i class="fas fa-file" style="margin-right:4px"></i>${a}</span>`).join('') : '<span style="color:var(--text-muted)">Tidak ada lampiran</span>'}</dd>
+                    <dt>Tanggal Dibuat</dt><dd>${req.createdAt}</dd>
+                    <dt>Terakhir Update</dt><dd>${req.updatedAt}</dd>
+                    ${req.notes ? `<dt>Catatan Admin</dt><dd style="white-space:normal;word-break:break-word;color:var(--info)">${req.notes}</dd>` : ''}
+                </dl>
+            `;
+            openModal('requestDetailModal');
+        }
+
+        function confirmCancelRequest(id) {
+            const req = PaydiaData.getRequests().find(r => r.id === id);
+            if (!req) return;
+            pendingCancelId = id;
+            document.getElementById('cancelConfirmText').textContent = `Request "${req.type}" (${id}) akan dibatalkan dan tidak dapat dikembalikan.`;
+            openModal('cancelConfirmModal');
+        }
+
+        function executeCancelRequest() {
+            if (!pendingCancelId) return;
+            PaydiaData.updateRequest(pendingCancelId, {
+                status: 'Ditolak',
+                updatedAt: PaydiaData.formatDate(new Date()),
+                notes: 'Dibatalkan oleh partner'
+            });
+            PaydiaData.writeAuditLog({
+                actor: getTenantInfo()?.emailPIC || 'partner',
+                actorRole: 'Partner',
+                action: 'cancel_request',
+                objectType: 'request',
+                objectId: pendingCancelId,
+                tenantId: getTenantId(),
+                description: `Batalkan request ${pendingCancelId}`,
+                before: 'Menunggu Review',
+                after: 'Ditolak'
+            });
+
+            closeModal('cancelConfirmModal');
+            pendingCancelId = null;
+            loadRequests();
+            showToast('Berhasil', 'Request berhasil dibatalkan.', 'success');
+        }
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

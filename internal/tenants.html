@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant — Paydia Internal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- ── Topbar Full-Width Header ── -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="tenants.html" class="topbar-logo-text">paydia</a>
+                <button class="topbar-collapse-btn" title="Collapse Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline" onclick="window.location.href='../app-preview/index.html'" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 8px;">
+                    <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
+                </button>
+                <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="btn btn-internal" id="btn-partner-dashboard" style="background: #2c37b7; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 12px;">
+                        <i class="fas fa-chart-line"></i><span>Partner Dashboard</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
+                    </button>
+                    <div class="partner-dropdown-menu" id="partner-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 180px; text-align: left; margin-top: 4px; padding: 4px 0;">
+                    </div>
+                </div>
+                <button class="topbar-btn" title="Notifikasi" style="pointer-events:none;cursor:default;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot" id="notif-dot" style="display:none"></span>
+                </button>
+                <div class="topbar-user">
+                    <div class="topbar-user-avatar">D</div>
+                    <span>Dion</span>
+                </div>
+                <button class="topbar-btn" title="Logout" onclick="handleLogout()" style="color:#ef4444 !important; margin-left: 8px;">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content-wrapper" style="display: flex; width: 100%;">
+            
+            <!-- ── Sidebar underneath Topbar ── -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="tenants.html" class="sidebar-link active">
+                        <i class="fas fa-store"></i><span>Merchant</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+                    <a href="transactions.html" class="sidebar-link">
+                        <i class="fas fa-file-invoice-dollar"></i><span>Settlement</span>
+                    </a>
+                    <a href="../approval.html" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i><span>Approval</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user-shield"></i><span>Admin</span>
+                    </a>
+                    <a href="users.html" class="sidebar-link">
+                        <i class="fas fa-user"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-truck"></i><span>Vendor</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-box"></i><span>Product</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bullhorn"></i><span>Marketing</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-university"></i><span>Bank Account</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-hand-holding-usd"></i><span>Kasbon</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-credit-card"></i><span>Virtual Account</span>
+                    </a>
+                    <div class="sidebar-dropdown">
+                        <div class="sidebar-link" onclick="toggleSidebarDropdown('sb-trx')">
+                            <i class="fas fa-sync"></i><span>Transaction</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="sidebar-submenu" id="sb-trx">
+                            <a href="payin.html" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Payin</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-upload"></i><span>Payout</span>
+                            </a>
+                            <a href="qris-mpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS MPM</span>
+                            </a>
+                            <a href="qris-cpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS CPM</span>
+                            </a>
+                            <a href="transactions.html" class="sidebar-sublink">
+                                <i class="fas fa-user-tag"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Topup Manual</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-file-invoice"></i><span>Auto Reporting</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-calendar-alt"></i><span>Schedule</span>
+                    </a>
+                    <a href="audit.html" class="sidebar-link">
+                        <i class="fas fa-clipboard-list"></i><span>Log</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i><span>Recap</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i><span>Settings</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-undo-alt"></i><span>Callback Recovery</span>
+                    </a>
+
+                </nav>
+            </aside>
+
+            <!-- ── Main Area ── -->
+            <main class="main-area">
+                <!-- Breadcrumbs -->
+                <div class="topbar-breadcrumb" style="margin-bottom: 8px;">
+                    home / Paydia Bisnis / <span style="font-weight:600; color:#1E293B;">Merchant</span>
+                </div>
+
+                <!-- Page Content -->
+                <div class="page-content" style="padding: 0;">
+                    <div class="section-header">
+                        <div>
+                            <h1 class="page-title">Merchant</h1>
+                        </div>
+                    </div>
+
+                    <!-- Merchant Table Container -->
+                    <div class="table-container">
+                        <div class="table-toolbar" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0;">
+                            <div class="table-toolbar-left" style="display: flex; gap: 8px;">
+                                <button class="page-btn btn-filter" id="filterBtn">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <button class="page-btn btn-export" id="exportBtn" onclick="handleExport()">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>
+                            <div class="table-toolbar-right" style="display: flex; gap: 8px; align-items: center;">
+                                <span style="font-size:0.85rem; color:#475569;">Search</span>
+                                <div class="search-box">
+                                    <input type="text" id="searchInput" placeholder="" oninput="loadTenants()" style="width: 140px;">
+                                </div>
+                                <button class="page-btn btn-search" onclick="loadTenants()">Search</button>
+                                <button class="page-btn" onclick="document.getElementById('searchInput').value=''; loadTenants();">Reset</button>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal Daftar</th>
+                                        <th>Email</th>
+                                        <th>Kategori</th>
+                                        <th>MID</th>
+                                        <th>Nama <i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 2px;" title="Pengerjaan Tambahan"></i> <span style="font-size: 0.6rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 1px 3px; border-radius: 3px; display: inline-block; vertical-align: middle;">WIP</span></th>
+                                        <th>Email Verified</th>
+                                        <th>Akses Transaksi</th>
+                                        <th>Status KYM</th>
+                                        <th>Status Dormant</th>
+                                        <th>Aktifitas Terakhir</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tenants-tbody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination Footer exactly matching Gambar 1 -->
+                        <div class="pagination-wrapper">
+                            <span class="pagination-info" id="tenant-count">-</span>
+                            <div class="pagination" id="tenant-pagination">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── Detail Merchant Modal (Populated Dynamically in internal.js) ── -->
+    <div class="modal-overlay" id="detailTenantModal">
+        <div class="modal-dialog modal-lg" style="max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="flex-shrink: 0;">
+                <h3 class="modal-title" id="modalMerchantTitle">Detail Merchant</h3>
+                <button class="modal-close" onclick="closeModal('detailTenantModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="detail-tenant-body" style="overflow-y: auto; flex-grow: 1;">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Watermark Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="internal.js"></script>
+    <script>
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let filteredTenants = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTenants();
+        });
+
+        function loadTenants() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            let tenants = PaydiaData.getTenants() || [];
+
+            if (searchVal) {
+                tenants = tenants.filter(t =>
+                    t.partnerName.toLowerCase().includes(searchVal) ||
+                    t.appName.toLowerCase().includes(searchVal) ||
+                    t.emailPIC.toLowerCase().includes(searchVal) ||
+                    (t.mid && t.mid.includes(searchVal))
+                );
+            }
+
+            filteredTenants = tenants;
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, filteredTenants.length);
+            const pageData = filteredTenants.slice(start, end);
+
+            document.getElementById('tenant-count').textContent = filteredTenants.length === 0 ? '0 of 0' : `${start + 1} - ${end} of ${filteredTenants.length}`;
+
+            const tbody = document.getElementById('tenants-tbody');
+            if (filteredTenants.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="12">
+                        <div class="empty-state" style="text-align:center; padding: 30px;">
+                            <div class="empty-state-icon"><i class="fas fa-store" style="font-size:2rem;color:#94A3B8;"></i></div>
+                            <div class="empty-state-title" style="font-weight:600;margin-top:10px;">Tidak ada merchant ditemukan</div>
+                        </div>
+                    </td></tr>
+                `;
+                document.getElementById('tenant-pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = pageData.map((t, idx) => `
+                <tr>
+                    <td>${start + idx + 1}</td>
+                    <td>${formatWaktu(t.createdAt)}</td>
+                    <td>${t.emailPIC}</td>
+                    <td>${t.kategori || 'Merchant'}</td>
+                    <td><code>${t.mid || '-'}</code></td>
+                    <td>
+                        <a href="javascript:void(0)" class="clickable-name" onclick="openMerchantDetailModal('${t.id}')">
+                            ${t.partnerName}
+                        </a>
+                    </td>
+                    <td><span class="badge ${t.emailVerified === 'Yes' ? 'badge-yes' : 'badge-no'}">${t.emailVerified || 'No'}</span></td>
+                    <td><span class="badge badge-active">${t.aksesTransaksi || 'Active'}</span></td>
+                    <td><span class="badge ${t.statusKYM === 'Approved' ? 'badge-approved' : 'badge-waiting'}">${t.statusKYM || 'Waiting'}</span></td>
+                    <td>${t.statusDormant || 'In 11 month'}</td>
+                    <td>${formatWaktu(t.lastActivity || t.createdAt)}</td>
+                    <td>
+                        <div class="action-btns" onclick="event.stopPropagation()">
+                            <button class="topbar-btn" onclick="openMerchantDetailModal('${t.id}')" title="Detail">
+                                <i class="fas fa-ellipsis-vertical" style="color:#64748B"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            renderPagination(filteredTenants.length);
+        }
+
+        function renderPagination(totalItems) {
+            const container = document.getElementById('tenant-pagination');
+            container.innerHTML = '';
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (totalPages <= 1) return;
+
+            // Prev Button
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            };
+            container.appendChild(prevBtn);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                container.appendChild(btn);
+            }
+
+            // Next Button
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            };
+            container.appendChild(nextBtn);
+        }
+
+        function openMerchantDetailModal(id) {
+            const tenant = PaydiaData.getTenant(id);
+            if (!tenant) return;
+            
+            // Set dynamic title to match Gambar 2 (displays partnerName / appName)
+            document.getElementById('modalMerchantTitle').textContent = tenant.partnerName.toLowerCase();
+            
+            // Trigger popup population from internal.js
+            showMerchantDetail(id);
+        }
+
+        function handleExport() {
+            const tenants = PaydiaData.getTenants();
+            const headers = ['No', 'Tanggal Daftar', 'Email', 'Kategori', 'MID', 'Nama', 'Email Verified', 'Akses Transaksi', 'Status KYM', 'Status Dormant', 'Aktifitas Terakhir'];
+            const rows = tenants.map((t, idx) => [
+                idx + 1,
+                t.createdAt,
+                t.emailPIC,
+                t.kategori || 'Merchant',
+                t.mid || '',
+                t.partnerName,
+                t.emailVerified || 'No',
+                t.aksesTransaksi || 'Active',
+                t.statusKYM || 'Waiting',
+                t.statusDormant || 'In 11 month',
+                t.lastActivity || t.createdAt
+            ]);
+            exportCSV(headers, rows, 'paydia_merchants.csv');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log — Paydia Internal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- ── Topbar Full-Width Header ── -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="tenants.html" class="topbar-logo-text">paydia</a>
+                <button class="topbar-collapse-btn" title="Collapse Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline" onclick="window.location.href='../app-preview/index.html'" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 8px;">
+                    <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
+                </button>
+                <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="btn btn-internal" id="btn-partner-dashboard" style="background: #2c37b7; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 12px;">
+                        <i class="fas fa-chart-line"></i><span>Partner Dashboard</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
+                    </button>
+                    <div class="partner-dropdown-menu" id="partner-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 180px; text-align: left; margin-top: 4px; padding: 4px 0;">
+                    </div>
+                </div>
+                <button class="topbar-btn" title="Notifikasi" style="pointer-events:none;cursor:default;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot" id="notif-dot" style="display:none"></span>
+                </button>
+                <div class="topbar-user">
+                    <div class="topbar-user-avatar">D</div>
+                    <span>Dion</span>
+                </div>
+                <button class="topbar-btn" title="Logout" onclick="handleLogout()" style="color:#ef4444 !important; margin-left: 8px;">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content-wrapper" style="display: flex; width: 100%;">
+            
+            <!-- ── Sidebar underneath Topbar ── -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="tenants.html" class="sidebar-link">
+                        <i class="fas fa-store"></i><span>Merchant</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+                    <a href="transactions.html" class="sidebar-link">
+                        <i class="fas fa-file-invoice-dollar"></i><span>Settlement</span>
+                    </a>
+                    <a href="../approval.html" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i><span>Approval</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user-shield"></i><span>Admin</span>
+                    </a>
+                    <a href="users.html" class="sidebar-link">
+                        <i class="fas fa-user"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-truck"></i><span>Vendor</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-box"></i><span>Product</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bullhorn"></i><span>Marketing</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-university"></i><span>Bank Account</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-hand-holding-usd"></i><span>Kasbon</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-credit-card"></i><span>Virtual Account</span>
+                    </a>
+                    <div class="sidebar-dropdown">
+                        <div class="sidebar-link" onclick="toggleSidebarDropdown('sb-trx')">
+                            <i class="fas fa-sync"></i><span>Transaction</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="sidebar-submenu" id="sb-trx">
+                            <a href="payin.html" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Payin</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-upload"></i><span>Payout</span>
+                            </a>
+                            <a href="qris-mpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS MPM</span>
+                            </a>
+                            <a href="qris-cpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS CPM</span>
+                            </a>
+                            <a href="transactions.html" class="sidebar-sublink">
+                                <i class="fas fa-user-tag"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Topup Manual</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-file-invoice"></i><span>Auto Reporting</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-calendar-alt"></i><span>Schedule</span>
+                    </a>
+                    <a href="audit.html" class="sidebar-link active">
+                        <i class="fas fa-clipboard-list"></i><span>Log</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i><span>Recap</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i><span>Settings</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-undo-alt"></i><span>Callback Recovery</span>
+                    </a>
+
+                </nav>
+            </aside>
+
+            <!-- ── Main Area ── -->
+            <main class="main-area">
+                <!-- Breadcrumbs -->
+                <div class="topbar-breadcrumb" style="margin-bottom: 8px;">
+                    home / Paydia Bisnis / <span style="font-weight:600; color:#1E293B;">Log</span>
+                </div>
+
+                <!-- Page Content -->
+                <div class="page-content" style="padding: 0;">
+                <div class="section-header">
+                    <div>
+                        <h1 class="page-title">Audit Log</h1>
+                        <p class="page-subtitle">Riwayat seluruh aktivitas pada sistem Paydia</p>
+                    </div>
+                    <button class="btn btn-internal" onclick="handleExportCSV()">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                </div>
+
+                <!-- Table -->
+                <div class="table-container">
+                    <div class="table-toolbar">
+                        <div class="table-toolbar-left filter-row">
+                            <div class="table-search">
+                                <button><i class="fas fa-search"></i></button>
+                                <input type="text" id="filter-actor" placeholder="Cari pelaku..." oninput="loadAuditLog()">
+                            </div>
+                            <select class="form-select" id="filter-action" onchange="loadAuditLog()">
+                                <option value="">Semua Aksi</option>
+                                <option value="login">Login</option>
+                                <option value="logout">Logout</option>
+                                <option value="update_config">Update Config</option>
+                                <option value="toggle_feature">Toggle Fitur</option>
+                                <option value="add_tenant">Tambah Tenant</option>
+                                <option value="activate_tenant">Aktifkan Tenant</option>
+                                <option value="deactivate_tenant">Nonaktifkan Tenant</option>
+                                <option value="activate_user">Aktifkan User</option>
+                                <option value="deactivate_user">Nonaktifkan User</option>
+                                <option value="block_user">Blokir User</option>
+                                <option value="update_request_status">Update Request</option>
+                            </select>
+                            <input type="date" class="form-input" id="filter-date-from" placeholder="Dari" onchange="loadAuditLog()">
+                            <input type="date" class="form-input" id="filter-date-to" placeholder="Sampai" onchange="loadAuditLog()">
+                            <select class="form-select" id="filter-tenant" onchange="loadAuditLog()">
+                                <option value="">Semua Tenant</option>
+                            </select>
+                        </div>
+                        <div class="table-toolbar-right">
+                            <span class="text-muted" id="log-count" style="font-size:0.8rem"></span>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Pelaku</th>
+                                    <th>Role</th>
+                                    <th>Aksi</th>
+                                    <th>Objek</th>
+                                    <th>Tenant</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <span id="audit-footer-info">-</span>
+                        <div class="table-pagination" id="audit-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        </div>
+    </div>
+
+    <!-- ── Detail Audit Modal ── -->
+    <div class="modal-overlay" id="detailAuditModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-clipboard-list" style="margin-right:8px;color:var(--internal-accent-light)"></i>Detail Audit Log</h3>
+                <button class="modal-close" onclick="closeModal('detailAuditModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="detail-audit-body">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="internal.js"></script>
+    <script>
+        let allLogs = [];
+        let filteredLogs = [];
+        const PAGE_SIZE = 15;
+        let currentPage = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTenantFilter();
+            loadAuditLog();
+        });
+
+        function populateTenantFilter() {
+            const tenants = PaydiaData.getTenants();
+            const select = document.getElementById('filter-tenant');
+            tenants.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.textContent = t.appName;
+                select.appendChild(opt);
+            });
+        }
+
+        function loadAuditLog() {
+            allLogs = PaydiaData.getAuditLog();
+            const actorFilter = document.getElementById('filter-actor').value.toLowerCase();
+            const actionFilter = document.getElementById('filter-action').value;
+            const dateFrom = document.getElementById('filter-date-from').value;
+            const dateTo = document.getElementById('filter-date-to').value;
+            const tenantFilter = document.getElementById('filter-tenant').value;
+
+            filteredLogs = allLogs.filter(log => {
+                if (actorFilter && !log.actor.toLowerCase().includes(actorFilter)) return false;
+                if (actionFilter && log.action !== actionFilter) return false;
+                if (tenantFilter && log.tenantId !== tenantFilter) return false;
+                if (dateFrom) {
+                    const logDate = log.timestamp.substring(0, 10);
+                    if (logDate < dateFrom) return false;
+                }
+                if (dateTo) {
+                    const logDate = log.timestamp.substring(0, 10);
+                    if (logDate > dateTo) return false;
+                }
+                return true;
+            });
+
+            // Sort by timestamp desc
+            filteredLogs.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = start + PAGE_SIZE;
+            const pageData = filteredLogs.slice(start, end);
+
+            document.getElementById('log-count').textContent = `${filteredLogs.length} entri`;
+
+            const tbody = document.getElementById('audit-tbody');
+            if (pageData.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="7">
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="empty-state-title">Tidak ada log ditemukan</div>
+                            <div class="empty-state-desc">Coba ubah filter pencarian Anda.</div>
+                        </div>
+                    </td></tr>
+                `;
+                document.getElementById('audit-footer-info').textContent = '0 entri';
+                document.getElementById('audit-pagination').innerHTML = '';
+                return;
+            }
+
+            const tenants = PaydiaData.getTenants();
+            const tenantMap = {};
+            tenants.forEach(t => tenantMap[t.id] = t.appName);
+
+            tbody.innerHTML = pageData.map(log => {
+                const actionLabel = formatActionLabel(log.action);
+                const tenantName = log.tenantId && log.tenantId !== '-' ? (tenantMap[log.tenantId] || log.tenantId) : '-';
+                return `
+                    <tr class="clickable-row" onclick="showAuditDetail('${log.id}')">
+                        <td style="font-size:0.78rem">${formatWaktu(log.timestamp)}</td>
+                        <td><strong>${log.actor}</strong></td>
+                        <td><span class="badge badge-neutral">${log.actorRole}</span></td>
+                        <td><span class="badge badge-info">${actionLabel}</span></td>
+                        <td>${log.objectType}${log.objectId && log.objectId !== '-' ? ` <code style="font-size:0.72rem">${log.objectId}</code>` : ''}</td>
+                        <td>${tenantName}</td>
+                        <td class="text-truncate-200" title="${log.description}">${log.description}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('audit-footer-info').textContent = `Menampilkan ${start + 1}-${Math.min(end, filteredLogs.length)} dari ${filteredLogs.length} entri`;
+
+            // Pagination
+            const totalPages = Math.ceil(filteredLogs.length / PAGE_SIZE);
+            const pag = document.getElementById('audit-pagination');
+            if (totalPages <= 1) { pag.innerHTML = ''; return; }
+
+            let pagHtml = '';
+            pagHtml += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                pagHtml += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+            }
+            pagHtml += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goPage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            pag.innerHTML = pagHtml;
+        }
+
+        function goPage(p) {
+            const totalPages = Math.ceil(filteredLogs.length / PAGE_SIZE);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            renderTable();
+        }
+
+        function formatActionLabel(action) {
+            const map = {
+                'login': 'Login',
+                'logout': 'Logout',
+                'update_config': 'Update Config',
+                'toggle_feature': 'Toggle Fitur',
+                'add_tenant': 'Tambah Tenant',
+                'activate_tenant': 'Aktifkan Tenant',
+                'deactivate_tenant': 'Nonaktifkan Tenant',
+                'activate_user': 'Aktifkan User',
+                'deactivate_user': 'Nonaktifkan User',
+                'block_user': 'Blokir User',
+                'update_request_status': 'Update Request'
+            };
+            return map[action] || action;
+        }
+
+        function showAuditDetail(logId) {
+            const logs = PaydiaData.getAuditLog();
+            const log = logs.find(l => l.id === logId);
+            if (!log) return;
+
+            const tenants = PaydiaData.getTenants();
+            const tenantMap = {};
+            tenants.forEach(t => tenantMap[t.id] = t.appName);
+            const tenantName = log.tenantId && log.tenantId !== '-' ? (tenantMap[log.tenantId] || log.tenantId) : '-';
+
+            const body = document.getElementById('detail-audit-body');
+            body.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Informasi Log</div>
+                    <dl class="detail-grid">
+                        <dt>ID Log</dt><dd><code style="color:var(--internal-accent-light)">${log.id}</code></dd>
+                        <dt>Timestamp</dt><dd>${formatWaktu(log.timestamp)}</dd>
+                        <dt>Pelaku</dt><dd><strong>${log.actor}</strong></dd>
+                        <dt>Role</dt><dd><span class="badge badge-neutral">${log.actorRole}</span></dd>
+                        <dt>Aksi</dt><dd><span class="badge badge-info">${formatActionLabel(log.action)}</span></dd>
+                        <dt>Tipe Objek</dt><dd>${log.objectType}</dd>
+                        <dt>ID Objek</dt><dd>${log.objectId || '-'}</dd>
+                        <dt>Tenant</dt><dd>${tenantName}</dd>
+                        <dt>Deskripsi</dt><dd>${log.description}</dd>
+                    </dl>
+                </div>
+
+                ${(log.before !== null || log.after !== null) ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">Perubahan Data (Before / After)</div>
+                    <div class="diff-row">
+                        <div class="diff-box before">
+                            <div class="diff-box-label">Sebelum</div>
+                            <div class="diff-box-value">${log.before !== null ? log.before : '<span class="text-muted">—</span>'}</div>
+                        </div>
+                        <div class="diff-box after">
+                            <div class="diff-box-label">Sesudah</div>
+                            <div class="diff-box-value">${log.after !== null ? log.after : '<span class="text-muted">—</span>'}</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            openModal('detailAuditModal');
+        }
+
+        function handleExportCSV() {
+            if (filteredLogs.length === 0) {
+                showToast('Peringatan', 'Tidak ada data untuk di-export.', 'warning');
+                return;
+            }
+
+            const tenants = PaydiaData.getTenants();
+            const tenantMap = {};
+            tenants.forEach(t => tenantMap[t.id] = t.appName);
+
+            const headers = ['ID', 'Timestamp', 'Pelaku', 'Role', 'Aksi', 'Tipe Objek', 'ID Objek', 'Tenant', 'Deskripsi', 'Sebelum', 'Sesudah'];
+            const rows = filteredLogs.map(log => [
+                log.id,
+                log.timestamp,
+                log.actor,
+                log.actorRole,
+                log.action,
+                log.objectType,
+                log.objectId || '-',
+                log.tenantId && log.tenantId !== '-' ? (tenantMap[log.tenantId] || log.tenantId) : '-',
+                log.description,
+                log.before || '-',
+                log.after || '-'
+            ]);
+
+            exportCSV(headers, rows, `audit_log_paydia_${new Date().toISOString().slice(0,10)}.csv`);
+        }
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

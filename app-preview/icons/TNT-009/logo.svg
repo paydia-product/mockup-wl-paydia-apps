@@ -1,0 +1,10 @@
+<svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="75" cy="75" r="70" fill="url(#logoGrad)" />
+  <polygon points="75,15 127,45 127,105 75,135 23,105 23,45" fill="none" stroke="white" stroke-width="6"/><circle cx="75" cy="75" r="28" fill="none" stroke="white" stroke-width="4"/><path d="M75 25v22M75 103v22M23 75h24M103 75h22" stroke="white" stroke-width="4"/>
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="150" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06B6D4"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+</svg>

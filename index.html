@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paydia White Label — Platform</title>
+    <meta name="description" content="Platform manajemen aplikasi white label Paydia">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #090d16;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(108, 60, 225, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            color: #f8fafc;
+            padding: 24px;
+        }
+
+        .portal-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .portal-logo {
+            width: 64px;
+            height: 64px;
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.05);
+            font-size: 1.6rem;
+            color: #1E40AF;
+        }
+
+        .portal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .portal-subtitle {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .portal-card {
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .portal-card:nth-child(1)::before { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+        .portal-card:nth-child(2)::before { background: linear-gradient(90deg, #10B981, #34D399); }
+        .portal-card:nth-child(3)::before { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+
+        .portal-card:hover {
+            transform: translateY(-4px);
+            border-color: #BFDBFE;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.08);
+        }
+
+        .portal-card:hover::before {
+            opacity: 1;
+        }
+
+        .portal-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .portal-card:hover .portal-card-icon {
+            transform: scale(1.1);
+        }
+
+        .portal-card:nth-child(1) .portal-card-icon {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60A5FA;
+        }
+
+        .portal-card:nth-child(2) .portal-card-icon {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+        }
+
+        .portal-card:nth-child(3) .portal-card-icon {
+            background: #EFF6FF;
+            color: #3B82F6;
+        }
+
+        .portal-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .portal-card-desc {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .portal-card-features {
+            list-style: none;
+            text-align: left;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .portal-card-features li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .portal-card-features li i {
+            font-size: 0.65rem;
+            color: #34D399;
+        }
+
+        .portal-card-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2563EB;
+            transition: color 0.2s;
+        }
+
+        .portal-card:hover .portal-card-action {
+            color: #3B82F6;
+        }
+
+        .portal-footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+
+        .portal-footer a {
+            color: #2563EB;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            .portal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-header">
+        <div class="portal-logo">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <h1 class="portal-title">Paydia White Label</h1>
+        <p class="portal-subtitle">Pilih mode dashboard untuk melanjutkan</p>
+    </div>
+
+    <div class="portal-grid">
+        <!-- Dashboard Internal -->
+        <a href="internal/" class="portal-card" id="cardInternal">
+            <div class="portal-card-icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <h2 class="portal-card-title">Dashboard Internal</h2>
+            <p class="portal-card-desc">Backoffice internal Paydia untuk mengelola seluruh tenant partner</p>
+            <ul class="portal-card-features">
+                <li><i class="fas fa-check"></i> Manajemen Tenant Partner</li>
+                <li><i class="fas fa-check"></i> Monitoring Transaksi Global</li>
+                <li><i class="fas fa-check"></i> Monitoring User Global</li>
+                <li><i class="fas fa-check"></i> Konfigurasi Parameter</li>
+                <li><i class="fas fa-check"></i> Audit Log & Activity</li>
+            </ul>
+            <div class="portal-card-action">
+                Buka Dashboard <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+
+        <!-- Dashboard Partner -->
+        <a href="partner/" class="portal-card" id="cardPartner">
+            <div class="portal-card-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h2 class="portal-card-title">Dashboard Partner</h2>
+            <p class="portal-card-desc">Kustomisasi dan kelola aplikasi white label Anda secara realtime</p>
+            <ul class="portal-card-features">
+                <li><i class="fas fa-check"></i> Kustomisasi Tema & Logo</li>
+                <li><i class="fas fa-check"></i> Hide/Show Fitur</li>
+                <li><i class="fas fa-check"></i> Manajemen Konten</li>
+                <li><i class="fas fa-check"></i> Monitoring Transaksi</li>
+                <li><i class="fas fa-check"></i> Manajemen User</li>
+            </ul>
+            <div class="portal-card-action">
+                Buka Dashboard <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+
+        <!-- App Preview -->
+        <a href="app-preview/" class="portal-card" id="cardPreview">
+            <div class="portal-card-icon">
+                <i class="fas fa-mobile-screen-button"></i>
+            </div>
+            <h2 class="portal-card-title">Preview Aplikasi</h2>
+            <p class="portal-card-desc">Lihat preview aplikasi mobile white label secara realtime</p>
+            <ul class="portal-card-features">
+                <li><i class="fas fa-check"></i> Simulasi Tampilan Mobile</li>
+                <li><i class="fas fa-check"></i> Realtime Sync dari Dashboard</li>
+                <li><i class="fas fa-check"></i> Multi-Tenant Preview</li>
+                <li><i class="fas fa-check"></i> Fitur Interaktif</li>
+                <li><i class="fas fa-check"></i> Tanpa Login</li>
+            </ul>
+            <div class="portal-card-action">
+                Buka Preview <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
+
+    <div class="portal-footer">
+        <p>&copy; 2026 Paydia. White Label Platform v1.0</p>
+        <p style="margin-top: 6px;">
+            <a href="login.html">Navigasi Portal</a> &middot; Password Master: <code style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 0.72rem;">!Paydia1</code>
+        </p>
+    </div>
+
+    <script src="shared/data.js"></script>
+    <script>
+        // Initialize shared data on first visit
+        PaydiaData.initialize();
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

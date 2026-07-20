@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Kustomisasi — Paydia Internal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- ── Topbar Full-Width Header ── -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="tenants.html" class="topbar-logo-text">paydia</a>
+                <button class="topbar-collapse-btn" title="Collapse Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline" onclick="window.location.href='../app-preview/index.html'" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 8px;">
+                    <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
+                </button>
+                <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="btn btn-internal" id="btn-partner-dashboard" style="background: #2c37b7; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 12px;">
+                        <i class="fas fa-chart-line"></i><span>Partner Dashboard</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
+                    </button>
+                    <div class="partner-dropdown-menu" id="partner-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 180px; text-align: left; margin-top: 4px; padding: 4px 0;">
+                    </div>
+                </div>
+                <button class="topbar-btn" title="Notifikasi" style="pointer-events:none;cursor:default;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot" id="notif-dot" style="display:none"></span>
+                </button>
+                <div class="topbar-user">
+                    <div class="topbar-user-avatar">D</div>
+                    <span>Dion</span>
+                </div>
+                <button class="topbar-btn" title="Logout" onclick="handleLogout()" style="color:#ef4444 !important; margin-left: 8px;">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content-wrapper" style="display: flex; width: 100%;">
+            
+            <!-- ── Sidebar underneath Topbar ── -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="tenants.html" class="sidebar-link">
+                        <i class="fas fa-store"></i><span>Merchant</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+                    <a href="transactions.html" class="sidebar-link">
+                        <i class="fas fa-file-invoice-dollar"></i><span>Settlement</span>
+                    </a>
+                    <a href="../approval.html" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i><span>Approval</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user-shield"></i><span>Admin</span>
+                    </a>
+                    <a href="users.html" class="sidebar-link">
+                        <i class="fas fa-user"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-truck"></i><span>Vendor</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-box"></i><span>Product</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bullhorn"></i><span>Marketing</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-university"></i><span>Bank Account</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-hand-holding-usd"></i><span>Kasbon</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-credit-card"></i><span>Virtual Account</span>
+                    </a>
+                    <div class="sidebar-dropdown">
+                        <div class="sidebar-link" onclick="toggleSidebarDropdown('sb-trx')">
+                            <i class="fas fa-sync"></i><span>Transaction</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="sidebar-submenu" id="sb-trx">
+                            <a href="payin.html" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Payin</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-upload"></i><span>Payout</span>
+                            </a>
+                            <a href="qris-mpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS MPM</span>
+                            </a>
+                            <a href="qris-cpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS CPM</span>
+                            </a>
+                            <a href="transactions.html" class="sidebar-sublink">
+                                <i class="fas fa-user-tag"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Topup Manual</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-file-invoice"></i><span>Auto Reporting</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-calendar-alt"></i><span>Schedule</span>
+                    </a>
+                    <a href="audit.html" class="sidebar-link">
+                        <i class="fas fa-clipboard-list"></i><span>Log</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i><span>Recap</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i><span>Settings</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-undo-alt"></i><span>Callback Recovery</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- ── Main Area ── -->
+            <main class="main-area">
+                <!-- Breadcrumbs -->
+                <div class="topbar-breadcrumb" style="margin-bottom: 8px;">
+                    home / Paydia Bisnis / <span style="font-weight:600; color:#1E293B;">Request Kustomisasi</span>
+                </div>
+
+                <!-- Page Content -->
+                <div class="page-content" style="padding: 0;">
+                    <div class="section-header">
+                        <div>
+                            <h1 class="page-title">Request Kustomisasi</h1>
+                            <p class="page-subtitle">Kelola seluruh permintaan kustomisasi dari tenant partner</p>
+                        </div>
+                    </div>
+
+                <!-- Stats -->
+                <div class="stats-grid" id="req-stats">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Table -->
+                <div class="table-container">
+                    <div class="table-toolbar">
+                        <div class="table-toolbar-left filter-row">
+                            <select class="form-select" id="filter-status" onchange="loadRequests()">
+                                <option value="">Semua Status</option>
+                                <option value="Menunggu Review">Menunggu Review</option>
+                                <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Ditolak">Ditolak</option>
+                            </select>
+                            <select class="form-select" id="filter-tenant" onchange="loadRequests()">
+                                <option value="">Semua Tenant</option>
+                            </select>
+                        </div>
+                        <div class="table-toolbar-right">
+                            <span class="text-muted" id="req-count" style="font-size:0.8rem"></span>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tenant</th>
+                                    <th>Jenis</th>
+                                    <th>Deskripsi</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="req-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        </div>
+    </div>
+
+    <!-- ── Detail Request Modal ── -->
+    <div class="modal-overlay" id="detailReqModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-code-pull-request" style="margin-right:8px;color:var(--internal-accent-light)"></i>Detail Request</h3>
+                <button class="modal-close" onclick="closeModal('detailReqModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="detail-req-body">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer" id="detail-req-footer">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Action Modal (Selesai / Ditolak) ── -->
+    <div class="modal-overlay" id="actionModal">
+        <div class="modal-dialog" style="max-width:500px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="action-modal-title">Ubah Status</h3>
+                <button class="modal-close" onclick="closeModal('actionModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="action-modal-desc" style="margin-bottom:16px;font-size:0.85rem;color:var(--text-secondary)"></div>
+                <div class="form-group">
+                    <label class="form-label" id="action-textarea-label">Catatan</label>
+                    <textarea class="form-textarea" id="action-notes" rows="4" placeholder="Masukkan catatan..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('actionModal')">Batal</button>
+                <button class="btn" id="action-confirm-btn" onclick="executeAction()">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="internal.js"></script>
+    <script>
+        let pendingAction = null; // { reqId, newStatus }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTenantFilter();
+            loadRequests();
+            loadReqStats();
+        });
+
+        function populateTenantFilter() {
+            const tenants = PaydiaData.getTenants();
+            const select = document.getElementById('filter-tenant');
+            tenants.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.textContent = t.appName;
+                select.appendChild(opt);
+            });
+        }
+
+        function loadReqStats() {
+            const requests = PaydiaData.getRequests();
+            const pending = requests.filter(r => r.status === 'Menunggu Review').length;
+            const inProgress = requests.filter(r => r.status === 'Sedang Dikerjakan').length;
+            const done = requests.filter(r => r.status === 'Selesai').length;
+            const rejected = requests.filter(r => r.status === 'Ditolak').length;
+
+            document.getElementById('req-stats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-card-icon yellow"><i class="fas fa-clock"></i></div>
+                    <div class="stat-card-label">Menunggu Review</div>
+                    <div class="stat-card-value">${pending}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon blue"><i class="fas fa-spinner"></i></div>
+                    <div class="stat-card-label">Sedang Dikerjakan</div>
+                    <div class="stat-card-value">${inProgress}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-card-label">Selesai</div>
+                    <div class="stat-card-value">${done}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon red"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-card-label">Ditolak</div>
+                    <div class="stat-card-value">${rejected}</div>
+                </div>
+            `;
+        }
+
+        function loadRequests() {
+            let requests = PaydiaData.getRequests();
+            const statusFilter = document.getElementById('filter-status').value;
+            const tenantFilter = document.getElementById('filter-tenant').value;
+
+            if (statusFilter) {
+                requests = requests.filter(r => r.status === statusFilter);
+            }
+            if (tenantFilter) {
+                requests = requests.filter(r => r.tenantId === tenantFilter);
+            }
+
+            // Sort: Menunggu Review first, then by date desc
+            const statusOrder = { 'Menunggu Review': 0, 'Sedang Dikerjakan': 1, 'Selesai': 2, 'Ditolak': 3 };
+            requests.sort((a, b) => {
+                const diff = (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9);
+                if (diff !== 0) return diff;
+                return b.createdAt.localeCompare(a.createdAt);
+            });
+
+            document.getElementById('req-count').textContent = `${requests.length} request`;
+
+            const tbody = document.getElementById('req-tbody');
+            if (requests.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="7">
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-code-pull-request"></i></div>
+                            <div class="empty-state-title">Tidak ada request ditemukan</div>
+                            <div class="empty-state-desc">Belum ada permintaan kustomisasi dari tenant.</div>
+                        </div>
+                    </td></tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = requests.map(req => `
+                <tr class="clickable-row" onclick="showReqDetail('${req.id}')">
+                    <td><code style="font-size:0.78rem;color:var(--internal-accent-light)">${req.id}</code></td>
+                    <td>${req.tenantName || req.tenantId}</td>
+                    <td><span class="badge badge-neutral">${req.type}</span></td>
+                    <td><span class="text-truncate-300" title="${req.description}">${req.description}</span></td>
+                    <td>${getStatusBadge(req.status)}</td>
+                    <td>${formatTanggal(req.createdAt)}</td>
+                    <td onclick="event.stopPropagation()">
+                        <div class="action-btns">
+                            <button class="btn btn-sm btn-outline" onclick="showReqDetail('${req.id}')" title="Detail">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showReqDetail(reqId) {
+            const requests = PaydiaData.getRequests();
+            const req = requests.find(r => r.id === reqId);
+            if (!req) return;
+
+            const body = document.getElementById('detail-req-body');
+            body.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Informasi Request</div>
+                    <dl class="detail-grid">
+                        <dt>ID Request</dt><dd><code style="color:var(--internal-accent-light)">${req.id}</code></dd>
+                        <dt>Tenant</dt><dd><strong>${req.tenantName || req.tenantId}</strong></dd>
+                        <dt>Jenis</dt><dd><span class="badge badge-neutral">${req.type}</span></dd>
+                        <dt>Status</dt><dd>${getStatusBadge(req.status)}</dd>
+                        <dt>Dibuat</dt><dd>${formatWaktu(req.createdAt)}</dd>
+                        <dt>Diperbarui</dt><dd>${formatWaktu(req.updatedAt)}</dd>
+                    </dl>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Deskripsi</div>
+                    <p style="font-size:0.85rem;color:var(--text-primary);line-height:1.7">${req.description}</p>
+                </div>
+
+                ${req.attachments && req.attachments.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">Lampiran</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        ${req.attachments.map(a => `
+                            <span class="badge badge-neutral"><i class="fas fa-paperclip" style="margin-right:4px"></i>${a}</span>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${req.notes ? `
+                <div class="notes-box">
+                    <div class="notes-box-label">Catatan</div>
+                    <div class="notes-box-content">${req.notes}</div>
+                </div>
+                ` : ''}
+
+                <div class="detail-section" style="margin-top:20px">
+                    <div class="detail-section-title">Progress Status</div>
+                    <div class="status-steps">
+                        <div class="status-step ${getStepClass(req.status, 'Menunggu Review')}">
+                            <i class="fas fa-clock"></i> Menunggu Review
+                        </div>
+                        <span class="status-step-arrow"><i class="fas fa-chevron-right"></i></span>
+                        <div class="status-step ${getStepClass(req.status, 'Sedang Dikerjakan')}">
+                            <i class="fas fa-spinner"></i> Sedang Dikerjakan
+                        </div>
+                        <span class="status-step-arrow"><i class="fas fa-chevron-right"></i></span>
+                        ${req.status === 'Ditolak' ? `
+                            <div class="status-step rejected">
+                                <i class="fas fa-times-circle"></i> Ditolak
+                            </div>
+                        ` : `
+                            <div class="status-step ${getStepClass(req.status, 'Selesai')}">
+                                <i class="fas fa-check-circle"></i> Selesai
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            // Footer buttons based on status
+            const footer = document.getElementById('detail-req-footer');
+            footer.innerHTML = `<button class="btn btn-secondary" onclick="closeModal('detailReqModal')">Tutup</button>`;
+
+            if (req.status === 'Menunggu Review') {
+                footer.innerHTML = `
+                    <button class="btn btn-secondary" onclick="closeModal('detailReqModal')">Tutup</button>
+                    <button class="btn btn-danger" onclick="openActionModal('${req.id}', 'Ditolak')">
+                        <i class="fas fa-times"></i> Tolak
+                    </button>
+                    <button class="btn btn-internal" onclick="startWorking('${req.id}')">
+                        <i class="fas fa-play"></i> Mulai Kerjakan
+                    </button>
+                `;
+            } else if (req.status === 'Sedang Dikerjakan') {
+                footer.innerHTML = `
+                    <button class="btn btn-secondary" onclick="closeModal('detailReqModal')">Tutup</button>
+                    <button class="btn btn-danger" onclick="openActionModal('${req.id}', 'Ditolak')">
+                        <i class="fas fa-times"></i> Tolak
+                    </button>
+                    <button class="btn btn-success" onclick="openActionModal('${req.id}', 'Selesai')">
+                        <i class="fas fa-check"></i> Tandai Selesai
+                    </button>
+                `;
+            }
+
+            openModal('detailReqModal');
+        }
+
+        function getStepClass(currentStatus, stepStatus) {
+            const order = ['Menunggu Review', 'Sedang Dikerjakan', 'Selesai'];
+            const currentIdx = order.indexOf(currentStatus);
+            const stepIdx = order.indexOf(stepStatus);
+
+            if (currentStatus === 'Ditolak') {
+                if (stepStatus === 'Menunggu Review') return 'completed';
+                if (stepStatus === 'Sedang Dikerjakan') {
+                    // If it was rejected from "Sedang Dikerjakan" state
+                    return 'completed';
+                }
+                return '';
+            }
+
+            if (stepIdx < currentIdx) return 'completed';
+            if (stepIdx === currentIdx) return 'active';
+            return '';
+        }
+
+        function startWorking(reqId) {
+            const req = PaydiaData.getRequests().find(r => r.id === reqId);
+            if (!req) return;
+
+            const oldStatus = req.status;
+            PaydiaData.updateRequest(reqId, {
+                status: 'Sedang Dikerjakan',
+                updatedAt: PaydiaData.formatDate(new Date())
+            });
+
+            PaydiaData.writeAuditLog({
+                actor: 'admin@paydia.id',
+                actorRole: 'Admin Internal',
+                action: 'update_request_status',
+                objectType: 'request',
+                objectId: reqId,
+                tenantId: req.tenantId,
+                description: `Ubah status request ${reqId} ke Sedang Dikerjakan`,
+                before: oldStatus,
+                after: 'Sedang Dikerjakan'
+            });
+
+            closeModal('detailReqModal');
+            loadRequests();
+            loadReqStats();
+            updateNotificationBell();
+            showToast('Berhasil', `Request ${reqId} sedang dikerjakan.`, 'success');
+        }
+
+        function openActionModal(reqId, newStatus) {
+            pendingAction = { reqId, newStatus };
+
+            const title = document.getElementById('action-modal-title');
+            const desc = document.getElementById('action-modal-desc');
+            const label = document.getElementById('action-textarea-label');
+            const btn = document.getElementById('action-confirm-btn');
+            const textarea = document.getElementById('action-notes');
+            textarea.value = '';
+
+            if (newStatus === 'Selesai') {
+                title.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;color:var(--success)"></i>Tandai Selesai';
+                desc.textContent = 'Request ini akan ditandai sebagai selesai. Masukkan catatan hasil pengerjaan.';
+                label.textContent = 'Catatan Penyelesaian *';
+                textarea.placeholder = 'Contoh: Sudah diaplikasikan ke build v2.2.0';
+                btn.className = 'btn btn-success';
+                btn.innerHTML = '<i class="fas fa-check"></i> Tandai Selesai';
+            } else if (newStatus === 'Ditolak') {
+                title.innerHTML = '<i class="fas fa-times-circle" style="margin-right:8px;color:var(--danger)"></i>Tolak Request';
+                desc.textContent = 'Request ini akan ditolak. Masukkan alasan penolakan.';
+                label.textContent = 'Alasan Penolakan *';
+                textarea.placeholder = 'Contoh: Tidak sesuai dengan ketentuan teknis yang berlaku';
+                btn.className = 'btn btn-danger';
+                btn.innerHTML = '<i class="fas fa-times"></i> Tolak Request';
+            }
+
+            closeModal('detailReqModal');
+            openModal('actionModal');
+        }
+
+        function executeAction() {
+            if (!pendingAction) return;
+
+            const { reqId, newStatus } = pendingAction;
+            const notes = document.getElementById('action-notes').value.trim();
+
+            if (!notes) {
+                showToast('Error', newStatus === 'Selesai' ? 'Catatan penyelesaian wajib diisi.' : 'Alasan penolakan wajib diisi.', 'error');
+                return;
+            }
+
+            const req = PaydiaData.getRequests().find(r => r.id === reqId);
+            if (!req) return;
+
+            const oldStatus = req.status;
+            PaydiaData.updateRequest(reqId, {
+                status: newStatus,
+                notes: notes,
+                updatedAt: PaydiaData.formatDate(new Date())
+            });
+
+            PaydiaData.writeAuditLog({
+                actor: 'admin@paydia.id',
+                actorRole: 'Admin Internal',
+                action: 'update_request_status',
+                objectType: 'request',
+                objectId: reqId,
+                tenantId: req.tenantId,
+                description: `Ubah status request ${reqId} ke ${newStatus}`,
+                before: oldStatus,
+                after: newStatus
+            });
+
+            closeModal('actionModal');
+            pendingAction = null;
+            loadRequests();
+            loadReqStats();
+            updateNotificationBell();
+
+            if (newStatus === 'Selesai') {
+                showToast('Berhasil', `Request ${reqId} telah ditandai selesai.`, 'success');
+            } else {
+                showToast('Ditolak', `Request ${reqId} telah ditolak.`, 'warning');
+            }
+        }
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

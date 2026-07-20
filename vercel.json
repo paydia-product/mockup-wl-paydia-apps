@@ -1,0 +1,39 @@
+{
+  "name": "wl-mockup",
+  "rewrites": [
+    { "source": "/internal", "destination": "/internal/index.html" },
+    { "source": "/partner", "destination": "/partner/index.html" },
+    { "source": "/app-preview", "destination": "/app-preview/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "off"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://placehold.co https://*.placehold.co; connect-src 'self'; frame-ancestors 'none';"
+        }
+      ]
+    }
+  ]
+}

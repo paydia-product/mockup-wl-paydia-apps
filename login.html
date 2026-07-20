@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <meta name="description" content="Masuk ke Dashboard Paydia White Label. Pilih mode Internal atau Partner.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #FFFFFF 100%);
+            color: #1E293B;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+            padding: 0 24px;
+        }
+
+        .login-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 44px 36px;
+            box-shadow:
+                0 10px 25px -5px rgba(0, 0, 0, 0.05),
+                0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-card:hover {
+            border-color: #BFDBFE;
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.07),
+                0 0 15px rgba(59, 130, 246, 0.05);
+        }
+
+        .login-logo {
+            width: 56px;
+            height: 56px;
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.05);
+            font-size: 1.5rem;
+            color: #1E40AF;
+            font-weight: 800;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+            color: #0F172A;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #64748B;
+            font-size: 0.85rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* Role Selector Tabs */
+        .role-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .role-tab {
+            flex: 1;
+            padding: 14px 12px;
+            background: #F8FAFC;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-tab:hover {
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+        }
+
+        .role-tab.active {
+            background: #EFF6FF;
+            border-color: #3B82F6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
+        }
+
+        .role-tab-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+
+        .role-tab:nth-child(1) .role-tab-icon {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563EB;
+        }
+
+        .role-tab:nth-child(2) .role-tab-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .role-tab.active:nth-child(1) .role-tab-icon {
+            background: rgba(59, 130, 246, 0.2);
+            color: #1D4ED8;
+        }
+
+        .role-tab.active:nth-child(2) .role-tab-icon {
+            background: rgba(16, 185, 129, 0.2);
+            color: #047857;
+        }
+
+        .role-tab-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #64748B;
+            transition: color 0.25s ease;
+        }
+
+        .role-tab.active .role-tab-label {
+            color: #0F172A;
+        }
+
+        .role-tab-desc {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            line-height: 1.3;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #475569;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 44px 12px 16px;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            color: #0F172A;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input::placeholder { color: #94A3B8; }
+
+        .form-input:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            background: #FFFFFF;
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .form-select {
+            width: 100%;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #0F172A;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        .form-select:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            background: #FFFFFF;
+        }
+
+        .portal-desc-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .portal-desc-card i {
+            color: #2563EB;
+            margin-right: 6px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover { color: #0F172A; }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.78rem;
+            margin-top: 8px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .error-message.show { display: flex; }
+
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            background: #EFF6FF;
+            color: #1E40AF;
+            border: 1px solid #BFDBFE;
+            border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.05);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            background: #DBEAFE;
+            border-color: #93C5FD;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-login:active { transform: translateY(0); }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-login .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(30, 64, 175, 0.2);
+            border-top-color: #1E40AF;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        .btn-login.loading .btn-text { display: none; }
+        .btn-login.loading .spinner { display: inline-block; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+
+        .shake { animation: shake 0.5s ease-in-out; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #94A3B8;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E2E8F0;
+        }
+
+        .preview-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .preview-link:hover {
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+            color: #1E40AF;
+        }
+
+        .preview-link i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 32px 24px; }
+            .role-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card" id="loginCard">
+            <div class="login-logo">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1 class="login-title">Paydia White Label</h1>
+            <p class="login-subtitle">Platform manajemen aplikasi white label</p>
+
+            <!-- Role Selector -->
+            <div class="role-tabs" id="roleTabs">
+                <div class="role-tab active" data-role="internal" onclick="selectRole('internal')">
+                    <div class="role-tab-icon"><i class="fas fa-building"></i></div>
+                    <div class="role-tab-label">Admin Internal</div>
+                    <div class="role-tab-desc">Backoffice Paydia</div>
+                </div>
+                <div class="role-tab" data-role="partner" onclick="selectRole('partner')">
+                    <div class="role-tab-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="role-tab-label">Partner</div>
+                    <div class="role-tab-desc">Dashboard Partner</div>
+                </div>
+            </div>
+
+            <div id="portalPortal">
+                <div class="error-message" id="errorMsg" style="margin-bottom: 16px;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Email atau password salah</span>
+                </div>
+
+                <div id="portalContent">
+                    <!-- Dynamic role content goes here -->
+                </div>
+
+                <button type="button" class="btn-login" id="btnAction" onclick="submitPortal()">
+                    <span class="btn-text" id="btnActionText"><i class="fas fa-right-to-bracket"></i> Masuk Ke Dashboard</span>
+                    <span class="spinner" id="btnActionSpinner"></span>
+                </button>
+            </div>
+
+            <div class="divider">atau</div>
+
+            <a href="app-preview/" class="preview-link">
+                <i class="fas fa-mobile-screen-button"></i>
+                Preview Aplikasi White Label
+            </a>
+        </div>
+    </div>
+
+    <script src="shared/data.js"></script>
+    <script>
+        // Initialize shared data
+        PaydiaData.initialize();
+
+        let selectedRole = 'internal';
+
+        const PARTNERS = PaydiaData.getTenants().map(t => ({
+            email: t.emailPIC,
+            name: t.partnerName,
+            tenantId: t.id
+        }));
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.role === role);
+            });
+            renderPortal();
+        }
+
+        function renderPortal() {
+            const contentDiv = document.getElementById('portalContent');
+            const btnText = document.getElementById('btnActionText');
+            clearError();
+
+            if (selectedRole === 'internal') {
+                contentDiv.innerHTML = '';
+                btnText.innerHTML = '<i class="fas fa-user-shield"></i> Masuk sebagai Admin Internal';
+            } else {
+                let optionsHtml = PARTNERS.map(p => `<option value="${p.email}">${p.name}</option>`).join('');
+                contentDiv.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label" for="partnerSelect">Pilih Tenant Partner</label>
+                        <select id="partnerSelect" class="form-select">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+                btnText.innerHTML = '<i class="fas fa-handshake"></i> Masuk sebagai Partner';
+            }
+        }
+
+
+        async function submitPortal() {
+            let email = 'admin@paydia.id';
+            if (selectedRole === 'partner') {
+                const partnerSelect = document.getElementById('partnerSelect');
+                if (!partnerSelect) return;
+                email = partnerSelect.value;
+            }
+
+            const btn = document.getElementById('btnAction');
+            const btnText = document.getElementById('btnActionText');
+            const spinner = document.getElementById('btnActionSpinner');
+
+            // Show loading state
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+            clearError();
+
+            // Simulate minor network delay for feedback
+            await new Promise(r => setTimeout(r, 600));
+
+            try {
+                // Send to login API without password
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, role: selectedRole })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Set client-side role and tenant info
+                    PaydiaData.setCurrentRole(selectedRole);
+
+                    if (selectedRole === 'partner' && data.tenantId) {
+                        PaydiaData.setCurrentTenant(data.tenantId);
+                    }
+
+                    // Redirect based on role
+                    if (selectedRole === 'internal') {
+                        window.location.replace('internal/');
+                    } else {
+                        window.location.replace('partner/');
+                    }
+                } else {
+                    const data = await response.json();
+                    showError(data.message || 'Gagal masuk ke dashboard');
+                    resetButton();
+                }
+            } catch (err) {
+                showError('Gagal terhubung ke server');
+                resetButton();
+            }
+
+            function resetButton() {
+                btn.disabled = false;
+                btnText.style.display = 'inline-flex';
+                spinner.style.display = 'none';
+            }
+        }
+
+        const errorMsg = document.getElementById('errorMsg');
+        const errorText = document.getElementById('errorText');
+        const card = document.getElementById('loginCard');
+
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorMsg.classList.add('show');
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
+        }
+
+        function clearError() {
+            errorMsg.classList.remove('show');
+        }
+
+        // Initialize portal on load
+        renderPortal();
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 5 C50 5 95 15 95 50 C95 80 50 95 50 95 C50 95 5 80 5 50 C5 15 50 5 50 5 Z" fill="url(#featGrad)"/>
+  <path d="M25 35c3-3 8-3 11 0l7 7c3 3 3 8 0 11L37 59c8 8 16 16 24 8l6-6c3-3 8-3 11 0l7 7c3 3 3 8 0 11c-15 15-45 15-60 0z" fill="white"/>
+  <defs>
+    <linearGradient id="featGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+  </defs>
+</svg>

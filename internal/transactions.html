@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaksi — Paydia Internal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="internal.css">
+    <style>
+        .filter-panel {
+            position: absolute;
+            top: 52px;
+            left: 20px;
+            z-index: 1050;
+            background: #fff;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 20px;
+            width: 520px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            display: none;
+        }
+        .filter-panel.open {
+            display: block;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding-bottom: 16px;
+        }
+        .filter-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+        }
+        .filter-date-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-date-container input[type="date"] {
+            width: 108px;
+            padding: 5px 8px;
+            font-size: 0.8rem;
+            border: 1px solid #CBD5E1;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .filter-date-separator {
+            color: #94A3B8;
+            font-size: 0.8rem;
+        }
+        .status-badge-custom {
+            display: inline-block;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .status-badge-custom.gagal {
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            background: #fef2f2;
+        }
+        .status-badge-custom.sukses {
+            border: 1px solid #86efac;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .status-badge-custom.buat {
+            border: 1px solid #99f6e4;
+            color: #0d9488;
+            background: #f0fdfa;
+        }
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid #E2E8F0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .table-toolbar-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .table-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* Custom Table Sizing to Prevent Horizontal Scroll */
+        .data-table th, .data-table td {
+            padding: 6px 5px !important;
+            font-size: 0.7rem !important;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
+        }
+        .data-table th {
+            font-weight: 600;
+            color: #475569;
+        }
+        .table-scroll {
+            overflow-x: auto;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- ── Topbar Full-Width Header ── -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="tenants.html" class="topbar-logo-text">paydia</a>
+                <button class="topbar-collapse-btn" title="Collapse Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline" onclick="window.location.href='../app-preview/index.html'" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 8px;">
+                    <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
+                </button>
+                <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="btn btn-internal" id="btn-partner-dashboard" style="background: #2c37b7; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 12px;">
+                        <i class="fas fa-chart-line"></i><span>Partner Dashboard</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
+                    </button>
+                    <div class="partner-dropdown-menu" id="partner-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 180px; text-align: left; margin-top: 4px; padding: 4px 0;">
+                    </div>
+                </div>
+                <button class="topbar-btn" title="Notifikasi" style="pointer-events:none;cursor:default;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot" id="notif-dot" style="display:none"></span>
+                </button>
+                <div class="topbar-user">
+                    <div class="topbar-user-avatar">D</div>
+                    <span>Dion</span>
+                </div>
+                <button class="topbar-btn" title="Logout" onclick="handleLogout()" style="color:#ef4444 !important; margin-left: 8px;">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content-wrapper" style="display: flex; width: 100%;">
+            
+            <!-- ── Sidebar underneath Topbar ── -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="tenants.html" class="sidebar-link">
+                        <i class="fas fa-store"></i><span>Merchant</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+                    <a href="transactions.html" class="sidebar-link">
+                        <i class="fas fa-file-invoice-dollar"></i><span>Settlement</span>
+                    </a>
+                    <a href="../approval.html" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i><span>Approval</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user-shield"></i><span>Admin</span>
+                    </a>
+                    <a href="users.html" class="sidebar-link">
+                        <i class="fas fa-user"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-truck"></i><span>Vendor</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-box"></i><span>Product</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bullhorn"></i><span>Marketing</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-university"></i><span>Bank Account</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-hand-holding-usd"></i><span>Kasbon</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-credit-card"></i><span>Virtual Account</span>
+                    </a>
+                    <div class="sidebar-dropdown open">
+                        <div class="sidebar-link" onclick="toggleSidebarDropdown('sb-trx')">
+                            <i class="fas fa-sync"></i><span>Transaction</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="sidebar-submenu" id="sb-trx">
+                            <a href="payin.html" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Payin</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-upload"></i><span>Payout</span>
+                            </a>
+                            <a href="qris-mpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS MPM</span>
+                            </a>
+                            <a href="qris-cpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS CPM</span>
+                            </a>
+                            <a href="transactions.html" class="sidebar-sublink active">
+                                <i class="fas fa-user-tag"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Topup Manual</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-file-invoice"></i><span>Auto Reporting</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-calendar-alt"></i><span>Schedule</span>
+                    </a>
+                    <a href="audit.html" class="sidebar-link">
+                        <i class="fas fa-clipboard-list"></i><span>Log</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i><span>Recap</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i><span>Settings</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-undo-alt"></i><span>Callback Recovery</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- ── Main Area ── -->
+            <main class="main-area">
+                <!-- Breadcrumbs -->
+                <div class="topbar-breadcrumb" style="margin-bottom: 8px;">
+                    home / Paydia Bisnis / Transaction
+                </div>
+
+                <!-- Page Content -->
+                <div class="page-content" style="padding: 0;">
+                    <div class="section-header" style="margin-bottom: 20px;">
+                        <div>
+                            <h1 class="page-title" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #0F172A;">Transaksi</h1>
+                        </div>
+                    </div>
+
+                    <!-- Table Container -->
+                    <div class="table-container" style="border-radius: 8px; background: #fff;">
+                        <div class="table-toolbar" style="position: relative;">
+                            <div class="table-toolbar-left">
+                                <button class="btn btn-internal" id="btn-filter" style="background:#2c37b7; color:#fff; display:flex; align-items:center; gap:8px;">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <button class="btn btn-outline" id="btn-export" style="border: 1px solid #10B981; color:#10B981; display:flex; align-items:center; gap:8px; background:#fff;">
+                                    <i class="fas fa-file-excel" style="color:#10B981"></i> Export
+                                </button>
+                            </div>
+                            <div class="table-toolbar-right" style="display:none">
+                            </div>
+
+                            <!-- Floating Filter Panel (Gambar 3 Layout + MID filter) -->
+                            <div class="filter-panel" id="filter-panel">
+                                <div class="filter-grid">
+                                    <!-- Left Column -->
+                                    <div class="filter-column" style="border-right: 1px solid #E2E8F0; padding-right: 20px;">
+                                        <div class="filter-group">
+                                            <label>Tanggal</label>
+                                            <div class="filter-date-container">
+                                                <input type="date" id="filter-start-date" placeholder="Start date">
+                                                <span class="filter-date-separator">➔</span>
+                                                <input type="date" id="filter-end-date" placeholder="End date">
+                                            </div>
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Tanggal Update</label>
+                                            <div class="filter-date-container">
+                                                <input type="date" id="filter-update-start-date" placeholder="Start date">
+                                                <span class="filter-date-separator">➔</span>
+                                                <input type="date" id="filter-update-end-date" placeholder="End date">
+                                            </div>
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Status</label>
+                                            <select class="form-select" id="filter-status" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;">
+                                                <option value="">choose status</option>
+                                                <option value="Sukses">Sukses</option>
+                                                <option value="Buat">Buat</option>
+                                                <option value="Gagal">Gagal</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Kategori</label>
+                                            <select class="form-select" id="filter-category" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;">
+                                                <option value="">choose category</option>
+                                                <option value="Uang Masuk - Transfer Bisnis">Uang Masuk - Transfer Bisnis</option>
+                                                <option value="Merchant - Bayar Merchant">Merchant - Bayar Merchant</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Sub Kategori</label>
+                                            <select class="form-select" id="filter-sub-category" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;">
+                                                <option value="">choose sub category</option>
+                                                <option value="Transfer">Transfer</option>
+                                                <option value="QRIS">QRIS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Right Column -->
+                                    <div class="filter-column">
+                                        <div class="filter-group">
+                                            <label>ID Referensi</label>
+                                            <input type="text" class="form-input" id="filter-ref-no" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;" placeholder="ID Transaksi">
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>MID <i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 2px;" title="Pengerjaan Tambahan"></i> <span style="font-size:0.65rem; color:#D97706; font-weight:500;">(Pengerjaan Tambahan)</span></label>
+                                            <input type="text" class="form-input" id="filter-mid" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;">
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Nama</label>
+                                            <input type="text" class="form-input" id="filter-name" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;" placeholder="Nama">
+                                        </div>
+                                        <div class="filter-group" style="margin-top: 6px;">
+                                            <label>Nomor Telepon</label>
+                                            <input type="text" class="form-input" id="filter-phone" style="width:100%; padding:6px; font-size:0.85rem; border:1px solid #CBD5E1; border-radius:6px;" placeholder="Nomor Telepon">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:10px; border-top: 1px solid #F1F5F9; padding-top:15px; margin-top:10px;">
+                                    <button class="btn btn-outline" id="filter-clear" style="border-radius: 20px; padding: 6px 20px; font-weight: 500; font-size:0.8rem; border: 1px solid #CBD5E1; background:#fff; cursor:pointer;">Clear All</button>
+                                    <button class="btn btn-internal" id="filter-apply" style="background:#2c37b7; color:#fff; border-radius: 20px; padding: 6px 20px; font-weight: 500; font-size:0.8rem; border:none; cursor:pointer;">Apply Filters</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30px;">No</th>
+                                        <th>ID Referensi <i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 2px;" title="Pengerjaan Tambahan"></i> <span style="font-size: 0.6rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 1px 3px; border-radius: 3px; display: inline-block; vertical-align: middle;">WIP</span></th>
+                                        <th>Tanggal</th>
+                                        <th>Kategori</th>
+                                        <th>Merchant <i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 2px;" title="Pengerjaan Tambahan"></i> <span style="font-size: 0.6rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 1px 3px; border-radius: 3px; display: inline-block; vertical-align: middle;">WIP</span></th>
+                                        <th>Nama</th>
+                                        <th>Nomor Telepon</th>
+                                        <th>Nominal (Rp)</th>
+                                        <th style="text-align:center">Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="trx-tbody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination Footer exactly matching Gambar 2 -->
+                        <div class="pagination-wrapper" style="border-top: 1px solid #E2E8F0; padding: 16px 20px; display:flex; justify-content:space-between; align-items:center;">
+                            <span class="pagination-info" id="trx-footer-info">-</span>
+                            <div class="pagination" id="trx-pagination" style="display:flex; gap:5px; align-items:center;"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── Transaction Details Modal (Gambar 1 Layout) ── -->
+    <div class="modal-overlay" id="detailTrxModal">
+        <div class="modal-dialog" style="max-width:600px;">
+            <div class="modal-header" style="border-bottom: none; padding: 20px 24px 10px 24px;">
+                <h3 class="modal-title" style="color: #20298B; font-weight: 700; font-size: 1.15rem; font-family: 'Inter', sans-serif;">Rincian Transaksi</h3>
+                <button class="modal-close" onclick="closeModal('detailTrxModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="detail-trx-body" style="padding: 0 24px 24px 24px;">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="internal.js"></script>
+    <script>
+        let allTrx = [];
+        let filteredTrx = [];
+        const itemsPerPage = 10;
+        let currentPage = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTransactions();
+            
+            document.getElementById('btn-filter').addEventListener('click', function() {
+                const panel = document.getElementById('filter-panel');
+                panel.classList.toggle('open');
+            });
+
+            document.getElementById('filter-apply').addEventListener('click', applyFilters);
+            document.getElementById('filter-clear').addEventListener('click', clearFilters);
+            document.getElementById('btn-export').addEventListener('click', handleExportCSV);
+        });
+
+        function formatNumber(amount) {
+            return new Intl.NumberFormat('id-ID').format(amount);
+        }
+
+        function formatRupiah(amount) {
+            return 'Rp' + formatNumber(amount);
+        }
+
+        function getStatusBadgeCustom(status) {
+            let cls = "status-badge-custom ";
+            let displayStatus = status;
+            if (status === 'Berhasil' || status === 'Sukses') {
+                cls += "sukses";
+                displayStatus = "Sukses";
+            } else if (status === 'Buat' || status === 'Diproses') {
+                cls += "buat";
+                displayStatus = "Buat";
+            } else {
+                cls += "gagal";
+                displayStatus = "Gagal";
+            }
+            return `<span class="${cls}">${displayStatus}</span>`;
+        }
+
+        // Dynamically looks up matching email, merchant name, and MID from PaydiaData
+        function getTrxExtendedInfo(tx) {
+            let email = 'adlan.darren26@gmail.com';
+            let merchantName = 'DanaKu';
+            let mid = '200525000000001';
+            let method = 'Transfer Bisnis';
+            
+            const allUsers = PaydiaData.getAllUsers();
+            const user = allUsers.find(u => u.phone === tx.userPhone);
+            if (user) {
+                email = user.email || '-';
+                merchantName = user.tenantName || 'DanaKu';
+                const tenant = PaydiaData.getTenant(user.tenantId);
+                if (tenant) {
+                    mid = tenant.mid || '-';
+                }
+            } else {
+                // Alternating defaults based on phone index
+                const tenants = PaydiaData.getTenants();
+                const hash = tx.userPhone.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                const tenant = tenants[hash % tenants.length];
+                if (tenant) {
+                    merchantName = tenant.appName;
+                    mid = tenant.mid;
+                    email = tx.userName.toLowerCase().replace(/ /g, '.') + '@' + tenant.appName.toLowerCase() + '.id';
+                }
+            }
+            
+            if (tx.category && tx.category.includes('Bayar Merchant')) {
+                method = 'QRIS';
+            } else if (tx.category && tx.category.includes('Transfer')) {
+                method = 'Transfer Bisnis';
+            }
+            
+            return { email, merchantName, mid, method };
+        }
+
+        function loadTransactions() {
+            // Build the simulated 7983 transaction list
+            let simulatedList = [];
+            
+            // The first 10 items must correspond exactly to Gambar 2
+            const initial10 = [
+                { refNo: '260529000001', date: '29-May-2026 11:29:52', category: 'Uang Masuk - Transfer Bisnis', userName: 'DARREN ADLAN EDNAWAN SUJONO', userPhone: '089632848293', nominal: 10000, status: 'Sukses' },
+                { refNo: '260528000014', date: '28-May-2026 14:28:41', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 2000, status: 'Sukses' },
+                { refNo: '260528000013', date: '28-May-2026 14:25:29', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Sukses' },
+                { refNo: '260528000012', date: '28-May-2026 14:20:18', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Buat' },
+                { refNo: '260528000011', date: '28-May-2026 14:19:43', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Buat' },
+                { refNo: '260528000010', date: '28-May-2026 14:15:43', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 2000, status: 'Sukses' },
+                { refNo: '260528000009', date: '28-May-2026 14:10:46', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Sukses' },
+                { refNo: '260528000008', date: '28-May-2026 14:06:40', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Sukses' },
+                { refNo: '260528000007', date: '28-May-2026 14:05:20', category: 'Merchant - Bayar Merchant', userName: 'Ariskurniawan', userPhone: '082244274194', nominal: 1000, status: 'Sukses' },
+                { refNo: '260528000006', date: '28-May-2026 11:16:28', category: 'Merchant - Bayar Merchant', userName: 'Ola', userPhone: '082112381683', nominal: 9000, status: 'Sukses' }
+            ];
+
+            simulatedList = [...initial10];
+
+            // Generate deterministic items up to 7983
+            const names = ["Andi Pratama", "Lina Marlina", "Budi Santoso", "Siti Rahayu", "Agus Widodo", "Rani", "TIJANI RIJENDRES", "Dion", "ALFAN QA", "BAMBANG DWI"];
+            const phones = ["089632848293", "082244274194", "089667711222", "08988888999", "08554941616", "085710915509", "0851283516351", "081290238465", "081200000007", "087885900280"];
+            const categories = ["Uang Masuk - Transfer Bisnis", "Merchant - Bayar Merchant", "Uang Masuk - Transfer Bank"];
+            const statuses = ["Sukses", "Sukses", "Sukses", "Buat", "Gagal"];
+            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+            for (let i = 11; i <= 7983; i++) {
+                const nameIdx = (i * 3) % names.length;
+                const phoneIdx = (i * 7) % phones.length;
+                const catIdx = (i * 11) % categories.length;
+                const statusIdx = (i * 17) % statuses.length;
+                
+                const nominal = ((i * 13) % 99 + 1) * 1000;
+                
+                const dayOffset = Math.floor(i / 15);
+                const hour = String((i * 5) % 24).padStart(2, '0');
+                const minute = String((i * 13) % 60).padStart(2, '0');
+                const second = String((i * 17) % 60).padStart(2, '0');
+                
+                const dateObj = new Date("2026-05-28T12:00:00");
+                dateObj.setDate(dateObj.getDate() - dayOffset);
+                const dateStr = `${dateObj.getDate().toString().padStart(2, '0')}-${months[dateObj.getMonth()]}-2026 ${hour}:${minute}:${second}`;
+                
+                const refNo = String(260528000000 - i);
+                
+                simulatedList.push({
+                    refNo,
+                    date: dateStr,
+                    category: categories[catIdx],
+                    userName: names[nameIdx],
+                    userPhone: phones[phoneIdx],
+                    nominal,
+                    status: statuses[statusIdx]
+                });
+            }
+            
+            allTrx = simulatedList;
+            filteredTrx = [...allTrx];
+            
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, filteredTrx.length);
+            const pageData = filteredTrx.slice(start, end);
+
+            document.getElementById('trx-footer-info').textContent = `${start + 1} - ${end} of ${filteredTrx.length}`;
+
+            const tbody = document.getElementById('trx-tbody');
+            if (pageData.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="10">
+                        <div class="empty-state" style="padding: 40px; text-align:center;">
+                            <div class="empty-state-icon" style="font-size:2rem; color:#94A3B8;"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="empty-state-title" style="font-weight:600; margin-top:10px;">Tidak ada transaksi ditemukan</div>
+                            <div class="empty-state-desc" style="color:#64748B; font-size:0.85rem;">Coba ubah filter pencarian Anda.</div>
+                        </div>
+                    </td></tr>
+                `;
+                document.getElementById('trx-pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = pageData.map((tx, idx) => {
+                const info = getTrxExtendedInfo(tx);
+                return `
+                <tr>
+                    <td>${start + idx + 1}</td>
+                    <td><a href="#" onclick="showDetails('${tx.refNo}')" style="color: #2c37b7; font-weight: 600; text-decoration: none;">${tx.refNo}</a></td>
+                    <td>${tx.date}</td>
+                    <td>${tx.category}</td>
+                    <td>
+                        <div style="font-weight: 500;">${info.mid}</div>
+                        <div style="color: #64748B; font-size: 0.78rem; margin-top: 2px;">${info.merchantName}</div>
+                    </td>
+                    <td>${tx.userName}</td>
+                    <td>${tx.userPhone}</td>
+                    <td style="font-weight: 500;">${formatRupiah(tx.nominal)}</td>
+                    <td style="text-align: center;">${getStatusBadgeCustom(tx.status)}</td>
+                    <td></td>
+                </tr>
+                `;
+            }).join('');
+
+            renderPagination(filteredTrx.length);
+        }
+
+        function renderPagination(totalItems) {
+            const container = document.getElementById('trx-pagination');
+            container.innerHTML = '';
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (totalPages <= 1) return;
+
+            // Prev Button
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            };
+            container.appendChild(prevBtn);
+
+            // Page numbers
+            let pages = [];
+            if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+            } else {
+                if (currentPage <= 3) {
+                    pages = [1, 2, 3, 4, 5, '...', totalPages];
+                } else if (currentPage >= totalPages - 2) {
+                    pages = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                } else {
+                    pages = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                }
+            }
+
+            pages.forEach(p => {
+                const btn = document.createElement('button');
+                if (p === '...') {
+                    btn.className = 'page-dots';
+                    btn.textContent = '...';
+                    btn.style.border = 'none';
+                    btn.style.background = 'none';
+                    btn.style.padding = '4px 8px';
+                    btn.style.color = '#94A3B8';
+                    btn.style.pointerEvents = 'none';
+                } else {
+                    btn.className = `page-btn ${currentPage === p ? 'active' : ''}`;
+                    btn.textContent = p;
+                    btn.onclick = () => {
+                        currentPage = p;
+                        renderTable();
+                    };
+                }
+                container.appendChild(btn);
+            });
+
+            // Next Button
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            };
+            container.appendChild(nextBtn);
+        }
+
+        // Detailed Transaction Modal popup matching Gambar 1 Layout
+        function showDetails(refNo) {
+            const tx = allTrx.find(t => t.refNo === refNo);
+            if (!tx) return;
+
+            const info = getTrxExtendedInfo(tx);
+
+            const body = document.getElementById('detail-trx-body');
+            body.innerHTML = `
+                <!-- Rincian Umum -->
+                <div style="font-weight: 700; color: #1E293B; margin-bottom: 12px; font-size: 0.95rem; font-family: 'Inter', sans-serif;">Rincian Umum</div>
+                <div style="display: flex; flex-direction: column; border-bottom: 1px solid #E2E8F0; margin-bottom: 20px; font-size: 0.85rem; font-family: 'Inter', sans-serif;">
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">ID Transaksi</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.refNo}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0; display: flex; align-items: center; gap: 4px;">Merchant <i class="fas fa-triangle-exclamation" style="color:#D97706;" title="Pengerjaan Tambahan"></i> <span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px;">WIP</span></span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${info.merchantName}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0; display: flex; align-items: center; gap: 4px;">MID <i class="fas fa-triangle-exclamation" style="color:#D97706;" title="Pengerjaan Tambahan"></i> <span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px;">WIP</span></span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;"><code>${info.mid}</code></span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Nama Pengguna</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.userName}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Email</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${info.email}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Nomor HP Pengguna</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.userPhone}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Kategori</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.category}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Metode Top Up</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${info.method}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Status</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.status}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Nama User</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.userName}</span>
+                    </div>
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Nomor Telepon</span>
+                        <span style="color: #1E293B; font-weight: 500; flex: 1;">${tx.userPhone}</span>
+                    </div>
+                </div>
+
+                <!-- Rincian Top Up -->
+                <div style="font-weight: 700; color: #1E293B; margin-bottom: 12px; font-size: 0.95rem; font-family: 'Inter', sans-serif;">Rincian Top Up</div>
+                <div style="display: flex; flex-direction: column; font-size: 0.85rem; font-family: 'Inter', sans-serif;">
+                    <div style="display: flex; padding: 10px 0; border-top: 1px solid #F1F5F9; border-bottom: 1px solid #F1F5F9; align-items: center;">
+                        <span style="color: #64748B; font-weight: 500; width: 220px; flex-shrink:0;">Nominal</span>
+                        <span style="color: #1E293B; font-weight: 700; flex: 1;">Rp ${formatNumber(tx.nominal)}</span>
+                    </div>
+                </div>
+            `;
+            openModal('detailTrxModal');
+        }
+
+        function applyFilters() {
+            const startDate = document.getElementById('filter-start-date').value;
+            const endDate = document.getElementById('filter-end-date').value;
+            const updateStartDate = document.getElementById('filter-update-start-date').value;
+            const updateEndDate = document.getElementById('filter-update-end-date').value;
+            const status = document.getElementById('filter-status').value;
+            const category = document.getElementById('filter-category').value;
+            const refNoVal = document.getElementById('filter-ref-no').value.trim();
+            const nameVal = document.getElementById('filter-name').value.toLowerCase().trim();
+            const phoneVal = document.getElementById('filter-phone').value.trim();
+            const midFilterVal = document.getElementById('filter-mid').value.trim();
+
+            filteredTrx = allTrx.filter(tx => {
+                const info = getTrxExtendedInfo(tx);
+                if (status && tx.status !== status) return false;
+                if (category && tx.category !== category) return false;
+                if (refNoVal && !tx.refNo.includes(refNoVal)) return false;
+                if (nameVal && !tx.userName.toLowerCase().includes(nameVal)) return false;
+                if (phoneVal && !tx.userPhone.includes(phoneVal)) return false;
+                if (midFilterVal && !info.mid.includes(midFilterVal)) return false;
+                
+                // Date check
+                if (startDate || endDate) {
+                    const txDateParts = tx.date.split(' ')[0].split('-');
+                    const monthsMap = { "Jan":0, "Feb":1, "Mar":2, "Apr":3, "May":4, "Jun":5, "Jul":6, "Aug":7, "Sep":8, "Oct":9, "Nov":10, "Dec":11 };
+                    const txDate = new Date(parseInt(txDateParts[2]), monthsMap[txDateParts[1]], parseInt(txDateParts[0]));
+                    
+                    if (startDate) {
+                        const start = new Date(startDate);
+                        if (txDate < start) return false;
+                    }
+                    if (endDate) {
+                        const end = new Date(endDate);
+                        if (txDate > end) return false;
+                    }
+                }
+                return true;
+            });
+
+            currentPage = 1;
+            renderTable();
+            document.getElementById('filter-panel').classList.remove('open');
+        }
+
+        function clearFilters() {
+            document.getElementById('filter-start-date').value = '';
+            document.getElementById('filter-end-date').value = '';
+            document.getElementById('filter-update-start-date').value = '';
+            document.getElementById('filter-update-end-date').value = '';
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-category').value = '';
+            document.getElementById('filter-ref-no').value = '';
+            document.getElementById('filter-mid').value = '';
+            document.getElementById('filter-name').value = '';
+            document.getElementById('filter-phone').value = '';
+
+            filteredTrx = [...allTrx];
+            currentPage = 1;
+            renderTable();
+        }
+
+        function handleExportCSV() {
+            const headers = ['No', 'ID Referensi', 'Tanggal', 'Kategori', 'MID', 'Merchant', 'Nama', 'Nomor Telepon', 'Nominal', 'Status'];
+            const rows = filteredTrx.map((tx, idx) => {
+                const info = getTrxExtendedInfo(tx);
+                return [
+                    idx + 1,
+                    tx.refNo,
+                    tx.date,
+                    tx.category,
+                    info.mid,
+                    info.merchantName,
+                    tx.userName,
+                    tx.userPhone,
+                    tx.nominal,
+                    tx.status
+                ];
+            });
+            exportCSV(headers, rows, `transaksi_paydia_export.csv`);
+        }
+    </script>
+
+    <!-- Watermark Disclaimer -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

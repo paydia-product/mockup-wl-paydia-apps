@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda — Paydia Bisnis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="partner.css">
+    <style>
+        /* ── Home page: light theme override ── */
+        body { background: #F8FAFC; }
+        .dashboard-layout { background: #F8FAFC; }
+
+        .page-content { padding: 0 !important; background: #F8FAFC; }
+
+        /* ── Content ── */
+        .pb-content { padding: 24px; }
+
+        /* Top cards grid */
+        .pb-cards-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            border: 1px solid #E2E8F0; border-radius: 12px;
+            overflow: hidden; margin-bottom: 20px; background: #fff;
+        }
+        .pb-card { padding: 20px; border-right: 1px solid #E2E8F0; }
+        .pb-card:last-child { border-right: none; }
+        .pb-card-label {
+            font-size: 0.78rem; color: #64748B; margin-bottom: 6px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .pb-card-label-icon {
+            width: 28px; height: 28px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; flex-shrink: 0;
+        }
+        .pb-card-amount { font-size: 1.3rem; font-weight: 700; color: #1E293B; margin-top: 4px; }
+        .pb-btn-topup {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 16px; border: 1px solid #CBD5E1; border-radius: 20px;
+            background: #fff; font-size: 0.77rem; color: #1E293B;
+            cursor: pointer; font-family: inherit; margin-top: 12px;
+            transition: all 0.15s;
+        }
+        .pb-btn-topup:hover { border-color: #2563EB; color: #2563EB; }
+
+        /* Alert banner */
+        .pb-alert {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px;
+            padding: 14px 16px; margin-bottom: 20px;
+        }
+        .pb-alert-icon { font-size: 1.5rem; color: #D97706; flex-shrink: 0; margin-top: 1px; }
+        .pb-alert-body { flex: 1; }
+        .pb-alert-title { font-size: 0.82rem; font-weight: 700; color: #92400E; margin-bottom: 3px; }
+        .pb-alert-msg { font-size: 0.76rem; color: #78350F; line-height: 1.5; }
+        .pb-alert-close {
+            background: none; border: none; cursor: pointer;
+            color: #D97706; font-size: 0.85rem; padding: 2px; flex-shrink: 0;
+        }
+
+        /* Status & Success grid */
+        .pb-status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+        .pb-status-card {
+            background: #fff; border: 1px solid #E2E8F0;
+            border-radius: 12px; padding: 20px;
+        }
+        .pb-status-title { font-size: 0.9rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+        .pb-status-subtitle { font-size: 0.74rem; color: #64748B; margin-bottom: 18px; line-height: 1.4; }
+        .pb-status-section-label {
+            font-size: 0.64rem; font-weight: 700; color: #94A3B8;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+        }
+        .pb-status-numbers { display: flex; gap: 32px; margin-bottom: 16px; }
+        .pb-stat-num { font-size: 2rem; font-weight: 800; line-height: 1; }
+        .pb-stat-num.orange { color: #F97316; }
+        .pb-stat-num.red { color: #EF4444; }
+        .pb-stat-sublabel { font-size: 0.67rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
+        .pb-status-update {
+            font-size: 0.73rem; color: #94A3B8;
+            border-top: 1px solid #F1F5F9; padding-top: 12px;
+        }
+        .pb-status-update strong { color: #64748B; font-weight: 600; }
+
+        .pb-success-card {
+            background: #1E40AF; border-radius: 12px; padding: 20px;
+            color: #fff; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .pb-success-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+        .pb-success-subtitle { font-size: 0.74rem; color: rgba(255,255,255,0.65); margin-bottom: 20px; }
+        .pb-success-rate { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+        .pb-success-pct { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+        .pb-success-badge {
+            font-size: 0.71rem; font-weight: 600; color: #34D399;
+            background: rgba(52,211,153,0.15); padding: 3px 8px; border-radius: 20px;
+        }
+        .pb-success-desc { font-size: 0.74rem; color: rgba(255,255,255,0.65); margin-bottom: 20px; line-height: 1.4; }
+        .pb-success-footer { display: flex; align-items: center; justify-content: space-between; }
+        .pb-success-icons { display: flex; gap: 8px; }
+        .pb-icon-btn {
+            width: 32px; height: 32px; border-radius: 50%; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: default; font-size: 0.78rem;
+        }
+
+        /* Promo banner */
+        .pb-promo {
+            background: #0F1729; border-radius: 12px; padding: 36px 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            overflow: hidden;
+        }
+        .pb-promo-left { max-width: 400px; }
+        .pb-promo-title { font-size: 1.35rem; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 10px; }
+        .pb-promo-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-bottom: 20px; line-height: 1.55; }
+        .pb-promo-dl-label { font-size: 0.71rem; color: rgba(255,255,255,0.45); margin-bottom: 10px; }
+        .pb-promo-btns { display: flex; gap: 10px; }
+        .pb-store-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 9px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+            background: rgba(255,255,255,0.06); color: #fff;
+            cursor: pointer; font-family: inherit; font-size: 0.75rem;
+            transition: background 0.15s;
+        }
+        .pb-store-btn:hover { background: rgba(255,255,255,0.12); }
+        .pb-store-btn i { font-size: 1.15rem; }
+        .pb-store-btn-text { text-align: left; }
+        .pb-store-tiny { font-size: 0.58rem; color: rgba(255,255,255,0.55); line-height: 1; }
+        .pb-store-name { font-size: 0.8rem; font-weight: 700; line-height: 1.4; }
+        .pb-promo-right {
+            width: 240px; height: 170px; flex-shrink: 0;
+            background: rgba(255,255,255,0.04); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.12); font-size: 3.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar" id="pbSidebar">
+            <!-- Rendered by JS below -->
+        </aside>
+
+        <!-- ── Main ── -->
+        <div class="main-area">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="pb-topbar">
+                    <div class="pb-topbar-brand">
+                        <div class="pb-topbar-logo"><i>p</i></div>
+                        <span class="pb-topbar-name">Paydia Bisnis</span>
+                    </div>
+                    <div class="pb-topbar-right">
+                        <button class="pb-btn-panduan">
+                            <i class="fas fa-circle-question"></i> Panduan
+                        </button>
+                        <button class="pb-topbar-icon" title="Notifikasi">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <div class="pb-topbar-divider"></div>
+                        <button class="pb-user-btn" id="pbUserEmail">
+                            company@gmail.com <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="page-content">
+                <div class="pb-content">
+
+                    <!-- ── Top 4 Cards ── -->
+                    <div class="pb-cards-grid">
+                        <div class="pb-card">
+                            <div class="pb-card-label">Saldo utama Anda saat ini</div>
+                            <div class="pb-card-amount">Rp1.000.000.000</div>
+                            <button class="pb-btn-topup">
+                                <i class="fas fa-circle-plus"></i> Top Up
+                            </button>
+                        </div>
+                        <div class="pb-card">
+                            <div class="pb-card-label">
+                                <div class="pb-card-label-icon" style="background:#EFF6FF;">
+                                    <i class="fas fa-qrcode" style="color:#2563EB;"></i>
+                                </div>
+                                Pendapatan QRIS
+                            </div>
+                            <div class="pb-card-amount">Rp1.000.000.000</div>
+                        </div>
+                        <div class="pb-card">
+                            <div class="pb-card-label">
+                                <div class="pb-card-label-icon" style="background:#EFF6FF;">
+                                    <span style="font-weight:900;color:#1E40AF;font-size:0.95rem;">K</span>
+                                </div>
+                                Limit Kasbon
+                            </div>
+                            <div class="pb-card-amount">Rp1.000.000.000</div>
+                        </div>
+                        <div class="pb-card">
+                            <div class="pb-card-label">
+                                <div class="pb-card-label-icon" style="background:#EFF6FF;">
+                                    <span style="font-weight:900;color:#1E40AF;font-size:0.95rem;">R</span>
+                                </div>
+                                Limit Bulanan Payroll Anda
+                            </div>
+                            <div class="pb-card-amount">Rp1.000.000.000</div>
+                        </div>
+                    </div>
+
+                    <!-- ── Alert Banner ── -->
+                    <div class="pb-alert" id="pbAlert">
+                        <div class="pb-alert-icon">
+                            <i class="fas fa-circle-user"></i>
+                        </div>
+                        <div class="pb-alert-body">
+                            <div class="pb-alert-title">System Maintenance Scheduled</div>
+                            <div class="pb-alert-msg">We'll be performing routine maintenance on Sunday, Oct 24, from 02:00 to 04:00 AM WIB. Some services may be intermittent.</div>
+                        </div>
+                        <button class="pb-alert-close" onclick="document.getElementById('pbAlert').style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- ── Status + Success ── -->
+                    <div class="pb-status-grid">
+                        <!-- Status Transaksi -->
+                        <div class="pb-status-card">
+                            <div class="pb-status-title">Status & Performa Transaksi</div>
+                            <div class="pb-status-subtitle">Pantau kesehatan dan kelancaran transaksi secara real-time</div>
+                            <div class="pb-status-section-label">Transaksi Tertunda &amp; Gagal</div>
+                            <div class="pb-status-numbers">
+                                <div>
+                                    <div class="pb-stat-num orange">124</div>
+                                    <div class="pb-stat-sublabel">Tertunda</div>
+                                </div>
+                                <div>
+                                    <div class="pb-stat-num red">28</div>
+                                    <div class="pb-stat-sublabel">Gagal</div>
+                                </div>
+                            </div>
+                            <div class="pb-status-update">
+                                <strong>Status Update</strong>&nbsp;&nbsp;Pembaruan Terakhir 2 menit yang lalu
+                            </div>
+                        </div>
+
+                        <!-- Transaksi Berhasil -->
+                        <div class="pb-success-card">
+                            <div>
+                                <div class="pb-success-title">Transaksi Berhasil</div>
+                                <div class="pb-success-subtitle">Jumlah Transaksi Berhasil</div>
+                                <div class="pb-success-rate">
+                                    <span class="pb-success-pct">98.2%</span>
+                                    <span class="pb-success-badge">Tingkat Keberhasilan</span>
+                                </div>
+                                <div class="pb-success-desc">8,340 transaksi berhasil dari 8,492 total transaksi</div>
+                            </div>
+                            <div class="pb-success-footer">
+                                <div class="pb-success-icons">
+                                    <button class="pb-icon-btn" style="background:rgba(52,211,153,0.2);color:#34D399;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="pb-icon-btn" style="background:rgba(251,191,36,0.2);color:#FBBF24;">
+                                        <i class="fas fa-bolt"></i>
+                                    </button>
+                                </div>
+                                <button class="pb-icon-btn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);">
+                                    <i class="fas fa-shield-halved"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Promo Banner ── -->
+                    <div class="pb-promo">
+                        <div class="pb-promo-left">
+                            <div class="pb-promo-title">Mulai Kelola Keuangan dengan Uang Elektronik yang Simple dan Cepat</div>
+                            <div class="pb-promo-sub">Gabung sekarang dan nikmati kemudahan keuangan digital dalam satu genggaman</div>
+                            <div class="pb-promo-dl-label">Download Aplikasi</div>
+                            <div class="pb-promo-btns">
+                                <button class="pb-store-btn">
+                                    <i class="fab fa-google-play"></i>
+                                    <div class="pb-store-btn-text">
+                                        <div class="pb-store-tiny">GET IT ON</div>
+                                        <div class="pb-store-name">Google Play</div>
+                                    </div>
+                                </button>
+                                <button class="pb-store-btn">
+                                    <i class="fab fa-apple"></i>
+                                    <div class="pb-store-btn-text">
+                                        <div class="pb-store-tiny">Download on the</div>
+                                        <div class="pb-store-name">App Store</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="pb-promo-right">
+                            <i class="fas fa-mobile-screen-button"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="partner.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartner();
+
+            const tenant = getTenantInfo();
+            const config = getConfig();
+
+            // Set email in topbar from tenant data
+            if (tenant && tenant.emailPIC) {
+                document.getElementById('pbUserEmail').innerHTML =
+                    tenant.emailPIC + ' <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i>';
+            }
+
+            // Sidebar data
+            const appName = config ? config.appName : (tenant ? tenant.appName : 'Toko Paydia');
+            const partnerName = tenant ? tenant.partnerName : appName;
+            const mid = tenant ? tenant.mid : '—';
+            const initial = partnerName.charAt(0).toUpperCase();
+
+            renderSidebar('beranda');
+        });
+    </script>
+</body>
+</html>

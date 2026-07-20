@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRIS CPM — Paydia Internal Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared.css">
+    <link rel="stylesheet" href="internal.css">
+    <style>
+        /* Custom page styling */
+        .filter-panel {
+            position: absolute;
+            top: 52px;
+            left: 20px;
+            z-index: 1050;
+            background: #fff;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 20px;
+            width: 480px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            display: none;
+        }
+        .filter-panel.open {
+            display: block;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            padding-bottom: 20px;
+        }
+        .filter-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .filter-group-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 8px;
+        }
+        .filter-checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .filter-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #334155;
+            cursor: pointer;
+        }
+        .filter-checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E1;
+            cursor: pointer;
+            accent-color: #2c37b7;
+        }
+        .filter-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .filter-input-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 4px;
+        }
+        .filter-date-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 8px 12px;
+            background: #fff;
+            width: 100%;
+            justify-content: space-between;
+        }
+        .filter-date-container input[type="date"] {
+            border: none;
+            outline: none;
+            font-size: 0.85rem;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            width: 45%;
+        }
+        .filter-date-separator {
+            color: #94A3B8;
+            font-size: 0.85rem;
+        }
+        .filter-footer-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #F1F5F9;
+            padding-top: 20px;
+            align-items: center;
+        }
+        .btn-outline {
+            background: #fff !important;
+            color: #334155 !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        .btn-outline:hover {
+            background: #F8FAFC !important;
+        }
+        .status-badge-custom {
+            display: inline-block;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .status-badge-custom.gagal {
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            background: #fef2f2;
+        }
+        .status-badge-custom.sukses {
+            border: 1px solid #86efac;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .status-badge-custom.proses {
+            border: 1px solid #93c5fd;
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        .status-badge-custom.pembayaran {
+            border: 1px solid #fde047;
+            color: #ca8a04;
+            background: #fefce8;
+        }
+        .status-badge-custom.buat {
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            background: #f8fafc;
+        }
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid #E2E8F0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .table-toolbar-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .table-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-label {
+            font-size: 0.85rem;
+            color: #475569;
+            font-weight: 500;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- ── Topbar Full-Width Header ── -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="tenants.html" class="topbar-logo-text">paydia</a>
+                <button class="topbar-collapse-btn" title="Collapse Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline" onclick="window.location.href='../app-preview/index.html'" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 8px;">
+                    <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
+                </button>
+                <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="btn btn-internal" id="btn-partner-dashboard" style="background: #2c37b7; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 12px;">
+                        <i class="fas fa-chart-line"></i><span>Partner Dashboard</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
+                    </button>
+                    <div class="partner-dropdown-menu" id="partner-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 180px; text-align: left; margin-top: 4px; padding: 4px 0;">
+                    </div>
+                </div>
+                <button class="topbar-btn" title="Notifikasi" style="pointer-events:none;cursor:default;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot" id="notif-dot" style="display:none"></span>
+                </button>
+                <div class="topbar-user">
+                    <div class="topbar-user-avatar">D</div>
+                    <span>Dion</span>
+                </div>
+                <button class="topbar-btn" title="Logout" onclick="handleLogout()" style="color:#ef4444 !important; margin-left: 8px;">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content-wrapper" style="display: flex; width: 100%;">
+            
+            <!-- ── Sidebar underneath Topbar ── -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="tenants.html" class="sidebar-link">
+                        <i class="fas fa-store"></i><span>Merchant</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+                    <a href="transactions.html" class="sidebar-link">
+                        <i class="fas fa-file-invoice-dollar"></i><span>Settlement</span>
+                    </a>
+                    <a href="../approval.html" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i><span>Approval</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user-shield"></i><span>Admin</span>
+                    </a>
+                    <a href="users.html" class="sidebar-link">
+                        <i class="fas fa-user"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                    </a>
+
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-truck"></i><span>Vendor</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-box"></i><span>Product</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bullhorn"></i><span>Marketing</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-university"></i><span>Bank Account</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-hand-holding-usd"></i><span>Kasbon</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-credit-card"></i><span>Virtual Account</span>
+                    </a>
+                    <div class="sidebar-dropdown open">
+                        <div class="sidebar-link" onclick="toggleSidebarDropdown('sb-trx')">
+                            <i class="fas fa-sync"></i><span>Transaction</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="sidebar-submenu" id="sb-trx">
+                            <a href="payin.html" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Payin</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-upload"></i><span>Payout</span>
+                            </a>
+                            <a href="qris-mpm.html" class="sidebar-sublink">
+                                <i class="fas fa-qrcode"></i><span>QRIS MPM</span>
+                            </a>
+                            <a href="qris-cpm.html" class="sidebar-sublink active">
+                                <i class="fas fa-qrcode"></i><span>QRIS CPM</span>
+                            </a>
+                            <a href="transactions.html" class="sidebar-sublink">
+                                <i class="fas fa-user-tag"></i><span>App Users</span><i class="fas fa-triangle-exclamation" style="color:#D97706; margin-left: 4px; font-size: 0.7rem;" title="Pengerjaan Tambahan"></i><span style="font-size: 0.55rem; font-weight: 600; color: #D97706; background: #FEF3C7; border: 1px solid #FCD34D; padding: 0.5px 3px; border-radius: 3px; margin-left: 4px; vertical-align: middle;">WIP</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-download"></i><span>Topup Manual</span>
+                            </a>
+                            <a href="#" class="sidebar-sublink">
+                                <i class="fas fa-file-invoice"></i><span>Auto Reporting</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-calendar-alt"></i><span>Schedule</span>
+                    </a>
+                    <a href="audit.html" class="sidebar-link">
+                        <i class="fas fa-clipboard-list"></i><span>Log</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i><span>Recap</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i><span>Settings</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-undo-alt"></i><span>Callback Recovery</span>
+                    </a>
+
+                </nav>
+            </aside>
+
+            <!-- ── Main Area ── -->
+            <main class="main-area">
+                <!-- Breadcrumbs -->
+                <div class="topbar-breadcrumb" style="margin-bottom: 8px;">
+                    home / Paydia Bisnis / Transaction / <span style="font-weight:600; color:#1E293B;">QRIS CPM</span>
+                </div>
+
+                <!-- Page Content -->
+                <div class="page-content" style="padding: 0;">
+                    <div class="section-header" style="margin-bottom: 20px;">
+                        <div>
+                            <h1 class="page-title" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #0F172A;">QRIS CPM</h1>
+                        </div>
+                    </div>
+
+                    <!-- Table Toolbar -->
+                    <div class="table-toolbar" style="position: relative;">
+                        <div class="table-toolbar-left">
+                            <button class="btn btn-internal" id="btn-filter" style="background:#2c37b7; color:#fff; display:flex; align-items:center; gap:8px;">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-outline" id="btn-export" style="border: 1px solid #10B981; color:#10B981; display:flex; align-items:center; gap:8px; background:#fff;">
+                                <i class="fas fa-file-excel" style="color:#10B981"></i> Export
+                            </button>
+                        </div>
+                        <div class="table-toolbar-right">
+                            <span class="search-label">Search</span>
+                            <div class="search-container">
+                                <input type="text" class="form-input" id="search-input" style="width: 200px; padding: 6px 12px; border: 1px solid #CBD5E1; border-radius: 6px;" placeholder="">
+                                <button class="btn btn-internal" id="btn-search" style="background:#2c37b7; color:#fff; padding: 6px 16px;">Search</button>
+                                <button class="btn btn-outline" id="btn-reset" style="padding: 6px 16px;">Reset</button>
+                            </div>
+                        </div>
+
+                        <!-- Collapsible Filter Panel (Gambar 5) -->
+                        <div class="filter-panel" id="filter-panel">
+                            <div class="filter-grid" style="border-top: none; padding-top: 0;">
+                                <!-- Left Column -->
+                                <div class="filter-column" style="border-right: 1px solid #E2E8F0; padding-right: 24px;">
+                                    <div class="filter-group">
+                                        <div class="filter-group-title">Status</div>
+                                        <div class="filter-checkbox-list">
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-status" value="Buat">
+                                                <span>Buat</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-status" value="Pembayaran">
+                                                <span>Pembayaran</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-status" value="Proses">
+                                                <span>Proses</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-status" value="Sukses">
+                                                <span>Sukses</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-status" value="Gagal">
+                                                <span>Gagal</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="filter-group" style="margin-top: 16px;">
+                                        <div class="filter-group-title">Kategori</div>
+                                        <div class="filter-checkbox-list">
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Bayar Merchant" checked>
+                                                <span>Bayar Merchant</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Pengembalian Pembayaran" checked>
+                                                <span>Pengembalian Pembayaran</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Dispute" checked>
+                                                <span>Dispute</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Auth Payment" checked>
+                                                <span>Auth Payment</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Auth Payment Void" checked>
+                                                <span>Auth Payment Void</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Auth Payment Refund" checked>
+                                                <span>Auth Payment Refund</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="Direct Debit Payment" checked>
+                                                <span>Direct Debit Payment</span>
+                                            </label>
+                                            <label class="filter-checkbox-label">
+                                                <input type="checkbox" name="filter-category" value="CPM" checked>
+                                                <span>CPM</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Right Column -->
+                                <div class="filter-column">
+                                    <div class="filter-input-group">
+                                        <label>RRN</label>
+                                        <input type="text" class="form-input" id="filter-rrn" style="width: 100%;" placeholder="RRN">
+                                    </div>
+                                    <div class="filter-input-group">
+                                        <label>ID Transaksi</label>
+                                        <input type="text" class="form-input" id="filter-trx-id" style="width: 100%;" placeholder="ID Transaksi">
+                                    </div>
+                                    <div class="filter-input-group">
+                                        <label>MID</label>
+                                        <input type="text" class="form-input" id="filter-mid" style="width: 100%;" placeholder="MID">
+                                    </div>
+                                    <div class="filter-input-group">
+                                        <label>Date</label>
+                                        <div class="filter-date-container">
+                                            <input type="date" id="filter-start-date" value="2026-05-31">
+                                            <span class="filter-date-separator">➔</span>
+                                            <input type="date" id="filter-end-date" value="2026-05-31">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-footer-buttons">
+                                <button class="btn btn-outline" id="filter-clear" style="border-radius: 20px; padding: 6px 20px; font-weight: 500;">Clear All</button>
+                                <button class="btn btn-internal" id="filter-apply" style="background:#2c37b7; color:#fff; border-radius: 20px; padding: 6px 20px; font-weight: 500;">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-container" style="border-radius: 0 0 8px 8px; border-top: none; background: #fff;">
+                        <table class="data-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No</th>
+                                    <th>Tanggal Transaksi</th>
+                                    <th>ID Transaksi</th>
+                                    <th>RRN</th>
+                                    <th>Nama Merchant</th>
+                                    <th>Kategori</th>
+                                    <th>Status</th>
+                                    <th>Nominal Transaksi (Rp)</th>
+                                    <th>Nominal Tip (Rp)</th>
+                                    <th>Nominal MDR (Rp)</th>
+                                    <th>Nominal Total (Rp)</th>
+                                    <th>Vendor</th>
+                                    <th>Status Callback</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="qris-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination Footer -->
+                        <div class="pagination-wrapper" style="border-top: 1px solid #E2E8F0; padding: 16px 20px;">
+                            <span class="pagination-info" id="pagination-info">1 - 6 of 6</span>
+                            <div class="pagination" id="pagination-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── Edit Modal ── -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-dialog" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Ubah Status QRIS CPM</h3>
+                <button class="modal-close" onclick="closeStatusModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="modal-trx-id">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500; font-size:0.85rem;">Status Transaksi</label>
+                    <select class="form-select" id="modal-status-select" style="width: 100%;">
+                        <option value="Sukses">Sukses</option>
+                        <option value="Gagal">Gagal</option>
+                        <option value="Proses">Proses</option>
+                        <option value="Pembayaran">Pembayaran</option>
+                        <option value="Buat">Buat</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500; font-size:0.85rem;">Status Callback</label>
+                    <select class="form-select" id="modal-callback-select" style="width: 100%;">
+                        <option value="Sukses">Sukses</option>
+                        <option value="Gagal">Gagal</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:500; font-size:0.85rem;">Vendor</label>
+                    <input type="text" class="form-input" id="modal-vendor-input" style="width:100%" placeholder="Paydia">
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                    <button class="btn btn-outline" onclick="closeStatusModal()">Batal</button>
+                    <button class="btn btn-internal" onclick="saveStatus()" style="background:#2c37b7; color:#fff;">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Watermark Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+
+    <script src="../shared/data.js"></script>
+    <script src="internal.js"></script>
+    <script>
+        let qrisData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial seed data
+            qrisData = PaydiaData.getQrisMpm(); // CPM defaults to same seed for preview purposes
+            filteredData = [...qrisData];
+            
+            document.getElementById('filter-start-date').value = '';
+            document.getElementById('filter-end-date').value = '';
+
+            document.getElementById('btn-filter').addEventListener('click', function() {
+                const panel = document.getElementById('filter-panel');
+                panel.classList.toggle('open');
+            });
+
+            document.getElementById('btn-search').addEventListener('click', doSearch);
+            document.getElementById('btn-reset').addEventListener('click', doReset);
+            document.getElementById('filter-apply').addEventListener('click', applyFilters);
+            document.getElementById('filter-clear').addEventListener('click', clearFilters);
+            document.getElementById('btn-export').addEventListener('click', doExport);
+
+            renderTable();
+        });
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('id-ID').format(num);
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, filteredData.length);
+            const pageItems = filteredData.slice(start, end);
+
+            const tbody = document.getElementById('qris-table-body');
+            tbody.innerHTML = '';
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="14" class="text-center text-muted" style="padding: 30px;">Tidak ada data transaksi QRIS CPM.</td></tr>`;
+                document.getElementById('pagination-info').textContent = '0 - 0 of 0';
+                renderPagination(0);
+                return;
+            }
+
+            pageItems.forEach((item, index) => {
+                const rowNo = start + index + 1;
+                
+                const statusClass = item.status.toLowerCase();
+                const statusBadge = `<span class="status-badge-custom ${statusClass}">${item.status}</span>`;
+
+                const cbClass = item.callbackStatus.toLowerCase();
+                const cbBadge = `<span class="status-badge-custom ${cbClass}">${item.callbackStatus}</span>`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${rowNo}</td>
+                    <td>${item.date}</td>
+                    <td><strong style="color: #475569;">${item.id}</strong></td>
+                    <td><code>${item.refNo}</code></td>
+                    <td>
+                        <div style="font-weight: 600; font-size: 0.85rem; color:#1E293B;">${item.merchantName}</div>
+                        <div class="text-muted" style="font-size: 0.75rem; color:#64748B;">MID: ${item.merchantMid}</div>
+                    </td>
+                    <td><span class="badge badge-neutral" style="font-size: 0.75rem; padding: 2px 6px;">${item.category}</span></td>
+                    <td style="text-align: center;">${statusBadge}</td>
+                    <td style="font-weight: 500;">${formatNumber(item.nominal)}</td>
+                    <td>${formatNumber(item.tip)}</td>
+                    <td style="color:#ef4444;">-${formatNumber(item.mdr)}</td>
+                    <td style="font-weight: 700; color:#2c37b7;">${formatNumber(item.total)}</td>
+                    <td>${item.vendor || '-'}</td>
+                    <td style="text-align: center;">${cbBadge}</td>
+                    <td style="text-align: center;">
+                        <button class="btn btn-internal" onclick="openStatusModal('${item.id}', '${item.status}', '${item.callbackStatus}', '${item.vendor}')" style="background: #2c37b7; color: #fff; padding: 4px 10px; font-size: 0.78rem;">Ubah Status</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('pagination-info').textContent = `${start + 1} - ${end} of ${filteredData.length}`;
+            renderPagination(filteredData.length);
+        }
+
+        function renderPagination(totalItems) {
+            const container = document.getElementById('pagination-container');
+            container.innerHTML = '';
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (totalPages <= 1) return;
+
+            // Prev Button
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            };
+            container.appendChild(prevBtn);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                container.appendChild(btn);
+            }
+
+            // Next Button
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            };
+            container.appendChild(nextBtn);
+        }
+
+        function doSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!query) {
+                filteredData = [...qrisData];
+            } else {
+                filteredData = qrisData.filter(item => 
+                    item.id.toLowerCase().includes(query) ||
+                    item.refNo.toLowerCase().includes(query) ||
+                    item.merchantMid.toLowerCase().includes(query) ||
+                    item.merchantName.toLowerCase().includes(query)
+                );
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        function doReset() {
+            document.getElementById('search-input').value = '';
+            filteredData = [...qrisData];
+            currentPage = 1;
+            renderTable();
+        }
+
+        function applyFilters() {
+            const statusCheckboxes = document.querySelectorAll('input[name="filter-status"]:checked');
+            const statuses = Array.from(statusCheckboxes).map(cb => cb.value);
+
+            const categoryCheckboxes = document.querySelectorAll('input[name="filter-category"]:checked');
+            const categories = Array.from(categoryCheckboxes).map(cb => cb.value);
+
+            const rrnVal = document.getElementById('filter-rrn').value.trim();
+            const trxId = document.getElementById('filter-trx-id').value.toLowerCase().trim();
+            const mid = document.getElementById('filter-mid').value.trim();
+            const startDateStr = document.getElementById('filter-start-date').value;
+            const endDateStr = document.getElementById('filter-end-date').value;
+
+            filteredData = qrisData.filter(item => {
+                if (statuses.length > 0 && !statuses.includes(item.status)) return false;
+                if (categories.length > 0 && !categories.includes(item.category)) return false;
+                if (rrnVal && !item.refNo.includes(rrnVal)) return false;
+                if (trxId && !item.id.toLowerCase().includes(trxId)) return false;
+                if (mid && !item.merchantMid.includes(mid)) return false;
+                if (startDateStr) {
+                    const itemDate = new Date(item.date.split(' ')[0]);
+                    const startDate = new Date(startDateStr);
+                    if (itemDate < startDate) return false;
+                }
+                if (endDateStr) {
+                    const itemDate = new Date(item.date.split(' ')[0]);
+                    const endDate = new Date(endDateStr);
+                    if (itemDate > endDate) return false;
+                }
+                return true;
+            });
+
+            currentPage = 1;
+            renderTable();
+            document.getElementById('filter-panel').classList.remove('open');
+            showToast('Filter Applied', `Menemukan ${filteredData.length} transaksi QRIS CPM`, 'success');
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('input[name="filter-status"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[name="filter-category"]').forEach(cb => cb.checked = true);
+            document.getElementById('filter-rrn').value = '';
+            document.getElementById('filter-trx-id').value = '';
+            document.getElementById('filter-mid').value = '';
+            document.getElementById('filter-start-date').value = '';
+            document.getElementById('filter-end-date').value = '';
+
+            filteredData = [...qrisData];
+            currentPage = 1;
+            renderTable();
+            showToast('Filter Cleared', 'Semua filter direset', 'success');
+        }
+
+        function openStatusModal(trxId, currentStatus, currentCallback, currentVendor) {
+            document.getElementById('modal-trx-id').value = trxId;
+            document.getElementById('modal-status-select').value = currentStatus;
+            document.getElementById('modal-callback-select').value = currentCallback;
+            document.getElementById('modal-vendor-input').value = currentVendor || '';
+            openModal('statusModal');
+        }
+
+        function closeStatusModal() {
+            closeModal('statusModal');
+        }
+
+        function saveStatus() {
+            const trxId = document.getElementById('modal-trx-id').value;
+            const newStatus = document.getElementById('modal-status-select').value;
+            const newCallback = document.getElementById('modal-callback-select').value;
+            const newVendor = document.getElementById('modal-vendor-input').value;
+
+            const updated = PaydiaData.updateQrisMpm(trxId, { status: newStatus, callbackStatus: newCallback, vendor: newVendor });
+            if (updated) {
+                qrisData = PaydiaData.getQrisMpm();
+                doSearch();
+                closeStatusModal();
+                showToast('Status Diperbarui', `Transaksi ${trxId} berhasil diubah.`, 'success');
+            }
+        }
+
+        function doExport() {
+            const headers = ['No', 'Tanggal Transaksi', 'ID Transaksi', 'RRN', 'Nama Merchant', 'Kategori', 'Status', 'Nominal Transaksi', 'Nominal Tip', 'Nominal MDR', 'Nominal Total', 'Vendor', 'Status Callback'];
+            const rows = filteredData.map((item, idx) => [
+                idx + 1,
+                item.date,
+                item.id,
+                item.refNo,
+                item.merchantName,
+                item.category,
+                item.status,
+                item.nominal,
+                item.tip,
+                item.mdr,
+                item.total,
+                item.vendor || '-',
+                item.callbackStatus
+            ]);
+            exportCSV(headers, rows, 'qris-cpm-transactions-export.csv');
+        }
+    </script>
+</body>
+</html>
