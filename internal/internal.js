@@ -635,7 +635,10 @@ function selectTenantAndNavigate(tenantId) {
 // Run on load
 document.addEventListener('DOMContentLoaded', function() {
     updateNotificationBell();
-    
+
+    // Version history widget (top-right of header)
+    if (typeof mountVersionWidget === 'function') mountVersionWidget('admin');
+
     // Partner Dashboard Dropdown Handler
     const partnerBtn = document.getElementById('btn-partner-dashboard');
     const partnerMenu = document.getElementById('partner-dropdown-menu');

@@ -271,6 +271,9 @@ function initPartner() {
         console.warn('No config found for tenant:', tenantId);
     }
     renderTopbarNavigation();
+
+    // Version history widget (top-right of header)
+    if (typeof mountVersionWidget === 'function') mountVersionWidget('partner');
 }
 
 

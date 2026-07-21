@@ -137,6 +137,35 @@
         return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
     }
 
+    // ── Per-Vendor Splash Screen ──
+    let splashHideTimer = null;
+    function showSplash(config) {
+        if (!config) return;
+        const splash = document.getElementById('appSplashScreen');
+        const logoEl = document.getElementById('appSplashLogo');
+        const logoWrapEl = document.getElementById('appSplashLogoWrap');
+        const nameEl = document.getElementById('appSplashName');
+        if (!splash) return;
+
+        const primary = config.primaryColor || '#6C3CE1';
+        const primaryDark = adjustColor(primary, -18);
+
+        splash.style.background = `linear-gradient(160deg, ${primary} 0%, ${primaryDark} 100%)`;
+
+        if (logoEl) {
+            logoEl.style.display = '';
+            if (logoWrapEl) logoWrapEl.style.display = '';
+            logoEl.src = resolvePath(config.appLogoUrl || '');
+        }
+        if (nameEl) nameEl.textContent = config.appName || '';
+
+        clearTimeout(splashHideTimer);
+        splash.classList.add('app-splash-active');
+        splashHideTimer = setTimeout(function () {
+            splash.classList.remove('app-splash-active');
+        }, 1600);
+    }
+
     // ── Apply Theme Colors ──
     function applyColors(config) {
         const primary = config.primaryColor || '#6C3CE1';
@@ -1058,6 +1087,9 @@
         const primary = config.primaryColor || '#6C3CE1';
         const primaryLight = adjustColor(primary, 15);
 
+        // Per-vendor themed splash (initial load + every tenant switch)
+        showSplash(config);
+
         // Update active tenant display info
         const activeTenantInfo = document.getElementById('activeTenantInfo');
         if (activeTenantInfo) {
@@ -1210,12 +1242,15 @@
 
         // Setup internal dashboard mock navigation handler
         setupInternalNav();
-        
+
         // Setup partner dashboard mock navigation handler
         setupPartnerNav();
 
         // Ensure home tab is active on load
         switchTab('home');
+
+        // Version history widget (preview toolbar)
+        if (typeof mountVersionWidget === 'function') mountVersionWidget('app');
     }
 
     // Run

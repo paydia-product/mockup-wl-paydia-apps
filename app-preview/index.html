@@ -52,6 +52,15 @@
                     </span>
                 </div>
 
+                <!-- Per-Vendor Splash Screen -->
+                <div class="app-splash-screen" id="appSplashScreen">
+                    <div class="app-splash-logo-wrap" id="appSplashLogoWrap">
+                        <img src="" alt="" class="app-splash-logo" id="appSplashLogo" onerror="this.style.display='none'; this.closest('.app-splash-logo-wrap').style.display='none';">
+                    </div>
+                    <div class="app-splash-name" id="appSplashName"></div>
+                    <div class="app-splash-indicator"></div>
+                </div>
+
                 <!-- App Content -->
                 <div class="app-content">
 
@@ -452,7 +461,8 @@
     </div>
 
     <script src="/shared/data.js"></script>
-    <script src="/app-preview/app-preview.js"></script>
+    <script src="/shared/versions.js?v=5.4.0"></script>
+    <script src="/app-preview/app-preview.js?v=5.4.0"></script>
     <!-- Watermark -->
     <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
         Mockup Prototype - Final Display May Different<br>
