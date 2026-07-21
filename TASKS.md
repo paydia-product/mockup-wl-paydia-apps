@@ -7,6 +7,7 @@ _Last updated: 2026-07-21_
 ## Backlog
 
 ## Done
+- [x] Dashboard Partner: menu sidebar "App Users" (daftar pengguna aplikasi whitelabel partner) & "Transaction" (transaksi di aplikasi partner) — halaman baru dengan tabel, pencarian, filter (status/jenis, diisi dari data), pagination, detail. Partner v2.4.0.
 - [x] Sistem versioning in-app (widget riwayat versi) di 3 surface dengan registry TERPISAH (Admin v1.5.0, Partner v2.3.0, Aplikasi v5.4.0) — pill + panel changelog searchable, badge Latest/Deployed. Registry di `shared/versions.js`.
 - [x] Splash screen per-vendor di Aplikasi White Label (warna/logo/nama menyesuaikan data tiap vendor), tampil saat buka & ganti tenant, auto-fade ~1.6s.
 - [x] Modifikasi seluruh halaman mockup dashboard partner dengan menambahkan navigasi ke App Whitelabel, Dashboard Tenant Lain, dan Dashboard Internal (menggunakan Z-Index dan dynamic dropdown yang responsif).

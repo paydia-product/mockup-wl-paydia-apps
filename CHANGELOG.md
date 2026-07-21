@@ -6,6 +6,27 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.2.0] - 2026-07-21
+
+Dashboard Partner: dua menu baru untuk memantau aplikasi whitelabel. Versi surface: **Partner v2.4.0**.
+
+### Added
+- Menu sidebar **App Users** (`partner/app-users.html`) — daftar pengguna aplikasi
+  whitelabel milik partner: nama, no HP, email, status, saldo, total transaksi,
+  tanggal daftar; dengan pencarian, filter status, pagination, dan detail per user.
+- Menu sidebar **Transaction** (`partner/app-transactions.html`) — transaksi yang
+  terjadi di aplikasi partner: ID, nama user, jenis, nominal, status, tanggal;
+  dengan pencarian, filter jenis & status, pagination, dan detail per transaksi.
+- Kedua filter (status & jenis) diisi otomatis dari nilai yang benar-benar ada di
+  data, sehingga selalu cocok dengan isi tabel.
+
+### Fixed
+- `statusBadge`/`trxTypeLabel` (dipakai bersama halaman lama) kini mengenali nilai
+  data `Active` → "Aktif" (badge hijau), `payment` → "Pembayaran", dan `Buat` —
+  sebelumnya tampil mentah/abu-abu dan tak bisa difilter.
+- Judul empty-state membedakan "belum ada data" vs "tidak ada hasil" pencarian/filter.
+- Field kosong pada detail transaksi (mis. no HP penerima) menampilkan "-".
+
 ## [1.1.0] - 2026-07-21
 
 Rilis batch: sistem versioning in-app + splash screen per-vendor.

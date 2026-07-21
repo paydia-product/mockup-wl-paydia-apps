@@ -52,10 +52,22 @@
         ],
         partner: [
             {
-                version: 'v2.3.0',
+                version: 'v2.4.0',
                 date: '2026-07-21',
                 deployed: true,
                 latest: true,
+                summary: 'Menu App Users & Transaction untuk memantau aplikasi whitelabel.',
+                changes: [
+                    'Menu "App Users": daftar pengguna aplikasi whitelabel partner',
+                    'Menu "Transaction": transaksi yang terjadi di aplikasi partner',
+                    'Filter status & jenis mengikuti data yang ada, pencarian, dan detail per baris'
+                ]
+            },
+            {
+                version: 'v2.3.0',
+                date: '2026-07-21',
+                deployed: false,
+                latest: false,
                 summary: 'Menambahkan widget riwayat versi di header Paydia Bisnis.',
                 changes: [
                     'Widget dropdown versi baru di header partner',

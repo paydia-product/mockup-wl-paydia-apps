@@ -56,6 +56,8 @@ function renderSidebar(activePage) {
     const navDef = [
         { type: 'link', id: 'beranda', label: 'Beranda', icon: 'fa-house', href: 'index.html', allowClick: true },
         { type: 'link', id: 'whitelabel', label: 'Whitelabel', icon: 'fa-palette', href: 'customize.html', allowClick: true },
+        { type: 'link', id: 'app-users', label: 'App Users', icon: 'fa-user-group', href: 'app-users.html', allowClick: true },
+        { type: 'link', id: 'app-transactions', label: 'Transaction', icon: 'fa-receipt', href: 'app-transactions.html', allowClick: true },
         {
             type: 'group', id: 'sub-merchant', label: 'Sub-Merchant', icon: 'fa-store',
             children: [
@@ -278,20 +280,34 @@ function initPartner() {
 
 
 // ── Status Badge Helper ──
+// ponytail: normalized display labels kept separate from color map so raw
+// English seed values (e.g. 'Active') still render Indonesian text.
+const STATUS_DISPLAY_LABELS = {
+    'Active': 'Aktif',
+    'Inactive': 'Nonaktif',
+};
+
+function statusLabel(status) {
+    return STATUS_DISPLAY_LABELS[status] || status;
+}
+
 function statusBadge(status) {
     const map = {
         'Berhasil': 'badge-success',
         'Aktif': 'badge-success',
+        'Active': 'badge-success',
         'Gagal': 'badge-danger',
         'Nonaktif': 'badge-danger',
+        'Inactive': 'badge-danger',
         'Diproses': 'badge-info',
         'Menunggu Review': 'badge-warning',
         'Sedang Dikerjakan': 'badge-info',
         'Selesai': 'badge-success',
         'Ditolak': 'badge-danger',
+        'Buat': 'badge-info',
     };
     const cls = map[status] || 'badge-neutral';
-    return `<span class="badge ${cls}"><span class="badge-dot"></span>${status}</span>`;
+    return `<span class="badge ${cls}"><span class="badge-dot"></span>${statusLabel(status)}</span>`;
 }
 
 // ── Transaction Type Label ──
@@ -301,6 +317,7 @@ function trxTypeLabel(type) {
         'topup': 'Top Up',
         'qris': 'QRIS',
         'biller': 'Biller',
+        'payment': 'Pembayaran',
     };
     return map[type] || type;
 }
