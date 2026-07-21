@@ -1131,10 +1131,18 @@
 
 .page-title {
     font-size: 1.85rem !important;
+    color: #0F172A !important;
 }
 
 .page-subtitle {
     font-size: 0.95rem !important;
+    color: #475569 !important;
+}
+
+/* Breadcrumb active segment: partner surface is light, var(--text-primary)
+   resolves to dark-theme near-white and is unreadable here. */
+.topbar-breadcrumb span {
+    color: #0F172A !important;
 }
 
 /* Card Padding & Spacing */
@@ -1358,5 +1366,27 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+/* ── Light table override (App Users / Transaction pages only) ── */
+.table-container.table-light {
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F8FAFC;
+    --bg-input: #F8FAFC;
+    --bg-table-row: #FFFFFF;
+    --bg-table-hover: #F8FAFC;
+    --border: #E2E8F0;
+    --border-light: #EDF2F7;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    background: #FFFFFF;
+    border-color: #E2E8F0;
+}
+.table-container.table-light .data-table thead th {
+    background: #F8FAFC;
+}
+.table-container.table-light .empty-state-title {
+    color: var(--text-primary);
 }
 

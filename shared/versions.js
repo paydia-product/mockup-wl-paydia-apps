@@ -52,10 +52,22 @@
         ],
         partner: [
             {
-                version: 'v2.4.0',
+                version: 'v2.5.0',
                 date: '2026-07-21',
                 deployed: true,
                 latest: true,
+                summary: 'Tabel App Users & Transaction jadi putih + data contoh untuk semua tenant.',
+                changes: [
+                    'Tabel App Users & Transaction memakai tema putih dengan teks yang jelas terbaca',
+                    'Judul halaman partner yang tadinya samar kini kontras dan mudah dibaca',
+                    'Setiap tenant kini punya data pengguna & transaksi contoh (tidak lagi kosong)'
+                ]
+            },
+            {
+                version: 'v2.4.0',
+                date: '2026-07-21',
+                deployed: false,
+                latest: false,
                 summary: 'Menu App Users & Transaction untuk memantau aplikasi whitelabel.',
                 changes: [
                     'Menu "App Users": daftar pengguna aplikasi whitelabel partner',

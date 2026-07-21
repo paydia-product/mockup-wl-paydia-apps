@@ -449,7 +449,7 @@ const PaydiaData = (() => {
             { id: 'TRX-002-0007', userId: 'USR-002-001', userName: 'Ariskurniawan', userPhone: '082244274194', type: 'qris', nominal: 1000, fee: 0, status: 'Berhasil', recipientName: '', recipientPhone: '', refNo: '260528000007', date: '2026-05-28 14:05:20', category: 'Merchant - Bayar Merchant', tenantId: 'TNT-002' }
         ],
         'TNT-003': [
-            { id: 'TRX-003-0006', userId: 'USR-003-001', userName: 'Ola', userPhone: '082112381683', type: 'qris', nominal: 9000, fee: 0, status: 'Berhasil', recipientName: '', recipientPhone: '', refNo: '260528000006', date: '2026-05-28 11:16:28', category: 'Merchant - Bayar Merchant', tenantId: 'TNT-003' }
+            { id: 'TRX-003-0006', userId: 'USR-003-001', userName: 'nirza', userPhone: '089667711222', type: 'qris', nominal: 9000, fee: 0, status: 'Berhasil', recipientName: '', recipientPhone: '', refNo: '260528000006', date: '2026-05-28 11:16:28', category: 'Merchant - Bayar Merchant', tenantId: 'TNT-003' }
         ],
         'TNT-004': [], 'TNT-005': [], 'TNT-006': [], 'TNT-007': [], 'TNT-008': [], 'TNT-009': [], 'TNT-010': [], 'TNT-011': [],
         'TNT-012': [
@@ -466,6 +466,88 @@ const PaydiaData = (() => {
             { id: 'TRX-012-0011', userId: 'USR-012-001', userName: 'Dion', userPhone: '087885900280', type: 'topup', nominal: 20066, fee: 0, status: 'Gagal', recipientName: 'BCA', recipientPhone: '', refNo: '260507000011', date: '2026-05-07 12:36:00', category: 'Top Up Bank Transfer', tenantId: 'TNT-012' }
         ]
     };
+
+    // ── Generated filler users/transactions so every tenant has ≥12 of each ──
+    // (deterministic, index-based — no Math.random — appended after the named anchors above)
+    const FILLER_NAMES = [
+        'Budi Santoso', 'Siti Nurhaliza', 'Agus Wijaya', 'Dewi Lestari', 'Rudi Hartono',
+        'Ani Suryani', 'Bambang Setiawan', 'Fitri Handayani', 'Joko Susilo', 'Rina Marlina',
+        'Hendra Gunawan', 'Yuni Astuti', 'Andi Firmansyah', 'Lina Kartika', 'Wahyu Ramadhan', 'Putri Amelia'
+    ];
+    const TENANT_NUMS = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012'];
+    const TRX_TYPES = ['transfer', 'topup', 'qris', 'payment', 'biller'];
+    const TRX_CATEGORY = {
+        transfer: 'Uang Keluar - Transfer Bank', topup: 'Top Up Bank Transfer',
+        qris: 'Merchant - Bayar Merchant', payment: 'Payment', biller: 'Tagihan - Pembayaran Biller'
+    };
+    const pad3 = n => String(n).padStart(3, '0');
+    const maxSuffix = (list, re) => list.reduce((max, item) => {
+        const m = re.exec(item.id);
+        return m ? Math.max(max, parseInt(m[1], 10)) : max;
+    }, 0);
+
+    function ensureMinUsers(tenantId, tnum, minCount) {
+        const list = SEED_USERS[tenantId] || (SEED_USERS[tenantId] = []);
+        let seq = maxSuffix(list, /USR-\d+-(\d+)/) + 1, i = 0;
+        while (list.length < minCount) {
+            const round = Math.floor(i / FILLER_NAMES.length);
+            const name = FILLER_NAMES[i % FILLER_NAMES.length] + (round > 0 ? ' ' + (round + 1) : '');
+            const day = (seq * 3) % 28 + 1;
+            const active = seq % 4 !== 0;
+            list.push({
+                id: `USR-${tnum}-${pad3(seq)}`,
+                name,
+                phone: '08' + String(1000000000 + Number(tnum) * 7654321 + seq * 911).slice(-9),
+                email: name.toLowerCase().replace(/\s+/g, '.') + seq + '@mail.com',
+                dob: `199${seq % 10}-0${(seq % 9) + 1}-1${seq % 9}`,
+                status: active ? 'Active' : 'Nonaktif',
+                balance: (seq * 15000) % 750000,
+                totalTrx: (seq * 3) % 40,
+                registeredAt: `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 0${seq % 9}:${String((seq * 7) % 60).padStart(2, '0')}:00`,
+                lastActivity: active ? `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 1${seq % 9}:${String((seq * 11) % 60).padStart(2, '0')}:00` : '',
+                statusDormant: 'In 11 month',
+                preKyc: true,
+                userType: 'user'
+            });
+            seq++; i++;
+        }
+    }
+
+    function ensureMinTransactions(tenantId, tnum, minCount) {
+        const list = SEED_TRX[tenantId] || (SEED_TRX[tenantId] = []);
+        const users = SEED_USERS[tenantId] || [];
+        if (users.length === 0) return;
+        let seq = maxSuffix(list, /TRX-\d+-(\d+)/) + 1, i = 0;
+        while (list.length < minCount) {
+            const user = users[i % users.length];
+            const type = TRX_TYPES[i % TRX_TYPES.length];
+            const day = (seq * 2) % 28 + 1;
+            const status = seq % 11 === 0 ? 'Diproses' : (seq % 7 === 0 ? 'Gagal' : 'Berhasil');
+            list.push({
+                id: `TRX-${tnum}-${String(seq).padStart(4, '0')}`,
+                userId: user.id,
+                userName: user.name,
+                userPhone: user.phone,
+                type,
+                nominal: (seq * 12345) % 900000 + 5000,
+                fee: type === 'transfer' ? 2500 : 0,
+                status,
+                recipientName: type === 'transfer' ? 'Bank Transfer Tujuan' : (type === 'biller' ? 'PLN Prepaid' : ''),
+                recipientPhone: '',
+                refNo: `2606${tnum}${String(seq).padStart(5, '0')}`,
+                date: `2026-06-${String(day).padStart(2, '0')} 1${seq % 9}:${String((seq * 13) % 60).padStart(2, '0')}:00`,
+                category: TRX_CATEGORY[type],
+                tenantId
+            });
+            seq++; i++;
+        }
+    }
+
+    TENANT_NUMS.forEach(tnum => {
+        const tid = `TNT-${tnum}`;
+        ensureMinUsers(tid, tnum, 12);
+        ensureMinTransactions(tid, tnum, 12);
+    });
 
     // ── Seed Data: Requests ──
     const SEED_REQUESTS = [
@@ -507,7 +589,7 @@ const PaydiaData = (() => {
 
     // ── Initialize / Seed Database ──
     function initialize(forceReset = false) {
-        const currentVersion = '17'; // Increment to reset cache and apply new schema
+        const currentVersion = '19'; // Increment to reset cache and apply new schema
         const seedVersion = localStorage.getItem('paydia_wl_seed_version');
         if (seedVersion !== currentVersion) {
             forceReset = true;
