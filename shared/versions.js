@@ -52,10 +52,21 @@
         ],
         partner: [
             {
-                version: 'v2.5.0',
+                version: 'v2.6.0',
                 date: '2026-07-21',
                 deployed: true,
                 latest: true,
+                summary: 'Modal detail transaksi & user kini bertema putih.',
+                changes: [
+                    'Modal "Detail Transaksi" & "Detail User" berubah dari gelap menjadi putih sesuai tema dashboard',
+                    'Teks di dalam modal jelas terbaca (label, nilai, dan sub-tabel transaksi terakhir)'
+                ]
+            },
+            {
+                version: 'v2.5.0',
+                date: '2026-07-21',
+                deployed: false,
+                latest: false,
                 summary: 'Tabel App Users & Transaction jadi putih + data contoh untuk semua tenant.',
                 changes: [
                     'Tabel App Users & Transaction memakai tema putih dengan teks yang jelas terbaca',

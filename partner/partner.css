@@ -1390,3 +1390,29 @@
     color: var(--text-primary);
 }
 
+/* ── Light (white) detail modal — scoped to partner detail dialogs ── */
+.modal-dialog.modal-light {
+    --bg-modal: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-input: #F8FAFC;
+    --bg-table-row: #FFFFFF;
+    --bg-table-hover: #F8FAFC;
+    --border: #E2E8F0;
+    --border-light: #EDF2F7;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    background: #FFFFFF;
+    border-color: #E2E8F0;
+}
+.modal-dialog.modal-light .modal-title { color: #0F172A; }
+.modal-dialog.modal-light .modal-close {
+    background: #F1F5F9;
+    color: #475569;
+}
+.modal-dialog.modal-light .modal-close:hover {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+.modal-dialog.modal-light .data-table thead th { background: #F8FAFC; }
+

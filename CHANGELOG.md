@@ -6,6 +6,17 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.4.0] - 2026-07-21
+
+Dashboard Partner: modal detail dibuat terang. Versi surface: **Partner v2.6.0**.
+
+### Changed
+- Modal **Detail Transaksi** dan **Detail User** berubah dari gelap menjadi
+  **putih** sesuai tema dashboard, dengan teks yang jelas terbaca (label, nilai,
+  tombol tutup, dan sub-tabel "Transaksi Terakhir"). Berlaku di seluruh Dashboard
+  Partner — halaman baru (App Users, Transaction) maupun lama (Manajemen Akun,
+  Riwayat Transaksi).
+
 ## [1.3.0] - 2026-07-21
 
 Dashboard Partner: tabel App Users & Transaction dibuat terang + data contoh untuk semua tenant. Versi surface: **Partner v2.5.0**.

@@ -6,7 +6,7 @@
     <title>Manajemen User/Member — Dashboard Partner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../shared/shared.css">
-    <link rel="stylesheet" href="partner.css">
+    <link rel="stylesheet" href="partner.css?v=2.6.0">
 </head>
 <body>
     <div class="dashboard-layout">
@@ -76,7 +76,7 @@
 
     <!-- Detail Modal -->
     <div class="modal-overlay" id="userDetailModal">
-        <div class="modal-dialog" style="max-width:600px">
+        <div class="modal-dialog modal-light" style="max-width:600px">
             <div class="modal-header">
                 <div class="modal-title">Detail User</div>
                 <button class="modal-close" onclick="closeModal('userDetailModal')"><i class="fas fa-times"></i></button>
@@ -103,8 +103,8 @@
     </div>
 
     <script src="../shared/data.js"></script>
-    <script src="../shared/versions.js?v=2.5.0"></script>
-    <script src="partner.js?v=2.5.0"></script>
+    <script src="../shared/versions.js?v=2.6.0"></script>
+    <script src="partner.js?v=2.6.0"></script>
     <script>
         let allUsers = [];
         let filteredUsers = [];
