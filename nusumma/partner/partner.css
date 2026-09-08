@@ -72,7 +72,7 @@
     font-size: 0.85rem;
 }
 
-.config-section-title .icon-purple { background: rgba(255, 152, 0, 0.12); color: #8B5CF6; }
+.config-section-title .icon-purple { background: rgba(255, 152, 0, 0.12); color: #E07B00; }
 .config-section-title .icon-green { background: rgba(16, 185, 129, 0.12); color: #10B981; }
 .config-section-title .icon-blue { background: rgba(255, 152, 0, 0.12); color: #E07B00; }
 .config-section-title .icon-yellow { background: rgba(245, 158, 11, 0.12); color: #F59E0B; }
@@ -1291,6 +1291,8 @@
     cursor: pointer; user-select: none;
 }
 .pb-nav-group-header:hover { background: #F1F5F9; }
+.pb-nav-group-header-active .pb-nav-group-left span { color: #E07B00; font-weight: 600; }
+.pb-nav-group-header-active .pb-nav-group-left i { color: #E07B00; }
 .pb-nav-group-left { display: flex; align-items: center; gap: 10px; }
 .pb-nav-group-left i { width: 16px; font-size: 0.8rem; color: #64748B; }
 .pb-nav-chevron { font-size: 0.62rem; color: #94A3B8; transition: transform 0.2s; }
@@ -1416,6 +1418,7 @@
     --text-muted: #64748B;
     background: #FFFFFF;
     border-color: #E2E8F0;
+    color: #0F172A;
 }
 .modal-dialog.modal-light .modal-title { color: #0F172A; }
 .modal-dialog.modal-light .modal-close {

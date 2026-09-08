@@ -102,9 +102,29 @@
         }
 
         .role-tab.active {
-            background: #FFF1DA;
-            border-color: #FF9800;
-            box-shadow: 0 0 20px rgba(255, 152, 0, 0.12);
+            background: #FFE3B8;
+            border: 2px solid #EF6C00;
+            padding: 13px 11px;
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.18);
+            position: relative;
+        }
+
+        .role-tab.active::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #EF6C00;
+            color: #fff;
+            font-size: 0.55rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .role-tab-icon {
@@ -173,16 +193,16 @@
         .btn-login {
             width: 100%;
             padding: 13px;
-            background: #FFF1DA;
-            color: #C56600;
-            border: 1px solid #FFB74D;
+            background: #EF6C00;
+            color: #FFFFFF;
+            border: 1px solid #EF6C00;
             border-radius: 10px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
             margin-top: 4px;
             display: flex;
             align-items: center;
@@ -192,9 +212,9 @@
 
         .btn-login:hover {
             transform: translateY(-1px);
-            background: #FFE3B8;
-            border-color: #FF9800;
-            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.15);
+            background: #D96200;
+            border-color: #D96200;
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
         }
 
         .btn-login:active { transform: translateY(0); }
@@ -204,8 +224,8 @@
             display: none;
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(197, 102, 0, 0.2);
-            border-top-color: #C56600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #FFFFFF;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
@@ -320,8 +340,12 @@
         NusummaData.initialize();
 
         let selectedRole = 'partner';
-        // Flagship Nusumma tenant used for the "Dashboard Merchant" destination.
-        const NUSUMMA_PARTNER_TENANT = 'NUS-001';
+        // Tenant used for the "Dashboard Merchant" destination — preserves
+        // whichever tenant the user last selected (e.g. via Switch Tenant),
+        // falling back to the flagship NUS-001 only when nothing is set yet.
+        function getPortalTenantId() {
+            return NusummaData.getCurrentTenant() || 'NUS-001';
+        }
 
         function selectRole(role) {
             selectedRole = role;
@@ -337,7 +361,7 @@
             clearError();
 
             if (selectedRole === 'partner') {
-                const tenant = NusummaData.getTenant(NUSUMMA_PARTNER_TENANT);
+                const tenant = NusummaData.getTenant(getPortalTenantId());
                 contentDiv.innerHTML = `
                     <div class="portal-desc-card">
                         <i class="fas fa-store"></i>
@@ -404,17 +428,18 @@
                     return;
                 }
 
-                // Mint a role: partner token for the flagship Nusumma tenant
-                const tenant = NusummaData.getTenant(NUSUMMA_PARTNER_TENANT);
+                // Mint a role: partner token for the currently-selected Nusumma tenant
+                const portalTenantId = getPortalTenantId();
+                const tenant = NusummaData.getTenant(portalTenantId);
                 const email = tenant ? tenant.emailPIC : 'partner@nusumma-jombang.id';
-                const token = await createToken(email, 'partner', NUSUMMA_PARTNER_TENANT);
+                const token = await createToken(email, 'partner', portalTenantId);
 
                 setCookie('dsh_auth', token, 86400);
                 setCookie('dsh_role', 'partner', 86400);
-                setCookie('dsh_tenant', NUSUMMA_PARTNER_TENANT, 86400);
+                setCookie('dsh_tenant', portalTenantId, 86400);
 
                 NusummaData.setCurrentRole('partner');
-                NusummaData.setCurrentTenant(NUSUMMA_PARTNER_TENANT);
+                NusummaData.setCurrentTenant(portalTenantId);
 
                 window.location.replace('partner/index.html');
             } catch (err) {

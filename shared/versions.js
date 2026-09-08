@@ -161,10 +161,26 @@
         ],
         nusumma: [
             {
-                version: 'v1.0.0',
+                version: 'v1.0.1',
                 date: '2026-09-08',
                 deployed: true,
                 latest: true,
+                summary: 'Perbaikan setelah uji coba: pilihan cabang, ikon aplikasi, dan logo.',
+                changes: [
+                    'Cabang yang dipilih tidak lagi kembali ke Jombang saat masuk lewat portal',
+                    'Sesi merchant Nusumma tidak bisa membuka dashboard Paydia, dan sebaliknya',
+                    'Ikon di aplikasi whitelabel kini oranye Nusumma (sebelumnya ungu)',
+                    'Mark logo diperbaiki menjadi bentuk "V" sesuai logo resmi',
+                    'Judul "Transaksi Terakhir" di modal detail kini terbaca',
+                    'Menu sidebar menandai halaman aktif di semua halaman',
+                    'Data tiap cabang kini berbeda, tidak lagi kembar'
+                ]
+            },
+            {
+                version: 'v1.0.0',
+                date: '2026-09-08',
+                deployed: false,
+                latest: false,
                 summary: 'Peluncuran mockup white label BPR Nusumma.',
                 changes: [
                     'Dashboard Merchant Nusumma dengan 6 kantor cabang BPR Nusumma',

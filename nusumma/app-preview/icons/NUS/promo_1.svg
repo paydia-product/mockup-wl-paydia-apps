@@ -1,0 +1,18 @@
+<svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="300" rx="24" fill="url(#bgGrad)"/>
+  <rect x="420" y="-30" width="200" height="200" rx="40" transform="rotate(45 420 -30)" fill="white" opacity="0.1" />
+  <circle cx="100" cy="80" r="60" fill="white" opacity="0.05" />
+  <path d="M 0,200 C 150,150 200,250 350,180 C 500,110 550,220 600,200 L 600,300 L 0,300 Z" fill="white" opacity="0.08"/>
+  <rect x="30" y="30" width="540" height="240" rx="16" fill="white" fill-opacity="0.05" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
+  <text x="50" y="75" fill="white" fill-opacity="0.8" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="14" letter-spacing="1.5">DANAKU PROMO</text>
+  <text x="50" y="125" fill="white" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="24">Cashback Top Up 10% Spesial!</text>
+  <text x="50" y="170" fill="white" fill-opacity="0.85" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="15">Tambahkan saldo Anda dan nikmati bonusnya.</text>
+  <rect x="50" y="205" width="160" height="40" rx="20" fill="white" />
+  <text x="130" y="229" fill="#FF9800" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="13" text-anchor="middle">Klaim Promo</text>
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="600" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF9800"/>
+      <stop offset="1" stop-color="#FFB74D"/>
+    </linearGradient>
+  </defs>
+</svg>

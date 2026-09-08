@@ -1,0 +1,13 @@
+<svg width="600" height="250" viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bannerGrad2" x1="0" y1="0" x2="600" y2="250" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EF6C00"/>
+      <stop offset="1" stop-color="#FFB74D"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="250" fill="url(#bannerGrad2)"/>
+  <circle cx="80" cy="30" r="80" fill="#FFFFFF" fill-opacity="0.08"/>
+  <circle cx="540" cy="210" r="90" fill="#FFFFFF" fill-opacity="0.08"/>
+  <text x="40" y="115" fill="#FFFFFF" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="34">Cashback Spesial</text>
+  <text x="40" y="150" fill="#FFF3E0" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="500" font-size="18">Berlaku untuk seluruh nasabah BPR Nusumma</text>
+</svg>

@@ -314,7 +314,7 @@
             promoContainer.style.display = 'block';
             track.innerHTML = promos.map((p, idx) => `
                 <div class="promo-slide-vertical" onclick="openPromoDetail(${idx})" style="cursor: pointer;">
-                    <img src="${p.imageUrl}" alt="Promo" onerror="this.src='https://placehold.co/600x250/FF9800/white?text=Promo+Image';">
+                    <img src="${p.imageUrl}" alt="Promo" onerror="this.src='/nusumma/assets/image-fallback.svg';">
                 </div>
             `).join('');
             
@@ -367,7 +367,7 @@
         const contentEl = document.getElementById('detailPromoContent');
         if (contentEl) {
             contentEl.innerHTML = `
-                <img class="detail-promo-image" src="${promo.imageUrl}" alt="${promo.title}" onerror="this.src='https://placehold.co/600x250/FF9800/white?text=Promo+Image';">
+                <img class="detail-promo-image" src="${promo.imageUrl}" alt="${promo.title}" onerror="this.src='/nusumma/assets/image-fallback.svg';">
                 <div class="detail-promo-card" style="background: linear-gradient(135deg, ${config.primaryColor || '#FF9800'} 0%, ${config.secondaryColor || '#FFCC80'} 100%);">
                     <div class="detail-promo-title">${promo.title}</div>
                 </div>
@@ -488,7 +488,7 @@
             blogSection.style.display = 'block';
             track.innerHTML = blogs.map((b, idx) => `
                 <div class="blog-slide-horizontal" onclick="showToast('Blog Link', 'Redirect to ${b.blogUrl || '#'}', 'success')">
-                    <img src="${b.imageUrl}" alt="Blog ${idx + 1}" onerror="this.src='https://placehold.co/600x250/FF9800/white?text=Blog+Image';">
+                    <img src="${b.imageUrl}" alt="Blog ${idx + 1}" onerror="this.src='/nusumma/assets/image-fallback.svg';">
                 </div>
             `).join('');
             
@@ -981,7 +981,15 @@
         if (copyrightEl) {
             const tenant = PaydiaData.getTenant(currentTenantId);
             const merchantName = tenant ? tenant.partnerName : 'PT. Datacell Infomedia';
-            copyrightEl.textContent = `Copyright © 2026 ${merchantName}. All right Reserved.`;
+            copyrightEl.textContent = `Copyright © 2026 ${merchantName}. All Rights Reserved.`;
+        }
+
+        // Set app version from the Nusumma version registry (falls back to a literal)
+        const versionEl = document.getElementById('profileVersionVal');
+        if (versionEl) {
+            const nusummaVersions = window.PaydiaVersions && window.PaydiaVersions.nusumma;
+            const latestVersion = (nusummaVersions && nusummaVersions[0] && nusummaVersions[0].version) || 'v1.0.0';
+            versionEl.textContent = `Version ${latestVersion.replace(/^v/i, '')}`;
         }
 
         // Render customer support dynamic data

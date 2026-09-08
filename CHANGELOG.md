@@ -6,6 +6,25 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.5.1] - 2026-09-08
+
+Perbaikan hasil uji coba mockup BPR Nusumma di production. Versi surface: **Nusumma v1.0.1**.
+
+### Fixed
+- Cabang yang dipilih lewat "Switch Tenant" tidak lagi dikembalikan paksa ke
+  Jombang ketika masuk kembali lewat portal.
+- Sesi merchant Nusumma tidak lagi bisa membuka dashboard Paydia (dan sebaliknya)
+  — pemeriksaan dilakukan di middleware berdasarkan tenant pada token.
+- Ikon fitur di aplikasi whitelabel Nusumma kini oranye Nusumma; sebelumnya masih
+  memakai ikon ungu milik mockup Paydia.
+- Mark logo diperbaiki menjadi bentuk **"V"** sesuai logo resmi (sebelumnya terbalik).
+- Judul "Transaksi Terakhir" pada modal detail user sebelumnya putih di atas putih.
+- Menu sidebar kini menandai halaman aktif juga pada submenu.
+- Data tiap cabang dibuat berbeda (sebelumnya keenam cabang identik).
+- Versi pada aplikasi tidak lagi menampilkan angka warisan Paydia.
+- Placeholder gambar dari CDN pihak ketiga diganti aset lokal; tombol portal
+  diperbaiki agar kontrasnya memenuhi standar.
+
 ## [1.5.0] - 2026-09-08
 
 Mockup khusus **BPR Nusumma** di prefix `/nusumma`. Versi surface: **Nusumma v1.0.0**.

@@ -149,17 +149,25 @@ export default async function middleware(request) {
         }
     }
 
-    // Partner dashboard pages — allowed for both internal and partner roles
+    // Partner dashboard pages — allowed for both internal and partner roles.
+    // A tenantId is only ever minted for role:'partner' — internal tokens
+    // carry no tenantId (or ''), so the NUS- prefix check must only apply
+    // when a tenantId is actually present, otherwise internal is locked out.
+    const tenantId = payload.tenantId || '';
     if (pathname.startsWith('/partner/') || pathname === '/partner') {
-        if (role !== 'partner' && role !== 'internal') {
+        const wrongSurface = tenantId.startsWith('NUS-');
+        if ((role !== 'partner' && role !== 'internal') || wrongSurface) {
             url.pathname = '/login.html';
             return Response.redirect(url, 302);
         }
     }
 
-    // Nusumma partner dashboard pages — mirrors /partner/* above
+    // Nusumma partner dashboard pages — mirrors /partner/* above, requiring
+    // the token's tenantId to belong to the Nusumma (NUS-) surface so a
+    // Paydia-tenant session cannot open the Nusumma dashboard.
     if (pathname.startsWith('/nusumma/partner/') || pathname === '/nusumma/partner') {
-        if (role !== 'partner' && role !== 'internal') {
+        const wrongSurface = !tenantId.startsWith('NUS-');
+        if ((role !== 'partner' && role !== 'internal') || wrongSurface) {
             url.pathname = '/nusumma/login.html';
             return Response.redirect(url, 302);
         }

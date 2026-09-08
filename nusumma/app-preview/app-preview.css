@@ -7,9 +7,9 @@
 
 /* ── CSS Variables for App Colors (set by JS) ── */
 :root {
-    --app-primary: #6C3CE1;
+    --app-primary: #FF9800;
     --app-secondary: #F59E0B;
-    --app-primary-light: #8B5CF6;
+    --app-primary-light: #FFB74D;
     --app-bg: #F8F9FC;
     --app-card: #FFFFFF;
     --app-text: #1E293B;
@@ -788,7 +788,7 @@ body {
 
 .trx-icon.qris {
     background: rgba(255,152,0,0.1);
-    color: #6C3CE1;
+    color: #EF6C00;
 }
 
 .trx-icon.biller {

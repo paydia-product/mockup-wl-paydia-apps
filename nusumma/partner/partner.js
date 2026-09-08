@@ -50,7 +50,6 @@ function renderSidebar(activePage) {
     const appName = config ? config.appName : (tenant ? tenant.appName : 'Partner');
     const partnerName = tenant ? tenant.partnerName : appName;
     const email = tenant ? tenant.emailPIC : 'partner@nusumma.id';
-    const initial = partnerName ? partnerName.charAt(0).toUpperCase() : 'P';
     const mid = tenant ? tenant.mid : '—';
 
     const navDef = [
@@ -61,26 +60,26 @@ function renderSidebar(activePage) {
         {
             type: 'group', id: 'sub-merchant', label: 'Sub-Merchant', icon: 'fa-store',
             children: [
-                { label: 'Import Merchant', href: '#' },
-                { label: 'Riwayat Transaksi', href: 'transactions.html' }
+                { id: 'import-merchant', label: 'Import Merchant', href: '#' },
+                { id: 'transaksi', label: 'Riwayat Transaksi', href: 'transactions.html' }
             ]
         },
         { type: 'link', id: 'kasbon', label: 'Kasbon', icon: 'fa-file-invoice-dollar', href: '#' },
         {
             type: 'group', id: 'kirim-saldo', label: 'Kirim Saldo', icon: 'fa-paper-plane',
             children: [
-                { label: 'E-Wallet (API)', href: '#' },
-                { label: 'Payroll', href: '#' }
+                { id: 'e-wallet', label: 'E-Wallet (API)', href: '#' },
+                { id: 'payroll', label: 'Payroll', href: '#' }
             ]
         },
         { type: 'link', id: 'konten', label: 'Konten Digital', icon: 'fa-tv', href: 'content.html' },
         {
             type: 'group', id: 'pengaturan', label: 'Pengaturan', icon: 'fa-gear',
             children: [
-                { label: 'Profil Saya', href: 'customize.html' },
-                { label: 'Manajemen Akun', href: 'members.html' },
-                { label: 'Nusumma API', href: '#' },
-                { label: 'Log Aktivitas', href: '#' }
+                { id: 'profil-saya', label: 'Profil Saya', href: 'customize.html' },
+                { id: 'members', label: 'Manajemen Akun', href: 'members.html' },
+                { id: 'nusumma-api', label: 'Nusumma API', href: '#' },
+                { id: 'log-aktivitas', label: 'Log Aktivitas', href: '#' }
             ]
         }
     ];
@@ -98,8 +97,10 @@ function renderSidebar(activePage) {
                     <i class="fas ${item.icon}"></i> <span>${item.label}</span>
                 </a>`;
             }
+            const groupHasActiveChild = item.children.some(c => c.id === activePage);
+            const groupHeaderClass = groupHasActiveChild ? ' pb-nav-group-header-active' : '';
             return `
-                <div class="pb-nav-group-header">
+                <div class="pb-nav-group-header${groupHeaderClass}">
                     <div class="pb-nav-group-left">
                         <i class="fas ${item.icon}"></i>
                         <span>${item.label}</span>
@@ -107,7 +108,7 @@ function renderSidebar(activePage) {
                     <i class="fas fa-chevron-up pb-nav-chevron"></i>
                 </div>
                 <div class="pb-nav-children">
-                    ${item.children.map(c => `<a href="${c.href}" class="pb-nav-item">${c.label}</a>`).join('')}
+                    ${item.children.map(c => `<a href="${c.href}" class="pb-nav-item${c.id === activePage ? ' active' : ''}">${c.label}</a>`).join('')}
                 </div>
             `;
         }).join('');
@@ -116,7 +117,7 @@ function renderSidebar(activePage) {
     sidebar.innerHTML = `
         <div class="pb-sidebar-top">
             <div class="pb-sidebar-brand">
-                <div class="pb-sidebar-logo">${initial}</div>
+                <img src="/nusumma/assets/logo-nusumma-mark.svg" alt="Nusumma" class="pb-sidebar-logo" style="border-radius:0; padding:4px;">
                 <div>
                     <div class="pb-sidebar-name">${partnerName}</div>
                     <div class="pb-sidebar-mid">MID: ${mid}</div>

@@ -136,29 +136,20 @@ const PaydiaData = (() => {
     ];
 
     // ── Helper to generate default Configs for merchants ──
-    // Nusumma tenant ids reuse existing app-preview/icons/TNT-00X asset folders
-    // (no nusumma-specific icon folders exist on disk).
-    const ICON_FOLDER = {
-        'NUS-001': 'TNT-001',
-        'NUS-002': 'TNT-002',
-        'NUS-003': 'TNT-003',
-        'NUS-004': 'TNT-005',
-        'NUS-005': 'TNT-007',
-        'NUS-006': 'TNT-010'
-    };
+    // All Nusumma tenants share one Nusumma-orange icon set at
+    // /nusumma/app-preview/icons/NUS (recolored from a Paydia icon folder).
+    const NUS_ICON_DIR = '/nusumma/app-preview/icons/NUS';
 
     const generateDefaultConfig = (id, appName) => {
         const colors = {
             'NUS-001': { primary: '#FF9800', secondary: '#FFCC80' },
-            'NUS-002': { primary: '#F57C00', secondary: '#FFB74D' },
-            'NUS-003': { primary: '#FB8C00', secondary: '#FFCC80' },
-            'NUS-004': { primary: '#EF6C00', secondary: '#FFB74D' },
-            'NUS-005': { primary: '#E65100', secondary: '#FF9800' },
-            'NUS-006': { primary: '#FFA726', secondary: '#FFCC80' }
+            'NUS-002': { primary: '#FF9800', secondary: '#FFB74D' },
+            'NUS-003': { primary: '#FF9800', secondary: '#FFCC80' },
+            'NUS-004': { primary: '#FF9800', secondary: '#FFB74D' },
+            'NUS-005': { primary: '#FF9800', secondary: '#FFA726' },
+            'NUS-006': { primary: '#FF9800', secondary: '#FFCC80' }
         };
         const tenantColors = colors[id] || { primary: '#FF9800', secondary: '#FFCC80' };
-        const iconId = ICON_FOLDER[id] || id;
-
         return {
             tenantId: id,
             primaryColor: tenantColors.primary,
@@ -182,20 +173,20 @@ const PaydiaData = (() => {
                 transaksiFavorit: true
             },
             featureIcons: {
-                kirimUang: `/app-preview/icons/${iconId}/icon_kirim_uang.svg`,
-                mintaDana: `/app-preview/icons/${iconId}/icon_minta_dana.svg`,
-                topUp: `/app-preview/icons/${iconId}/icon_topup.svg`,
+                kirimUang: `${NUS_ICON_DIR}/icon_kirim_uang.svg`,
+                mintaDana: `${NUS_ICON_DIR}/icon_minta_dana.svg`,
+                topUp: `${NUS_ICON_DIR}/icon_topup.svg`,
                 qris: '/app-preview/qris.png',
-                komunitas: `/app-preview/icons/${iconId}/icon_komunitas.svg`,
-                pulsaPaket: `/app-preview/icons/${iconId}/icon_pulsa_paket.svg`,
-                pln: `/app-preview/icons/${iconId}/icon_pln.svg`,
-                pdam: `/app-preview/icons/${iconId}/icon_pdam.svg`,
-                bpjs: `/app-preview/icons/${iconId}/icon_bpjs.svg`,
-                tagihan: `/app-preview/icons/${iconId}/icon_tagihan.svg`,
-                kasbon: `/app-preview/icons/${iconId}/icon_kasbon.svg`,
-                internet: `/app-preview/icons/${iconId}/icon_internet.svg`,
-                telkom: `/app-preview/icons/${iconId}/icon_telkom.svg`,
-                transaksiFavorit: `/app-preview/icons/${iconId}/nav_transaksi_favorit.svg`
+                komunitas: `${NUS_ICON_DIR}/icon_komunitas.svg`,
+                pulsaPaket: `${NUS_ICON_DIR}/icon_pulsa_paket.svg`,
+                pln: `${NUS_ICON_DIR}/icon_pln.svg`,
+                pdam: `${NUS_ICON_DIR}/icon_pdam.svg`,
+                bpjs: `${NUS_ICON_DIR}/icon_bpjs.svg`,
+                tagihan: `${NUS_ICON_DIR}/icon_tagihan.svg`,
+                kasbon: `${NUS_ICON_DIR}/icon_kasbon.svg`,
+                internet: `${NUS_ICON_DIR}/icon_internet.svg`,
+                telkom: `${NUS_ICON_DIR}/icon_telkom.svg`,
+                transaksiFavorit: `${NUS_ICON_DIR}/nav_transaksi_favorit.svg`
             },
             featureNames: {
                 kirimUang: 'Kirim Uang',
@@ -216,35 +207,35 @@ const PaydiaData = (() => {
             fontFamily: 'Inter',
             fontSize: '14px',
             banners: [
-                'https://placehold.co/600x250/FF9800/white?text=Banner+1',
-                'https://placehold.co/600x250/EF6C00/white?text=Banner+2'
+                '/nusumma/assets/promo-banner-1.svg',
+                '/nusumma/assets/promo-banner-2.svg'
             ],
             blogs: [
                 {
-                    imageUrl: `/app-preview/icons/${iconId}/blog_1.svg`,
+                    imageUrl: `${NUS_ICON_DIR}/blog_1.svg`,
                     blogUrl: 'https://nusumma.id/blog/artikel-1'
                 },
                 {
-                    imageUrl: `/app-preview/icons/${iconId}/blog_2.svg`,
+                    imageUrl: `${NUS_ICON_DIR}/blog_2.svg`,
                     blogUrl: 'https://nusumma.id/blog/artikel-2'
                 }
             ],
             promos: [
                 {
-                    imageUrl: `/app-preview/icons/${iconId}/promo_1.svg`,
+                    imageUrl: `${NUS_ICON_DIR}/promo_1.svg`,
                     promoUrl: 'https://nusumma.id/promo/1'
                 },
                 {
-                    imageUrl: `/app-preview/icons/${iconId}/promo_2.svg`,
+                    imageUrl: `${NUS_ICON_DIR}/promo_2.svg`,
                     promoUrl: 'https://nusumma.id/promo/2'
                 }
             ],
             splashScreenUrl: 'https://placehold.co/360x640/FF9800/white?text=Splash+Screen',
             navbar: [
-                { name: 'Home', icon: `/app-preview/icons/${iconId}/nav_home.svg` },
-                { name: 'Favorite Transaction', icon: `/app-preview/icons/${iconId}/nav_transaksi_favorit.svg` },
-                { name: 'Riwayat Transaksi', icon: `/app-preview/icons/${iconId}/nav_riwayat.svg` },
-                { name: 'Profil', icon: `/app-preview/icons/${iconId}/nav_profil.svg` }
+                { name: 'Home', icon: `${NUS_ICON_DIR}/nav_home.svg` },
+                { name: 'Favorite Transaction', icon: `${NUS_ICON_DIR}/nav_transaksi_favorit.svg` },
+                { name: 'Riwayat Transaksi', icon: `${NUS_ICON_DIR}/nav_riwayat.svg` },
+                { name: 'Profil', icon: `${NUS_ICON_DIR}/nav_profil.svg` }
             ],
             emptyStateUrl: 'https://placehold.co/300x200/cccccc/333333?text=Empty+State',
             errorStateUrl: 'https://placehold.co/300x200/ffcccc/990000?text=Error+State',
@@ -340,14 +331,18 @@ const PaydiaData = (() => {
         return m ? Math.max(max, parseInt(m[1], 10)) : max;
     }, 0);
 
-    function ensureMinUsers(tenantId, tnum, minCount) {
+    function ensureMinUsers(tenantId, tnum, minCount, branchIdx) {
         const list = SEED_USERS[tenantId] || (SEED_USERS[tenantId] = []);
+        // Rotate the name pool per branch (7 is coprime with the 16-name pool)
+        // and shift the active/inactive split so branches don't all look identical.
+        const nameOffset = (branchIdx * 7) % FILLER_NAMES.length;
         let seq = maxSuffix(list, /USR-\d+-(\d+)/) + 1, i = 0;
         while (list.length < minCount) {
-            const round = Math.floor(i / FILLER_NAMES.length);
-            const name = FILLER_NAMES[i % FILLER_NAMES.length] + (round > 0 ? ' ' + (round + 1) : '');
+            const idx = (i + nameOffset) % FILLER_NAMES.length;
+            const round = Math.floor((i + nameOffset) / FILLER_NAMES.length);
+            const name = FILLER_NAMES[idx] + (round > 0 ? ' ' + (round + 1) : '');
             const day = (seq * 3) % 28 + 1;
-            const active = seq % 4 !== 0;
+            const active = (seq + branchIdx) % 4 !== 0;
             list.push({
                 id: `USR-${tnum}-${pad3(seq)}`,
                 name,
@@ -355,8 +350,8 @@ const PaydiaData = (() => {
                 email: name.toLowerCase().replace(/\s+/g, '.') + seq + '@mail.com',
                 dob: `199${seq % 10}-0${(seq % 9) + 1}-1${seq % 9}`,
                 status: active ? 'Active' : 'Nonaktif',
-                balance: (seq * 15000) % 750000,
-                totalTrx: (seq * 3) % 40,
+                balance: (seq * 15000 + branchIdx * 63000) % (650000 + branchIdx * 40000),
+                totalTrx: (seq * 3 + branchIdx * 5) % 40,
                 registeredAt: `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 0${seq % 9}:${String((seq * 7) % 60).padStart(2, '0')}:00`,
                 lastActivity: active ? `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 1${seq % 9}:${String((seq * 11) % 60).padStart(2, '0')}:00` : '',
                 statusDormant: 'In 11 month',
@@ -367,23 +362,27 @@ const PaydiaData = (() => {
         }
     }
 
-    function ensureMinTransactions(tenantId, tnum, minCount) {
+    function ensureMinTransactions(tenantId, tnum, minCount, branchIdx) {
         const list = SEED_TRX[tenantId] || (SEED_TRX[tenantId] = []);
         const users = SEED_USERS[tenantId] || [];
         if (users.length === 0) return;
+        // Vary the type mix and the fail/processing rate per branch.
+        const typeOffset = branchIdx % TRX_TYPES.length;
+        const failMod = 6 + branchIdx;
+        const procMod = 9 + branchIdx;
         let seq = maxSuffix(list, /TRX-\d+-(\d+)/) + 1, i = 0;
         while (list.length < minCount) {
             const user = users[i % users.length];
-            const type = TRX_TYPES[i % TRX_TYPES.length];
+            const type = TRX_TYPES[(i + typeOffset) % TRX_TYPES.length];
             const day = (seq * 2) % 28 + 1;
-            const status = seq % 11 === 0 ? 'Diproses' : (seq % 7 === 0 ? 'Gagal' : 'Berhasil');
+            const status = seq % procMod === 0 ? 'Diproses' : (seq % failMod === 0 ? 'Gagal' : 'Berhasil');
             list.push({
                 id: `TRX-${tnum}-${String(seq).padStart(4, '0')}`,
                 userId: user.id,
                 userName: user.name,
                 userPhone: user.phone,
                 type,
-                nominal: (seq * 12345) % 900000 + 5000,
+                nominal: (seq * 12345 + branchIdx * 21000) % 900000 + 5000,
                 fee: type === 'transfer' ? 2500 : 0,
                 status,
                 recipientName: type === 'transfer' ? 'Bank Transfer Tujuan' : (type === 'biller' ? 'PLN Prepaid' : ''),
@@ -397,10 +396,10 @@ const PaydiaData = (() => {
         }
     }
 
-    TENANT_NUMS.forEach(tnum => {
+    TENANT_NUMS.forEach((tnum, branchIdx) => {
         const tid = `NUS-${tnum}`;
-        ensureMinUsers(tid, tnum, 12);
-        ensureMinTransactions(tid, tnum, 12);
+        ensureMinUsers(tid, tnum, 12, branchIdx);
+        ensureMinTransactions(tid, tnum, 12, branchIdx);
     });
 
     // ── Seed Data: Requests ──
@@ -432,7 +431,7 @@ const PaydiaData = (() => {
 
     // ── Initialize / Seed Database ──
     function initialize(forceReset = false) {
-        const currentVersion = '1'; // Nusumma independent seed version counter
+        const currentVersion = '2'; // Nusumma independent seed version counter
         const seedVersion = localStorage.getItem('nusumma_wl_seed_version');
         if (seedVersion !== currentVersion) {
             forceReset = true;

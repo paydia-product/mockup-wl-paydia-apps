@@ -1,14 +1,18 @@
-<!-- Recreated approximation of the BPR Nusumma mark (V + circle "head").
+<!-- Recreated approximation of the BPR Nusumma mark: a tapered "V" (two
+     blades wide at the top, converging to a point at the bottom — like
+     raised arms / a checkmark) with a filled circle floating above the
+     opening, slightly left of centre.
      The operator's own website only ships a template placeholder logo (renders
      the word "Startus") — no official artwork was available to download.
      Replace this file with official BPR Nusumma artwork when available. -->
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="50" cy="18" r="10" fill="#FF9800"/>
-  <path d="M 50 34
-           L 20 88
-           C 18 92 22 95 26 92
-           L 50 52
-           L 74 92
-           C 78 95 82 92 80 88
+  <circle cx="40" cy="14" r="9" fill="#FF9800"/>
+  <path d="M 14 28
+           L 30 28
+           L 50 78
+           L 70 28
+           L 86 28
+           L 52 94
+           L 48 94
            Z" fill="#FF9800"/>
 </svg>
