@@ -291,13 +291,31 @@
             .login-card { padding: 32px 24px; }
             .role-tabs { flex-direction: column; }
         }
+
+        /* ── Mockup watermark: legible chip, never sits over content ── */
+        .mockup-watermark {
+            position: fixed;
+            bottom: 8px;
+            left: 8px;
+            max-width: 220px;
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.92);
+            text-align: left;
+            pointer-events: none;
+            z-index: 100000;
+            line-height: 1.3;
+            font-family: 'Inter', sans-serif;
+            background: rgba(15,23,41,0.72);
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-card" id="loginCard">
             <div class="login-logo">
-                <img src="assets/logo-nusumma-mark.svg" alt="BPR Nusumma">
+                <img src="/nusumma/assets/logo-nusumma.svg" alt="BPR Nusumma">
             </div>
             <h1 class="login-title">BPR Nusumma White Label</h1>
             <p class="login-subtitle">Platform manajemen aplikasi white label BPR Nusumma</p>
@@ -473,7 +491,7 @@
         renderPortal();
     </script>
     <!-- Watermark -->
-    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+    <div class="mockup-watermark">
         Mockup Prototype - Final Display May Different<br>
         Confidential | Do Not Share Without Permission
     </div>

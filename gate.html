@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Masuk — Paydia</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -300,6 +300,23 @@
         }
 
         pwInput.addEventListener('input', clearError);
+
+        // Explicitly forward Enter to a real form submission.
+        // Root cause: the implicit-submit mechanism (Enter inside a lone
+        // text field with a submit button) is silently swallowed in some
+        // browser/autofill combinations once the field's value was set
+        // programmatically (e.g. by a password manager) rather than via
+        // real keystrokes — no native "submit" event is ever dispatched.
+        // requestSubmit() re-triggers the browser's own validation +
+        // submit pipeline (same as a real click), so this isn't a
+        // parallel/duplicate submit path — it's the same one, made
+        // reliable regardless of how the value got into the field.
+        pwInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                form.requestSubmit();
+            }
+        });
     </script>
     <!-- Watermark -->
     <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">

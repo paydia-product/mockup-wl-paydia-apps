@@ -207,8 +207,8 @@
                     <dt>Biaya</dt><dd>${PaydiaData.formatCurrency(t.fee)}</dd>
                     <dt>Total</dt><dd style="font-weight:700">${PaydiaData.formatCurrency(t.nominal + t.fee)}</dd>
                     <dt>Status</dt><dd>${statusBadge(t.status)}</dd>
-                    <dt>Penerima</dt><dd>${t.recipientName}</dd>
-                    <dt>No. HP Penerima</dt><dd>${t.recipientPhone}</dd>
+                    <dt>Penerima</dt><dd>${t.recipientName || '-'}</dd>
+                    <dt>No. HP Penerima</dt><dd>${t.recipientPhone || '-'}</dd>
                     <dt>Waktu</dt><dd>${t.date}</dd>
                 </dl>
             `;
@@ -242,7 +242,7 @@
         }
     </script>
     <!-- Watermark -->
-    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+    <div class="mockup-watermark">
         Mockup Prototype - Final Display May Different<br>
         Confidential | Do Not Share Without Permission
     </div>

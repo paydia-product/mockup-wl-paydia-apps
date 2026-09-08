@@ -55,31 +55,29 @@ function renderSidebar(activePage) {
     const navDef = [
         { type: 'link', id: 'beranda', label: 'Beranda', icon: 'fa-house', href: 'index.html', allowClick: true },
         { type: 'link', id: 'whitelabel', label: 'Whitelabel', icon: 'fa-palette', href: 'customize.html', allowClick: true },
+        { type: 'link', id: 'requests', label: 'Request Kustomisasi', icon: 'fa-file-pen', href: 'requests.html', allowClick: true },
         { type: 'link', id: 'app-users', label: 'App Users', icon: 'fa-user-group', href: 'app-users.html', allowClick: true },
         { type: 'link', id: 'app-transactions', label: 'Transaction', icon: 'fa-receipt', href: 'app-transactions.html', allowClick: true },
         {
             type: 'group', id: 'sub-merchant', label: 'Sub-Merchant', icon: 'fa-store',
             children: [
-                { id: 'import-merchant', label: 'Import Merchant', href: '#' },
-                { id: 'transaksi', label: 'Riwayat Transaksi', href: 'transactions.html' }
+                { id: 'import-merchant', label: 'Import Merchant', href: '#', toast: true }
             ]
         },
-        { type: 'link', id: 'kasbon', label: 'Kasbon', icon: 'fa-file-invoice-dollar', href: '#' },
+        { type: 'link', id: 'kasbon', label: 'Kasbon', icon: 'fa-file-invoice-dollar', href: '#', toast: true },
         {
             type: 'group', id: 'kirim-saldo', label: 'Kirim Saldo', icon: 'fa-paper-plane',
             children: [
-                { id: 'e-wallet', label: 'E-Wallet (API)', href: '#' },
-                { id: 'payroll', label: 'Payroll', href: '#' }
+                { id: 'e-wallet', label: 'E-Wallet (API)', href: '#', toast: true },
+                { id: 'payroll', label: 'Payroll', href: '#', toast: true }
             ]
         },
         { type: 'link', id: 'konten', label: 'Konten Digital', icon: 'fa-tv', href: 'content.html' },
         {
             type: 'group', id: 'pengaturan', label: 'Pengaturan', icon: 'fa-gear',
             children: [
-                { id: 'profil-saya', label: 'Profil Saya', href: 'customize.html' },
-                { id: 'members', label: 'Manajemen Akun', href: 'members.html' },
-                { id: 'nusumma-api', label: 'Nusumma API', href: '#' },
-                { id: 'log-aktivitas', label: 'Log Aktivitas', href: '#' }
+                { id: 'nusumma-api', label: 'Nusumma API', href: '#', toast: true },
+                { id: 'log-aktivitas', label: 'Log Aktivitas', href: '#', toast: true }
             ]
         }
     ];
@@ -92,7 +90,7 @@ function renderSidebar(activePage) {
             if (item.type === 'link') {
                 const allowClickClass = item.allowClick ? ' allow-click' : '';
                 const activeClass = activePage === item.id ? ' active' : '';
-                const onclickAttr = '';
+                const onclickAttr = item.toast ? ' onclick="return notAvailable(event)"' : '';
                 return `<a href="${item.href}" class="pb-nav-item${activeClass}${allowClickClass}"${onclickAttr}>
                     <i class="fas ${item.icon}"></i> <span>${item.label}</span>
                 </a>`;
@@ -108,7 +106,7 @@ function renderSidebar(activePage) {
                     <i class="fas fa-chevron-up pb-nav-chevron"></i>
                 </div>
                 <div class="pb-nav-children">
-                    ${item.children.map(c => `<a href="${c.href}" class="pb-nav-item${c.id === activePage ? ' active' : ''}">${c.label}</a>`).join('')}
+                    ${item.children.map(c => `<a href="${c.href}" class="pb-nav-item${c.id === activePage ? ' active' : ''}"${c.toast ? ' onclick="return notAvailable(event)"' : ''}>${c.label}</a>`).join('')}
                 </div>
             `;
         }).join('');
@@ -134,9 +132,16 @@ function renderSidebar(activePage) {
             </a>
         </nav>
         <div class="pb-sidebar-footer">
-            Nusumma &bull; <a href="#">Dokumentasi API</a>
+            Nusumma &bull; <a href="#" onclick="return notAvailable(event)">Dokumentasi API</a>
         </div>
     `;
+}
+
+// ── "Not available in mockup" toast handler ──
+function notAvailable(e) {
+    if (e) e.preventDefault();
+    showToast('Belum tersedia', 'Menu ini belum tersedia di mockup.', 'warning');
+    return false;
 }
 
 // ── Logout Handler ──
@@ -166,7 +171,7 @@ function renderTopbarNavigation() {
     if (topbarLeft && !topbarLeft.querySelector('.pb-topbar-brand')) {
         const brandHtml = `
             <div class="pb-topbar-brand" style="display: flex; align-items: center; gap: 10px; margin-right: 20px;">
-                <img src="/nusumma/assets/logo-nusumma-mark.svg" alt="Nusumma" style="width: 30px; height: 30px; display: block;">
+                <img src="/nusumma/assets/logo-nusumma.svg" alt="Nusumma" style="height: 30px; width: auto; display: block;">
                 <span class="pb-topbar-name" style="font-size: 1rem; font-weight: 700; color: #1E293B; letter-spacing: -0.3px;">Nusumma Bisnis</span>
             </div>
             <div style="width: 1px; height: 22px; background: #E2E8F0; margin-right: 16px;"></div>
@@ -175,35 +180,6 @@ function renderTopbarNavigation() {
     }
 
     if (document.getElementById('btn-whitelabel-app')) return;
-
-    const tenants = PaydiaData.getTenants() || [];
-    const currentTenantId = getTenantId();
-
-    const dropdownItemsHtml = tenants.map(t => {
-        const isCurrent = t.id === currentTenantId;
-        const checkIcon = isCurrent ? '<i class="fas fa-check" style="margin-left: auto; font-size: 0.7rem; color: #E07B00;"></i>' : '';
-        return `<a href="#" onclick="selectTenantAndReload(event, '${t.id}')" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: ${isCurrent ? '#E07B00' : '#334155'}; background: ${isCurrent ? '#FFF3E0' : 'transparent'}; text-decoration: none; font-size: 0.8rem; font-weight: ${isCurrent ? '600' : '400'}; transition: background 0.2s; font-family: 'Inter', sans-serif;">
-            <i class="fas fa-store" style="font-size: 0.75rem; color: ${isCurrent ? '#E07B00' : '#94A3B8'};"></i>
-            <span>${t.partnerName}</span>
-            ${checkIcon}
-        </a>`;
-    }).join('');
-
-    // Dynamically inject styles for hover transitions in the dropdown menu
-    if (!document.getElementById('partner-dropdown-styles')) {
-        const styleTag = document.createElement('style');
-        styleTag.id = 'partner-dropdown-styles';
-        styleTag.textContent = `
-            .partner-dropdown-menu a:hover {
-                background: #FFF3E0 !important;
-                color: #E07B00 !important;
-            }
-            .partner-dropdown-menu a:hover i {
-                color: #E07B00 !important;
-            }
-        `;
-        document.head.appendChild(styleTag);
-    }
 
     const navContainer = document.createElement('div');
     navContainer.style.display = 'flex';
@@ -216,42 +192,9 @@ function renderTopbarNavigation() {
         <button id="btn-whitelabel-app" class="btn" onclick="window.open('/nusumma/app-preview/', '_blank')" style="border: 1px solid #E07B00; color: #E07B00; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: none;">
             <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
         </button>
-
-        <!-- Dropdown Tenant Lain -->
-        <div class="topbar-dropdown-container" style="position: relative; display: inline-block;">
-            <button class="btn" id="btn-partner-tenant-dropdown" style="background: #EF6C00; color: #fff; border: none; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: none;">
-                <i class="fas fa-store"></i><span>Switch Tenant</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 2px;"></i>
-            </button>
-            <div class="partner-dropdown-menu" id="partner-tenant-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 1000; min-width: 200px; text-align: left; margin-top: 4px; padding: 4px 0;">
-                ${dropdownItemsHtml}
-            </div>
-        </div>
     `;
 
     topbarRight.insertBefore(navContainer, topbarRight.firstChild);
-
-    const dropdownBtn = document.getElementById('btn-partner-tenant-dropdown');
-    const dropdownMenu = document.getElementById('partner-tenant-dropdown-menu');
-    if (dropdownBtn && dropdownMenu) {
-        dropdownBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.topbar-dropdown-container')) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
-    }
-}
-
-function selectTenantAndReload(e, tenantId) {
-    if (e) e.preventDefault();
-    if (typeof PaydiaData !== 'undefined') {
-        PaydiaData.setCurrentTenant(tenantId);
-        window.location.reload();
-    }
 }
 
 // ── Initialize ──

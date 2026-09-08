@@ -15,19 +15,12 @@
         <!-- ── Sidebar (Title & Controls) ── -->
         <div class="preview-sidebar">
             <h1 class="preview-title">Preview Aplikasi White Label</h1>
-            <p class="preview-active-tenant-info" id="activeTenantInfo">Melihat Simulasi: <strong>PT BPR Nusumma Jombang</strong></p>
+            <p class="preview-active-tenant-info" id="activeTenantInfo">Melihat Simulasi: <strong>PT BPR Nusumma</strong></p>
             <div class="preview-controls topbar-right">
                 <a href="/nusumma/partner/index.html" class="preview-btn preview-btn-outline" id="btnDashboardPartner">
                     <i class="fas fa-handshake"></i>
                     Dashboard Merchant
                 </a>
-                <div class="preview-dropdown-container">
-                    <button class="preview-btn preview-btn-filled" id="btnSwitchTenant">
-                        <i class="fas fa-store"></i><span id="switchTenantLabel">Switch Tenant</span>
-                        <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:2px;"></i>
-                    </button>
-                    <div class="preview-dropdown-menu" id="previewTenantMenu"></div>
-                </div>
             </div>
         </div>
 
@@ -210,7 +203,7 @@
                     <!-- ═══════ TRANSAKSI FAVORIT SCREEN ═══════ -->
                     <div class="app-screen" id="screenTransaksiFavorit">
                         <div class="fav-header">
-                            <div class="fav-title">Favorite</div>
+                            <div class="fav-title">Favorit</div>
                         </div>
                         <div class="fav-content">
                             <div class="fav-empty-state">
@@ -278,7 +271,7 @@
                     <div class="app-screen" id="screenProfil">
                         <!-- Header -->
                         <div style="height: 52px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #F1F5F9; background: #FFFFFF; flex-shrink: 0;">
-                            <span style="font-size: 15px; font-weight: 700; color: #1E293B; font-family: 'Plus Jakarta Sans', sans-serif;">Profile</span>
+                            <span style="font-size: 15px; font-weight: 700; color: #1E293B; font-family: 'Plus Jakarta Sans', sans-serif;">Profil</span>
                         </div>
                         
                         <!-- Scrollable Content -->
@@ -291,7 +284,7 @@
                                         <i class="far fa-user"></i>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Full Name</span>
+                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Nama Lengkap</span>
                                         <span id="profileFullNameVal" style="font-size: 0.85rem; color: #1E293B; font-weight: 600;">Dion</span>
                                     </div>
                                 </div>
@@ -301,7 +294,7 @@
                                         <i class="fas fa-phone-alt" style="transform: rotate(90deg);"></i>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Phone Number</span>
+                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Nomor HP</span>
                                         <span id="profilePhoneVal" style="font-size: 0.85rem; color: #1E293B; font-weight: 600;">087885900280</span>
                                     </div>
                                 </div>
@@ -325,7 +318,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="far fa-comment-dots"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change PIN</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Ubah PIN</span>
                                     </div>
                                     <i class="fas fa-chevron-right profile-chevron"></i>
                                 </div>
@@ -335,7 +328,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="far fa-lock"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change Password</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Ubah Kata Sandi</span>
                                     </div>
                                     <i class="fas fa-chevron-right profile-chevron"></i>
                                 </div>
@@ -345,7 +338,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="fas fa-sign-in-alt"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Enter PIN to Sign In</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Masuk dengan PIN</span>
                                     </div>
                                     <label class="switch-toggle">
                                         <input type="checkbox" id="toggleEnterPin" checked onchange="showToast('PIN Sign In', this.checked ? 'PIN untuk masuk diaktifkan' : 'PIN untuk masuk dinonaktifkan', 'success')">
@@ -358,7 +351,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="fas fa-fingerprint"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Use Biometric</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Gunakan Biometrik</span>
                                     </div>
                                     <label class="switch-toggle">
                                         <input type="checkbox" id="toggleUseBiometric" checked onchange="showToast('Biometrik', this.checked ? 'Autentikasi biometrik diaktifkan' : 'Autentikasi biometrik dinonaktifkan', 'success')">
@@ -371,7 +364,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="fas fa-language" style="font-size: 1.1rem;"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change Language</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Ubah Bahasa</span>
                                     </div>
                                     <i class="fas fa-chevron-right profile-chevron"></i>
                                 </div>
@@ -385,7 +378,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="far fa-question-circle" style="font-size: 1.1rem;"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Customer Support</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Bantuan</span>
                                     </div>
                                     <i class="fas fa-chevron-right profile-chevron"></i>
                                 </div>
@@ -395,7 +388,7 @@
                                         <div class="profile-icon-circle">
                                             <i class="far fa-file-alt"></i>
                                         </div>
-                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Terms & Conditions</span>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Syarat & Ketentuan</span>
                                     </div>
                                     <i class="fas fa-chevron-right profile-chevron"></i>
                                 </div>
@@ -404,13 +397,13 @@
                             <!-- Log Out Button -->
                             <div style="padding: 0 16px; margin-bottom: 16px;">
                                 <button onclick="showToast('Logout', 'Anda telah keluar dari aplikasi', 'warning')" class="profile-btn-logout">
-                                    Log Out
+                                    Keluar
                                 </button>
                             </div>
 
                             <!-- Version & Copyright -->
                             <div id="profileVersionVal" style="font-size: 0.8rem; color: #64748B; text-align: center; margin-bottom: 4px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Version 1.0.0</div>
-                            <div id="profileCopyrightVal" style="font-size: 0.7rem; color: #94A3B8; text-align: center; padding: 0 20px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.4;">Copyright © 2026 PT. Datacell Infomedia. All right Reserved.</div>
+                            <div id="profileCopyrightVal" style="font-size: 0.7rem; color: #94A3B8; text-align: center; padding: 0 20px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.4;">Hak Cipta © 2026 PT. Datacell Infomedia. Seluruh hak dilindungi.</div>
                         </div>
                     </div>
 
@@ -419,7 +412,7 @@
                         <!-- Header -->
                         <div style="height: 52px; background: var(--app-primary); display: flex; align-items: center; padding: 0 16px; color: #FFFFFF; position: relative; flex-shrink: 0;">
                             <button class="back-btn-new" onclick="switchTab('profil')"><i class="fas fa-arrow-left"></i></button>
-                            <div style="font-size: 15px; font-weight: 700; position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Plus Jakarta Sans', sans-serif;">Contact Us</div>
+                            <div style="font-size: 15px; font-weight: 700; position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Plus Jakarta Sans', sans-serif;">Hubungi Kami</div>
                         </div>
                         
                         <!-- Content -->
@@ -434,20 +427,25 @@
                 <div class="bottom-nav" id="bottomNav">
                     <div class="bottom-nav-item active" data-screen="home" onclick="switchTab('home')">
                         <i class="fas fa-home"></i>
+                        <span class="bottom-nav-label">Beranda</span>
                     </div>
                     <div class="bottom-nav-item" data-screen="transaksiFavorit" onclick="switchTab('transaksiFavorit')">
                         <i class="far fa-heart"></i>
+                        <span class="bottom-nav-label">Favorit</span>
                     </div>
                     <div class="bottom-nav-item qris-btn" data-screen="qris" onclick="switchTab('qris')">
                         <div class="qris-center-icon">
                             <img src="/app-preview/qris.png" alt="QRIS" class="qris-center-logo">
                         </div>
+                        <span class="bottom-nav-label">QRIS</span>
                     </div>
                     <div class="bottom-nav-item" data-screen="riwayat" onclick="switchTab('riwayat')">
                         <i class="fas fa-clock-rotate-left"></i>
+                        <span class="bottom-nav-label">Riwayat</span>
                     </div>
                     <div class="bottom-nav-item" data-screen="profil" onclick="switchTab('profil')">
                         <i class="fas fa-user"></i>
+                        <span class="bottom-nav-label">Profil</span>
                     </div>
                 </div>
 
@@ -460,7 +458,7 @@
     <script src="/shared/versions.js?v=1.0.0"></script>
     <script src="/nusumma/app-preview/app-preview.js?v=1.0.0"></script>
     <!-- Watermark -->
-    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+    <div class="mockup-watermark">
         Mockup Prototype - Final Display May Different<br>
         Confidential | Do Not Share Without Permission
     </div>

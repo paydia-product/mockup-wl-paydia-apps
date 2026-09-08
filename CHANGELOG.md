@@ -6,6 +6,35 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.6.0] - 2026-09-08
+
+BPR Nusumma diperlakukan sebagai satu institusi + pembersihan menyeluruh. Versi surface: **Nusumma v1.1.0**.
+
+### Changed
+- Mockup Nusumma tidak lagi terbagi per cabang. Seluruh nama daerah (Jombang,
+  Kediri, Tulungagung, Malang, Sidoarjo, Gresik) dihapus; kini hanya ada satu
+  merchant: **PT BPR Nusumma** (24 pengguna & 40 transaksi contoh).
+- Opsi **Switch Tenant** dihapus dari dashboard merchant dan dari preview
+  aplikasi whitelabel, karena merchant-nya hanya satu.
+- Logo dirujuk dari **satu berkas** yang sama di portal, dashboard, dan aplikasi,
+  sehingga mengganti berkasnya otomatis mengganti logo di semua tempat.
+
+### Fixed
+- Menu ganda dirapikan: "Manajemen Akun" dan "Riwayat Transaksi" dihapus dari
+  sidebar (isinya sama dengan App Users & Transaction); "Profil Saya" yang salah
+  membuka editor tema dihapus; **Request Kustomisasi** kini punya menu sendiri.
+- Tombol yang belum berfungsi (Panduan, Top Up, Kasbon, E-Wallet API, Payroll,
+  Nusumma API, Log Aktivitas, Import Merchant, tombol unduh aplikasi) kini
+  memberi notifikasi "Belum tersedia", tidak lagi diam saja.
+- Tab Profil aplikasi dan menu bawah aplikasi kini berbahasa Indonesia dan
+  memiliki label teks.
+- Empat kartu ringkasan tidak lagi menampilkan angka yang sama persis; banner
+  pemeliharaan diterjemahkan dan tanggalnya konsisten; banner promo mengikuti
+  warna Nusumma; watermark dibuat terbaca dan tidak menutupi isi tabel.
+- Kolom penerima yang kosong pada detail transaksi kini menampilkan "-".
+- Menekan **Enter** pada kolom kata sandi di halaman gerbang kini mengirim form
+  (sebelumnya harus klik tombol). Tampilan gerbang tidak diubah.
+
 ## [1.5.1] - 2026-09-08
 
 Perbaikan hasil uji coba mockup BPR Nusumma di production. Versi surface: **Nusumma v1.0.1**.

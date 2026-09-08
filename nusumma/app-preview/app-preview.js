@@ -88,37 +88,6 @@
         if (appContent) appContent.scrollTop = 0;
     };
 
-    // ── Populate Tenant Dropdown ──
-    function populateTenantSelector() {
-        const menu = document.getElementById('previewTenantMenu');
-        const tenants = PaydiaData.getTenants();
-        if (!menu) return;
-        menu.innerHTML = tenants.map(t => {
-            const isCurrent = t.id === currentTenantId;
-            const checkIcon = isCurrent ? '<i class="fas fa-check" style="margin-left:auto;font-size:0.7rem;color:#E07B00;"></i>' : '';
-            return `<a href="#" data-tenant-id="${t.id}" class="${isCurrent ? 'active' : ''}">
-                <i class="fas fa-store" style="font-size:0.75rem;color:${isCurrent ? '#E07B00' : '#94A3B8'};"></i>
-                <span>${t.partnerName}</span>
-                ${checkIcon}
-            </a>`;
-        }).join('');
-
-        // Attach click handlers
-        menu.querySelectorAll('a[data-tenant-id]').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const tenantId = this.dataset.tenantId;
-                currentTenantId = tenantId;
-                PaydiaData.setCurrentTenant(tenantId);
-                renderApp(tenantId);
-                switchTab('home');
-                menu.style.display = 'none';
-                populateTenantSelector();
-                showToast('Tenant Diubah', `Preview sekarang menampilkan ${PaydiaData.getTenant(tenantId)?.partnerName || tenantId}`, 'success');
-            });
-        });
-    }
-
     // ── Lighten / Darken Color Helper ──
     function adjustColor(hex, percent) {
         hex = hex.replace('#', '');
@@ -487,7 +456,7 @@
         if (blogs.length > 0) {
             blogSection.style.display = 'block';
             track.innerHTML = blogs.map((b, idx) => `
-                <div class="blog-slide-horizontal" onclick="showToast('Blog Link', 'Redirect to ${b.blogUrl || '#'}', 'success')">
+                <div class="blog-slide-horizontal" onclick="showToast('Blog Link', 'Mengarahkan ke ${b.blogUrl || '#'}', 'success')">
                     <img src="${b.imageUrl}" alt="Blog ${idx + 1}" onerror="this.src='/nusumma/assets/image-fallback.svg';">
                 </div>
             `).join('');
@@ -981,7 +950,7 @@
         if (copyrightEl) {
             const tenant = PaydiaData.getTenant(currentTenantId);
             const merchantName = tenant ? tenant.partnerName : 'PT. Datacell Infomedia';
-            copyrightEl.textContent = `Copyright © 2026 ${merchantName}. All Rights Reserved.`;
+            copyrightEl.textContent = `Hak Cipta © 2026 ${merchantName}. Seluruh hak dilindungi.`;
         }
 
         // Set app version from the Nusumma version registry (falls back to a literal)
@@ -989,7 +958,7 @@
         if (versionEl) {
             const nusummaVersions = window.PaydiaVersions && window.PaydiaVersions.nusumma;
             const latestVersion = (nusummaVersions && nusummaVersions[0] && nusummaVersions[0].version) || 'v1.0.0';
-            versionEl.textContent = `Version ${latestVersion.replace(/^v/i, '')}`;
+            versionEl.textContent = `Versi ${latestVersion.replace(/^v/i, '')}`;
         }
 
         // Render customer support dynamic data
@@ -1025,16 +994,16 @@
             
             <!-- Support Badge -->
             <div style="background: ${primaryColor}; color: #FFFFFF; font-weight: 700; padding: 10px 24px; border-radius: 6px; font-size: 0.95rem; margin-top: 20px; font-family: 'Plus Jakarta Sans', sans-serif; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                ${appName} Support
+                ${appName} Bantuan
             </div>
             
             <!-- Headers -->
-            <div style="font-size: 1.1rem; font-weight: 700; margin: 24px 0 6px; color: #1E293B; font-family: 'Plus Jakarta Sans', sans-serif; text-align: center;">Need Help?</div>
+            <div style="font-size: 1.1rem; font-weight: 700; margin: 24px 0 6px; color: #1E293B; font-family: 'Plus Jakarta Sans', sans-serif; text-align: center;">Butuh Bantuan?</div>
             <div style="font-size: 0.85rem; color: #64748B; text-align: center; max-width: 90%; line-height: 1.5; font-family: 'Plus Jakarta Sans', sans-serif;">
-                Feel free to reach out to us. Our customer service is happy to assist you.
+                Jangan ragu untuk menghubungi kami. Layanan pelanggan kami siap membantu Anda.
             </div>
             <div style="font-size: 0.8rem; color: #64748B; text-align: center; margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500;">
-                Operating Hours (08.00–17.00)
+                Jam Operasional (08.00–17.00)
             </div>
             
             <!-- Contact buttons -->
@@ -1044,7 +1013,7 @@
         // Render Call Center Button
         if (hasCallCenter) {
             html += `
-                <button onclick="showToast('Call Center', 'Redirect to ${config.callCenter}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
+                <button onclick="showToast('Call Center', 'Mengarahkan ke ${config.callCenter}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
                     <i class="fas fa-headset" style="font-size: 1rem;"></i>
                     Call Center
                 </button>
@@ -1054,7 +1023,7 @@
         // Render Email Button
         if (hasEmail) {
             html += `
-                <button onclick="showToast('Email', 'Redirect to ${config.supportEmail}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
+                <button onclick="showToast('Email', 'Mengarahkan ke ${config.supportEmail}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
                     <i class="far fa-envelope" style="font-size: 1rem;"></i>
                     Email
                 </button>
@@ -1064,7 +1033,7 @@
         // Render Whatsapp Button
         if (hasWhatsapp) {
             html += `
-                <button onclick="showToast('Whatsapp', 'Redirect to ${config.whatsapp}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
+                <button onclick="showToast('Whatsapp', 'Mengarahkan ke ${config.whatsapp}', 'success')" style="width: 100%; height: 46px; background: ${primaryColor}; color: #FFFFFF; font-weight: 600; border: none; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: opacity 0.2s;">
                     <i class="fab fa-whatsapp" style="font-size: 1.1rem;"></i>
                     Whatsapp
                 </button>
@@ -1131,34 +1100,12 @@
         renderBottomNav(config);
     }
 
-    // ── Balance Toggle ──
-
-
-    // ── Switch Tenant Dropdown Toggle ──
-    const btnSwitch = document.getElementById('btnSwitchTenant');
-    const tenantMenu = document.getElementById('previewTenantMenu');
-    if (btnSwitch && tenantMenu) {
-        btnSwitch.addEventListener('click', function (e) {
-            e.stopPropagation();
-            tenantMenu.style.display = tenantMenu.style.display === 'block' ? 'none' : 'block';
-        });
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.preview-dropdown-container')) {
-                tenantMenu.style.display = 'none';
-            }
-        });
-    }
-
     // ── Cross-Tab Sync ──
     PaydiaData.onStorageChange(function (key, newValue, oldValue) {
         // If it's a config change for the current tenant, re-render
         if (key === 'nusumma_wl_config_' + currentTenantId) {
             renderApp(currentTenantId);
             showToast('Live Update', 'Konfigurasi berhasil diperbarui dari Dashboard Partner', 'success');
-        }
-        // If it's the tenant list, re-populate the dropdown
-        if (key === 'nusumma_wl_tenants') {
-            populateTenantSelector();
         }
         // If it's transaction data for the current tenant
         if (key === 'nusumma_wl_trx_' + currentTenantId) {
@@ -1220,7 +1167,6 @@
             currentTenantId = tenants[0].id;
         }
 
-        populateTenantSelector();
         renderApp(currentTenantId);
 
         // Setup partner dashboard mock navigation handler

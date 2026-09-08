@@ -161,10 +161,26 @@
         ],
         nusumma: [
             {
-                version: 'v1.0.1',
+                version: 'v1.1.0',
                 date: '2026-09-08',
                 deployed: true,
                 latest: true,
+                summary: 'BPR Nusumma sebagai satu institusi + pembersihan menyeluruh.',
+                changes: [
+                    'Tidak lagi terbagi per cabang — seluruhnya "PT BPR Nusumma", nama daerah dihapus',
+                    'Opsi "Switch Tenant" dihapus dari dashboard merchant dan preview aplikasi',
+                    'Logo dipakai dari satu berkas yang sama di portal, dashboard, dan aplikasi',
+                    'Menu ganda (Manajemen Akun, Riwayat Transaksi) dan menu salah tujuan (Profil Saya) dirapikan; Request Kustomisasi kini punya menu',
+                    'Tombol yang belum berfungsi kini memberi tahu lewat notifikasi, tidak lagi diam saja',
+                    'Tab Profil aplikasi dan label menu bawah kini berbahasa Indonesia',
+                    'Kartu ringkasan, banner pemeliharaan, banner promo, dan watermark diperbaiki'
+                ]
+            },
+            {
+                version: 'v1.0.1',
+                date: '2026-09-08',
+                deployed: false,
+                latest: false,
                 summary: 'Perbaikan setelah uji coba: pilihan cabang, ikon aplikasi, dan logo.',
                 changes: [
                     'Cabang yang dipilih tidak lagi kembali ke Jombang saat masuk lewat portal',

@@ -1220,7 +1220,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 14px 0;
+    gap: 3px;
+    padding: 10px 0 8px;
     cursor: pointer;
     position: relative;
     transition: all 150ms ease;
@@ -1236,6 +1237,18 @@ body {
     font-size: 18px;
     color: inherit;
     transition: all 200ms ease;
+}
+
+.bottom-nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    color: inherit;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.bottom-nav-item.qris-btn .bottom-nav-label {
+    margin-top: -2px;
 }
 
 .bottom-nav-item.active::before {
@@ -2286,3 +2299,21 @@ body {
     transform: scale(0.98);
 }
 
+
+/* ── Mockup watermark: legible chip, never sits over content ── */
+.mockup-watermark {
+    position: fixed;
+    bottom: 8px;
+    left: 8px;
+    max-width: 200px;
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.92);
+    text-align: left;
+    pointer-events: none;
+    z-index: 100000;
+    line-height: 1.3;
+    font-family: 'Inter', sans-serif;
+    background: rgba(15,23,41,0.72);
+    padding: 5px 8px;
+    border-radius: 6px;
+}
