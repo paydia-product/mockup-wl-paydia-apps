@@ -148,7 +148,7 @@ const PaydiaData = (() => {
             ],
             appId: 'APP-' + id.substring(4),
             packageName: 'com.nusumma.' + appName.toLowerCase().replace(/\s+/g, ''),
-            appLogoUrl: '/nusumma/assets/logo-nusumma-mark.svg',
+            appLogoUrl: '/nusumma/assets/logo-nusummadark.png',
             baseUrl: 'https://api.nusumma.id',
             tosText: 'Syarat & Ketentuan Penggunaan Aplikasi Whitelabel BPR Nusumma ini diatur oleh BPR Nusumma. Dengan menggunakan aplikasi ini, Anda setuju untuk mematuhi seluruh hukum yang berlaku di Republik Indonesia serta batasan limit transaksi harian yang ditetapkan.',
             socialMedia: {

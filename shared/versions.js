@@ -161,10 +161,22 @@
         ],
         nusumma: [
             {
-                version: 'v1.1.1',
+                version: 'v1.2.0',
                 date: '2026-09-08',
                 deployed: true,
                 latest: true,
+                summary: 'Memakai berkas logo resmi BPR Nusumma di seluruh tampilan.',
+                changes: [
+                    'Logo resmi BPR Nusumma dipakai di portal, dashboard merchant, dan aplikasi whitelabel',
+                    'Pada latar oranye logo ditampilkan putih agar tetap terbaca',
+                    'Gambar logo sementara dan dua halaman duplikat yang tidak terpakai dihapus'
+                ]
+            },
+            {
+                version: 'v1.1.1',
+                date: '2026-09-08',
+                deployed: false,
+                latest: false,
                 summary: 'Perbaikan gagal masuk dashboard bagi pengguna yang pernah membuka mockup Paydia.',
                 changes: [
                     'Masuk ke Dashboard Merchant kini lewat server, bukan cookie dari browser — sebelumnya pengguna yang pernah login di mockup Paydia terlempar balik ke portal',

@@ -115,7 +115,7 @@ function renderSidebar(activePage) {
     sidebar.innerHTML = `
         <div class="pb-sidebar-top">
             <div class="pb-sidebar-brand">
-                <img src="/nusumma/assets/logo-nusumma-mark.svg" alt="Nusumma" class="pb-sidebar-logo" style="border-radius:0; padding:4px;">
+                <div class="pb-sidebar-logo nus-mark" role="img" aria-label="Nusumma"></div>
                 <div>
                     <div class="pb-sidebar-name">${partnerName}</div>
                     <div class="pb-sidebar-mid">MID: ${mid}</div>
@@ -171,7 +171,7 @@ function renderTopbarNavigation() {
     if (topbarLeft && !topbarLeft.querySelector('.pb-topbar-brand')) {
         const brandHtml = `
             <div class="pb-topbar-brand" style="display: flex; align-items: center; gap: 10px; margin-right: 20px;">
-                <img src="/nusumma/assets/logo-nusumma.svg" alt="Nusumma" style="height: 30px; width: auto; display: block;">
+                <img src="/nusumma/assets/logo-nusummadark.png" alt="Nusumma" style="height: 30px; width: auto; display: block;">
                 <span class="pb-topbar-name" style="font-size: 1rem; font-weight: 700; color: #1E293B; letter-spacing: -0.3px;">Nusumma Bisnis</span>
             </div>
             <div style="width: 1px; height: 22px; background: #E2E8F0; margin-right: 16px;"></div>

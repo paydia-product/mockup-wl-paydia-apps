@@ -1,9 +1,0 @@
-<!-- Placeholder recreation. Replace this file with the official BPR Nusumma artwork; all surfaces reference this one path. -->
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Circle "head", floating above the V's opening, slightly left of centre -->
-  <circle cx="40" cy="14" r="9" fill="#FF9800"/>
-  <!-- Two tapered blades (wide flat top, converging to a sharp point at the
-       bottom) drawn as separate triangles so the taper reads clearly -->
-  <path d="M 14 26 L 46 26 L 49 92 Z" fill="#FF9800"/>
-  <path d="M 86 26 L 54 26 L 51 92 Z" fill="#FF9800"/>
-</svg>

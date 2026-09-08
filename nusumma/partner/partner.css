@@ -1264,6 +1264,14 @@
     display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
     flex-shrink: 0;
 }
+.pb-sidebar-logo.nus-mark {
+    background-color: #FFFFFF;
+    background-image: url('/nusumma/assets/logo-nusummadark.png');
+    background-size: auto 130%;
+    background-position: left center;
+    background-repeat: no-repeat;
+    border: 1px solid #F1D9BF;
+}
 .pb-sidebar-name { font-size: 0.85rem; font-weight: 700; color: #1E293B; }
 .pb-sidebar-mid { font-size: 0.7rem; color: #E07B00; margin-top: 1px; font-weight: 500; }
 
