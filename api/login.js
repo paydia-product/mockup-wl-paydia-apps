@@ -20,7 +20,8 @@ const VALID_ACCOUNTS = {
     'lumtek@gmail.com': { role: 'partner', tenantId: 'TNT-009' },
     'cs@stratos.com': { role: 'partner', tenantId: 'TNT-010' },
     'incarnate.maria@pt-mfa.com': { role: 'partner', tenantId: 'TNT-011' },
-    'dion@paydia.id': { role: 'partner', tenantId: 'TNT-012' }
+    'dion@paydia.id': { role: 'partner', tenantId: 'TNT-012' },
+    'partner@nusumma.co.id': { role: 'partner', tenantId: 'NUS-001' }
 };
 
 async function sha256(message) {

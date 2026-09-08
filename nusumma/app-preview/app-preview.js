@@ -1114,27 +1114,10 @@
         }
     });
 
-    // ── Dashboard Internal Navigation Bypassing Login ──
-    async function generateMockToken(email, role, tenantId) {
-        const TOKEN_SECRET = 'pyd_s3cR3t_k3y_r3c0n_2026!xZ9';
-        const payload = JSON.stringify({
-            email,
-            role,
-            tenantId: tenantId || '',
-            ts: Date.now()
-        });
-        const encoded = btoa(payload);
-        
-        // sha256 in browser
-        const encoder = new TextEncoder();
-        const data = encoder.encode(encoded + ':' + TOKEN_SECRET);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const signature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        
-        return encoded + '.' + signature;
-    }
-
+    // ── Dashboard Partner Navigation — logs in through the server so it sets
+    // the HttpOnly dsh_auth/dsh_role/dsh_tenant cookies (a client-side
+    // document.cookie write is silently ignored when a same-named HttpOnly
+    // cookie already exists from a prior session on another surface). ──
     function setupPartnerNav() {
         const btnPartner = document.getElementById('btnDashboardPartner');
         if (btnPartner) {
@@ -1142,15 +1125,25 @@
                 e.preventDefault();
                 try {
                     const activeTenant = PaydiaData.getTenant(currentTenantId);
-                    const email = activeTenant ? activeTenant.emailPIC : 'partner@nusumma-jombang.id';
-                    const token = await generateMockToken(email, 'partner', currentTenantId);
-                    document.cookie = `dsh_auth=${token}; Path=/; Max-Age=86400; SameSite=Strict`;
-                    document.cookie = `dsh_role=partner; Path=/; Max-Age=86400; SameSite=Strict`;
-                    document.cookie = `dsh_tenant=${currentTenantId}; Path=/; Max-Age=86400; SameSite=Strict`;
-                    window.location.href = '/nusumma/partner/index.html';
+                    const email = activeTenant ? activeTenant.emailPIC : 'partner@nusumma.co.id';
+
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, role: 'partner' })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        PaydiaData.setCurrentRole('partner');
+                        PaydiaData.setCurrentTenant(data.tenantId || currentTenantId);
+                        window.location.href = '/nusumma/partner/index.html';
+                    } else {
+                        showToast('Gagal Masuk', 'Gagal terhubung ke server', 'error');
+                    }
                 } catch (err) {
-                    console.error('Failed to set mock partner auth:', err);
-                    window.location.href = '/nusumma/partner/index.html';
+                    console.error('Failed to log in to partner dashboard:', err);
+                    showToast('Gagal Masuk', 'Gagal terhubung ke server', 'error');
                 }
             });
         }

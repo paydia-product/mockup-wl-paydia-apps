@@ -161,10 +161,22 @@
         ],
         nusumma: [
             {
-                version: 'v1.1.0',
+                version: 'v1.1.1',
                 date: '2026-09-08',
                 deployed: true,
                 latest: true,
+                summary: 'Perbaikan gagal masuk dashboard bagi pengguna yang pernah membuka mockup Paydia.',
+                changes: [
+                    'Masuk ke Dashboard Merchant kini lewat server, bukan cookie dari browser — sebelumnya pengguna yang pernah login di mockup Paydia terlempar balik ke portal',
+                    'Kunci penandatangan token tidak lagi ikut terkirim ke browser',
+                    'Pilihan merchant yang sudah tidak ada otomatis dipulihkan ke PT BPR Nusumma'
+                ]
+            },
+            {
+                version: 'v1.1.0',
+                date: '2026-09-08',
+                deployed: false,
+                latest: false,
                 summary: 'BPR Nusumma sebagai satu institusi + pembersihan menyeluruh.',
                 changes: [
                     'Tidak lagi terbagi per cabang — seluruhnya "PT BPR Nusumma", nama daerah dihapus',

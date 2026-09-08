@@ -398,35 +398,6 @@
             }
         }
 
-        // ── Mock auth token minting — same secret/format as the main portal's
-        // api/login.js createToken(), reused verbatim here client-side so the
-        // Nusumma portal keeps working without touching /api (out of scope). ──
-        const TOKEN_SECRET = 'pyd_s3cR3t_k3y_r3c0n_2026!xZ9';
-
-        async function sha256(message) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function createToken(email, role, tenantId) {
-            const payload = JSON.stringify({
-                email,
-                role,
-                tenantId: tenantId || '',
-                ts: Date.now()
-            });
-            const encoded = btoa(payload);
-            const signature = await sha256(encoded + ':' + TOKEN_SECRET);
-            return encoded + '.' + signature;
-        }
-
-        function setCookie(name, value, maxAgeSeconds) {
-            document.cookie = `${name}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Strict`;
-        }
-
         async function submitPortal() {
             const btn = document.getElementById('btnAction');
             const btnText = document.getElementById('btnActionText');
@@ -446,20 +417,31 @@
                     return;
                 }
 
-                // Mint a role: partner token for the currently-selected Nusumma tenant
+                // Log in through the server so it sets the HttpOnly dsh_auth/dsh_role/dsh_tenant
+                // cookies — matching the main portal's flow so a stale HttpOnly Paydia session
+                // in this browser gets properly overwritten instead of silently ignored.
                 const portalTenantId = getPortalTenantId();
                 const tenant = NusummaData.getTenant(portalTenantId);
-                const email = tenant ? tenant.emailPIC : 'partner@nusumma-jombang.id';
-                const token = await createToken(email, 'partner', portalTenantId);
+                const email = tenant ? tenant.emailPIC : 'partner@nusumma.co.id';
 
-                setCookie('dsh_auth', token, 86400);
-                setCookie('dsh_role', 'partner', 86400);
-                setCookie('dsh_tenant', portalTenantId, 86400);
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, role: 'partner' })
+                });
 
-                NusummaData.setCurrentRole('partner');
-                NusummaData.setCurrentTenant(portalTenantId);
+                if (response.ok) {
+                    const data = await response.json();
 
-                window.location.replace('partner/index.html');
+                    NusummaData.setCurrentRole('partner');
+                    NusummaData.setCurrentTenant(data.tenantId || portalTenantId);
+
+                    window.location.replace('partner/index.html');
+                } else {
+                    const data = await response.json();
+                    showError(data.message || 'Gagal masuk ke dashboard');
+                    resetButton();
+                }
             } catch (err) {
                 showError('Gagal terhubung ke server');
                 resetButton();

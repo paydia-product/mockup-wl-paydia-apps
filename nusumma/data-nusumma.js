@@ -328,6 +328,15 @@ const PaydiaData = (() => {
             localStorage.setItem(KEYS.QRIS_MPM, JSON.stringify(SEED_QRIS_MPM));
             localStorage.setItem(KEYS.INITIALIZED, 'true');
         }
+
+        // Self-heal a stale current-tenant pointer (e.g. left over from a prior
+        // seed version with more tenants) so it never points at a tenant that
+        // no longer exists.
+        const tenants = getTenants();
+        const current = localStorage.getItem(KEYS.CURRENT_TENANT);
+        if (tenants.length > 0 && (!current || !tenants.find(t => t.id === current))) {
+            localStorage.setItem(KEYS.CURRENT_TENANT, tenants[0].id);
+        }
     }
 
     // ── Generic Read/Write Helpers ──
