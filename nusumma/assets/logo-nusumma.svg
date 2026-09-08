@@ -1,0 +1,29 @@
+<!-- Recreated approximation of the BPR Nusumma logo lockup (V+circle mark
+     plus wordmark). The operator's own website only ships a template
+     placeholder logo (renders the word "Startus") — no official artwork was
+     available to download. Replace this file with official BPR Nusumma
+     artwork when available. -->
+<svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mark: circle "head" + tapered V "raised arms" -->
+  <g transform="translate(0,5)">
+    <circle cx="48" cy="20" r="11" fill="#FF9800"/>
+    <path d="M 48 38
+             L 14 100
+             C 12 105 17 108 21 104
+             L 48 56
+             L 75 104
+             C 79 108 84 105 82 100
+             Z" fill="#FF9800"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g fill="#FF9800" font-family="Arial, Helvetica, 'Segoe UI', sans-serif">
+    <!-- Line 1: BANK + PEREKONOMIAN / RAKYAT -->
+    <text x="118" y="38" font-size="30" font-weight="800" letter-spacing="1">BANK</text>
+    <text x="220" y="30" font-size="13" font-weight="700" letter-spacing="0.5">PEREKONOMIAN</text>
+    <text x="220" y="45" font-size="13" font-weight="700" letter-spacing="0.5">RAKYAT</text>
+
+    <!-- Line 2: NUSUMMA, very large heavy -->
+    <text x="118" y="92" font-size="56" font-weight="900" letter-spacing="1">NUSUMMA</text>
+  </g>
+</svg>

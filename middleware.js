@@ -62,9 +62,9 @@ export default async function middleware(request) {
     const pathname = url.pathname;
 
     // 1. Bypass check for assets/endpoints needed to unlock the mockup
-    if (pathname === '/gate.html' || 
-        pathname === '/api/unlock' || 
-        pathname === '/favicon.ico' || 
+    if (pathname === '/gate.html' ||
+        pathname === '/api/unlock' ||
+        pathname === '/favicon.ico' ||
         pathname.startsWith('/shared/')) {
         return;
     }
@@ -104,13 +104,37 @@ export default async function middleware(request) {
         return;
     }
 
+    // Nusumma portal — mirrors the rules above, once unlocked.
+    if (pathname === '/nusumma/login.html') {
+        return;
+    }
+
+    if (pathname.startsWith('/nusumma/app-preview/') || pathname === '/nusumma/app-preview') {
+        return;
+    }
+
+    // Static assets (logos, data-nusumma.js) must be reachable for an
+    // unlocked user who does not have a dsh_auth cookie yet — the
+    // unauthenticated branch below redirects to /nusumma/login.html BEFORE
+    // reaching the generic "allow other static assets" fall-through at the
+    // bottom of this function, so without this the Nusumma login page would
+    // render unstyled and its scripts would 404-redirect.
+    if (pathname.startsWith('/nusumma/assets/') || pathname === '/nusumma/data-nusumma.js') {
+        return;
+    }
+
+    if (pathname === '/nusumma' || pathname === '/nusumma/' || pathname === '/nusumma/index.html') {
+        url.pathname = '/nusumma/login.html';
+        return Response.redirect(url, 302);
+    }
+
     // Check for signed auth cookie
     const token = cookies['dsh_auth'];
 
     const payload = token ? await verifyToken(token) : false;
 
     if (!payload) {
-        url.pathname = '/login.html';
+        url.pathname = pathname.startsWith('/nusumma/') ? '/nusumma/login.html' : '/login.html';
         return Response.redirect(url, 302);
     }
 
@@ -129,6 +153,14 @@ export default async function middleware(request) {
     if (pathname.startsWith('/partner/') || pathname === '/partner') {
         if (role !== 'partner' && role !== 'internal') {
             url.pathname = '/login.html';
+            return Response.redirect(url, 302);
+        }
+    }
+
+    // Nusumma partner dashboard pages — mirrors /partner/* above
+    if (pathname.startsWith('/nusumma/partner/') || pathname === '/nusumma/partner') {
+        if (role !== 'partner' && role !== 'internal') {
+            url.pathname = '/nusumma/login.html';
             return Response.redirect(url, 302);
         }
     }

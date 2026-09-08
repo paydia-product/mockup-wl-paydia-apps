@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kustomisasi Tampilan — Dashboard Merchant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../shared/shared.css">
+    <link rel="stylesheet" href="partner.css?v=1.0.0">
+    <style>
+        /* Force page background to white */
+        body, .dashboard-layout, .main-area, .page-content {
+            background: #FFFFFF !important;
+        }
+
+        .page-content {
+            padding: 24px 40px !important;
+        }
+
+        .page-title {
+            color: #000000 !important;
+            font-size: 1.75rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 6px !important;
+        }
+
+        .page-subtitle {
+            color: #000000 !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            margin-bottom: 32px !important;
+        }
+
+        /* Groups & Sections Formatting */
+        .config-group-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #E07B00;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 8px;
+            margin-top: 36px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .config-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .config-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #E07B00;
+            padding-left: 10px;
+        }
+
+        .config-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .config-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .config-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .form-group-custom {
+            margin-bottom: 16px;
+        }
+
+        .form-group-custom label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-input-custom {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #0F172A;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input-custom:focus {
+            border-color: #E07B00;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.15);
+        }
+
+        .form-textarea-custom {
+            width: 100%;
+            height: 120px;
+            padding: 10px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #0F172A;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .form-textarea-custom:focus {
+            border-color: #E07B00;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.15);
+        }
+
+        .read-only-badge {
+            display: inline-block;
+            background: #F1F5F9;
+            border: 1px solid #E2E8F0;
+            color: #334155;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Products Toggle Switching Table */
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .products-table th {
+            text-align: left;
+            font-size: 0.78rem;
+            color: #64748B;
+            font-weight: 700;
+            padding: 10px 12px;
+            border-bottom: 1.5px solid #E2E8F0;
+            text-transform: uppercase;
+        }
+
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #F1F5F9;
+            font-size: 0.85rem;
+            color: #1E293B;
+            font-weight: 500;
+        }
+
+        /* Custom toggle design pattern */
+        .toggle-switch-custom {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch-custom input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider-custom {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #CBD5E1;
+            transition: .2s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider-custom:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .2s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider-custom {
+            background-color: #EF6C00;
+        }
+
+        input:checked + .toggle-slider-custom:before {
+            transform: translateX(20px);
+        }
+
+        .btn-save-fixed {
+            background: #EF6C00;
+            color: #FFFFFF;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+            transition: all 0.2s;
+            margin: 40px auto 20px;
+        }
+
+        .btn-save-fixed:hover {
+            background: #E07B00;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-save-fixed:active {
+            transform: translateY(0);
+        }
+
+        /* ── Image Upload Element Style ── */
+        .image-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #F8FAFC;
+            border: 1px dashed #CBD5E1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 4px;
+            transition: all 0.2s;
+        }
+        .image-upload-wrapper:hover {
+            border-color: #E07B00;
+            background: #F1F5F9;
+        }
+        .image-upload-btn {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            color: #475569;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .image-upload-btn:hover {
+            border-color: #E07B00;
+            color: #E07B00;
+        }
+        .image-upload-info {
+            flex: 1;
+            font-size: 0.78rem;
+            color: #64748B;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn-view-image {
+            background: #EF6C00;
+            color: #FFFFFF;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .btn-view-image:hover {
+            background: #E07B00;
+        }
+        .image-requirement-hint {
+            font-size: 0.7rem;
+            color: #94A3B8;
+            margin-top: 4px;
+        }
+
+        /* ── Tooltip Custom ── */
+        .tooltip-custom {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 6px;
+            cursor: pointer;
+            color: #94A3B8;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+            vertical-align: middle;
+        }
+        .tooltip-custom:hover {
+            color: #E07B00;
+        }
+        .tooltip-text-custom {
+            visibility: hidden;
+            width: 260px;
+            background-color: #0F172A;
+            color: #FFFFFF;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1.4;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            white-space: normal;
+            font-family: 'Inter', sans-serif;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .tooltip-text-custom::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #0F172A transparent transparent transparent;
+        }
+        .tooltip-custom:hover .tooltip-text-custom,
+        .tooltip-custom.active .tooltip-text-custom {
+            visibility: visible;
+            opacity: 1;
+        }
+        .topbar-breadcrumb, .topbar-breadcrumb span {
+            color: #000000 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar"></aside>
+ 
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-breadcrumb">
+                        Dashboard <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                        <span>Kustomisasi Tampilan</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-btn" title="Notifikasi"><i class="fas fa-bell"></i><span class="badge-dot"></span></button>
+                </div>
+            </header>
+ 
+            <main class="page-content">
+                <h1 class="page-title">Kustomisasi Tampilan</h1>
+                <p class="page-subtitle">Atur tampilan aplikasi Anda secara realtime. Perubahan langsung terlihat di preview.</p>
+ 
+                <!-- Unified Form Container -->
+                <div class="customize-full-container" id="form-container">
+                    
+                    <!-- ── GROUP 1: TAMPILAN ── -->
+                    <div class="config-group-title">Tampilan</div>
+                    <div class="config-card">
+                        <div class="config-card-title">Tema Warna Aplikasi <span style="color:#EF4444; margin-left: 2px;">*</span></div>
+                        <div>
+                            <div class="form-group-custom">
+                                <label for="primaryColor">Tema Warna <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah tema warna tombol, header dan layout di dalam aplikasi</span></span></label>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <input type="color" id="primaryColor" class="form-input-custom" style="width:50px; padding:0; height:38px; cursor:pointer;" value="#FF9800">
+                                    <input type="text" id="primaryColorHex" class="form-input-custom" value="#FF9800" placeholder="#HEX" maxlength="7">
+                                </div>
+                            </div>
+                            <div class="form-group-custom" style="display: none;">
+                                <label>Logo di Dalam Aplikasi <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah logo brand yang muncul di dalam aplikasi</span></span></label>
+                                <div class="image-upload-wrapper">
+                                    <button type="button" class="image-upload-btn" onclick="document.getElementById('logoFile').click()">
+                                        <i class="fas fa-upload"></i> Pilih Gambar
+                                    </button>
+                                    <span class="image-upload-info" id="logoFileInfo">Belum ada file dipilih</span>
+                                    <button type="button" class="btn-view-image" id="btnView_logo" style="display:none;">Lihat</button>
+                                    <input type="file" id="logoFile" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'logoFileInfo', 'btnView_logo')">
+                                </div>
+                                <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Onboarding -->
+                    <div>
+                        <!-- Hidden Splash Screen elements to preserve JS compatibility -->
+                        <div class="config-card" style="display: none;">
+                            <div class="config-card-title">Splash Screen <span style="color:#EF4444; margin-left: 2px;">*</span> <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah gambar yang pertama kali muncul ketika membuka aplikasi</span></span></div>
+                            <div class="form-group-custom">
+                                <label>Layar Splash Screen</label>
+                                <div class="image-upload-wrapper">
+                                    <button type="button" class="image-upload-btn" onclick="document.getElementById('splashScreenFile').click()">
+                                        <i class="fas fa-upload"></i> Pilih Gambar
+                                    </button>
+                                    <span class="image-upload-info" id="splashScreenFileInfo">Belum ada file dipilih</span>
+                                    <button type="button" class="btn-view-image" id="btnView_splashScreen" style="display:none;">Lihat</button>
+                                    <input type="file" id="splashScreenFile" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'splashScreenFileInfo', 'btnView_splashScreen')">
+                                </div>
+                                <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                            </div>
+                        </div>
+
+                        <!-- HIDDEN: custom onboarding screen disabled for this phase -->
+                        <div class="config-card" style="display: none;">
+                            <div class="config-card-title">Layar Onboarding <span style="color:#EF4444; margin-left: 2px;">*</span></div>
+                            <div class="config-grid-2">
+                                <div class="form-group-custom">
+                                    <label>Gambar Set PIN Onboarding</label>
+                                    <input type="hidden" id="onboarding_name_0" value="Set PIN">
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('onboardingPinFile').click()">
+                                            <i class="fas fa-upload"></i> Pilih Gambar
+                                        </button>
+                                        <span class="image-upload-info" id="onboardingPinFileInfo">Belum ada file dipilih</span>
+                                        <button type="button" class="btn-view-image" id="btnView_onboardingPin" style="display:none;">Lihat</button>
+                                        <input type="file" id="onboardingPinFile" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'onboardingPinFileInfo', 'btnView_onboardingPin')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                                <div class="form-group-custom">
+                                    <label>Gambar Set Biometric Onboarding</label>
+                                    <input type="hidden" id="onboarding_name_1" value="Set Biometric">
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('onboardingBioFile').click()">
+                                            <i class="fas fa-upload"></i> Pilih Gambar
+                                        </button>
+                                        <span class="image-upload-info" id="onboardingBioFileInfo">Belum ada file dipilih</span>
+                                        <button type="button" class="btn-view-image" id="btnView_onboardingBio" style="display:none;">Lihat</button>
+                                        <input type="file" id="onboardingBioFile" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'onboardingBioFileInfo', 'btnView_onboardingBio')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Product Toggles -->
+                    <div class="config-card">
+                        <div class="config-card-title">Produk <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mempengaruhi fitur yang tampil di homepage</span></span></div>
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Produk</th>
+                                    <th>Status Aktif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Kirim Uang</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_kirimUang" checked>
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Minta Dana</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_mintaDana" checked>
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Top Up Saldo</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_topUp" checked>
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>QRIS</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_qris" checked>
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Komunitas</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_komunitas">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pulsa &amp; Paket Data</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_pulsaPaket">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PLN</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_pln">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PDAM</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_pdam">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BPJS Kesehatan</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_bpjs">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tagihan</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_tagihan">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Kasbon</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_kasbon">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Internet</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_internet">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Telkom</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_telkom">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Transaksi Favorit</td>
+                                    <td>
+                                        <label class="toggle-switch-custom">
+                                            <input type="checkbox" id="feat_transaksiFavorit">
+                                            <span class="toggle-slider-custom"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Row 4: Custom Feature Names & Icons -->
+                    <div class="config-card">
+                        <div class="config-card-title">Icon &amp; Nama Fitur <span style="color:#EF4444; margin-left: 2px;">*</span> <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah nama dan icon setiap fitur di homepage</span></span></div>
+                        <div class="config-grid-5">
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Kirim Uang</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_kirimUang" class="form-input-custom" placeholder="Kirim Uang">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_kirimUang').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_kirimUang" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_kirimUang" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_kirimUang" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_kirimUang', 'btnView_featIcon_kirimUang')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Minta Dana</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_mintaDana" class="form-input-custom" placeholder="Minta Dana">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_mintaDana').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_mintaDana" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_mintaDana" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_mintaDana" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_mintaDana', 'btnView_featIcon_mintaDana')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Top Up Saldo</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_topUp" class="form-input-custom" placeholder="Top Up Saldo">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_topUp').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_topUp" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_topUp" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_topUp" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_topUp', 'btnView_featIcon_topUp')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Komunitas</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_komunitas" class="form-input-custom" placeholder="Komunitas">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_komunitas').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_komunitas" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_komunitas" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_komunitas" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_komunitas', 'btnView_featIcon_komunitas')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Pulsa &amp; Paket Data</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_pulsaPaket" class="form-input-custom" placeholder="Pulsa &amp; Paket Data">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_pulsaPaket').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_pulsaPaket" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_pulsaPaket" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_pulsaPaket" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_pulsaPaket', 'btnView_featIcon_pulsaPaket')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">PLN</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_pln" class="form-input-custom" placeholder="PLN">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_pln').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_pln" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_pln" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_pln" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_pln', 'btnView_featIcon_pln')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">PDAM</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_pdam" class="form-input-custom" placeholder="PDAM">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_pdam').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_pdam" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_pdam" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_pdam" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_pdam', 'btnView_featIcon_pdam')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">BPJS Kesehatan</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_bpjs" class="form-input-custom" placeholder="BPJS Kesehatan">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_bpjs').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_bpjs" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_bpjs" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_bpjs" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_bpjs', 'btnView_featIcon_bpjs')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Tagihan</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_tagihan" class="form-input-custom" placeholder="Tagihan">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_tagihan').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_tagihan" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_tagihan" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_tagihan" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_tagihan', 'btnView_featIcon_tagihan')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Kasbon</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_kasbon" class="form-input-custom" placeholder="Kasbon">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_kasbon').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_kasbon" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_kasbon" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_kasbon" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_kasbon', 'btnView_featIcon_kasbon')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Internet</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_internet" class="form-input-custom" placeholder="Internet">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_internet').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_internet" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_internet" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_internet" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_internet', 'btnView_featIcon_internet')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Telkom</div>
+                                <div class="form-group-custom">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_telkom" class="form-input-custom" placeholder="Telkom">
+                                </div>
+                                <div class="form-group-custom" style="display: none;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('featIconFile_telkom').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="featIconFileInfo_telkom" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_featIcon_telkom" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="featIconFile_telkom" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'featIconFileInfo_telkom', 'btnView_featIcon_telkom')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:8px; color:#1E293B;">Transaksi Favorit</div>
+                                <div class="form-group-custom" style="margin-bottom:0;">
+                                    <label>Ubah Nama</label>
+                                    <input type="text" id="name_transaksiFavorit" class="form-input-custom" placeholder="Transaksi Favorit">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Banner Promo -->
+                    <div class="config-card">
+                        <div class="config-card-title">Banner Promo <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengatur gambar, judul, dan konten untuk banner promo di aplikasi mobile. Klik pada banner akan membuka halaman detail promo.</span></span></div>
+                        <div id="banners-container">
+                            <!-- Dynamically populated -->
+                        </div>
+                        <button type="button" class="image-upload-btn" onclick="addBannerInput()" style="margin-top: 12px; background: #FFF3E0; color: #E07B00; border-color: #E07B00; font-weight: 700;">
+                            <i class="fas fa-plus"></i> Tambah Banner Promo
+                        </button>
+                    </div>
+
+                    <!-- Row 6: Custom Navbar Icons (No Names) -->
+                    <div class="config-card" style="display: none;">
+                        <div class="config-card-title">Navigation Bar <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah icon yang tampil di navigation bar</span></span></div>
+                        <div class="config-grid-5">
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:12px; color:#1E293B;">Home</div>
+                                <div class="form-group-custom" style="margin-bottom: 0;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('navIconFile_0').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="navIconFileInfo_0" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_navIcon_0" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="navIconFile_0" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'navIconFileInfo_0', 'btnView_navIcon_0')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:12px; color:#1E293B;">Transaksi Favorit</div>
+                                <div class="form-group-custom" style="margin-bottom: 0;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('navIconFile_1').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="navIconFileInfo_1" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_navIcon_1" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="navIconFile_1" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'navIconFileInfo_1', 'btnView_navIcon_1')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:12px; color:#1E293B;">Riwayat Transaksi</div>
+                                <div class="form-group-custom" style="margin-bottom: 0;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('navIconFile_2').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="navIconFileInfo_2" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_navIcon_2" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="navIconFile_2" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'navIconFileInfo_2', 'btnView_navIcon_2')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #E2E8F0; padding:12px; border-radius:8px;">
+                                <div style="font-weight:700; font-size:0.8rem; margin-bottom:12px; color:#1E293B;">Profil</div>
+                                <div class="form-group-custom" style="margin-bottom: 0;">
+                                    <label>Ubah Icon</label>
+                                    <div class="image-upload-wrapper">
+                                        <button type="button" class="image-upload-btn" onclick="document.getElementById('navIconFile_3').click()">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                        <span class="image-upload-info" id="navIconFileInfo_3" style="font-size: 0.72rem;">Belum ada file</span>
+                                        <button type="button" class="btn-view-image" id="btnView_navIcon_3" style="display:none; padding:4px 8px; font-size:0.75rem;">Lihat</button>
+                                        <input type="file" id="navIconFile_3" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'navIconFileInfo_3', 'btnView_navIcon_3')">
+                                    </div>
+                                    <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Row 8: Blog Configuration -->
+                    <div class="config-card">
+                        <div class="config-card-title">Blog <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengatur URL link dan file gambar untuk banner blog di aplikasi mobile. Jika dikosongkan, segmen blog tidak akan muncul di aplikasi.</span></span></div>
+                        <div id="blogs-container">
+                            <!-- Dynamically populated -->
+                        </div>
+                        <button type="button" class="image-upload-btn" onclick="addBlogInput()" style="margin-top: 12px; background: #FFF3E0; color: #E07B00; border-color: #E07B00; font-weight: 700;">
+                            <i class="fas fa-plus"></i> Tambah Banner Blog
+                        </button>
+                    </div>
+
+                    <!-- ── GROUP 2: KONTEN ── -->
+                    <div class="config-group-title">Konten</div>
+
+                    <!-- Row 1: Terms & Conditions -->
+                    <div class="config-card">
+                        <div class="config-card-title">Terms & Conditions <span style="color:#EF4444; margin-left: 2px;">*</span> <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah copywriting Syarat & Ketentuan pada halaman profile</span></span></div>
+                        <div class="form-group-custom">
+                            <label for="tosText">Isi Syarat & Ketentuan Penggunaan <span style="color:#EF4444; margin-left: 2px;">*</span></label>
+                            <textarea id="tosText" class="form-textarea-custom" placeholder="Syarat & ketentuan aplikasi..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Social Media & Language -->
+                    <div class="config-grid-2">
+                        <!-- HIDDEN: social media links disabled for this phase -->
+                        <div class="config-card" style="display: none;">
+                            <div class="config-card-title">Link Social Media <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah link social media milik brand pada halaman profile. Jika link social media dikosongkan, maka icon social media tersebut tidak akan muncul di aplikasi.</span></span></div>
+                            <div class="form-group-custom">
+                                <label for="social_facebook">Facebook URL</label>
+                                <input type="text" id="social_facebook" class="form-input-custom" placeholder="https://facebook.com/username">
+                            </div>
+                            <div class="form-group-custom">
+                                <label for="social_tiktok">TikTok URL</label>
+                                <input type="text" id="social_tiktok" class="form-input-custom" placeholder="https://tiktok.com/@username">
+                            </div>
+                            <div class="form-group-custom">
+                                <label for="social_instagram">Instagram URL</label>
+                                <input type="text" id="social_instagram" class="form-input-custom" placeholder="https://instagram.com/username">
+                            </div>
+                            <div class="form-group-custom">
+                                <label for="social_twitter">Twitter (X) URL</label>
+                                <input type="text" id="social_twitter" class="form-input-custom" placeholder="https://twitter.com/username">
+                            </div>
+                        </div>
+
+                        <div class="config-card">
+                            <div class="config-card-title">Support &amp; Kontak <span class="tooltip-custom" onclick="this.classList.toggle('active')"><i class="fas fa-circle-info"></i><span class="tooltip-text-custom">Mengubah kontak support yang tampil di aplikasi pada halaman profile. Jika kontak dikosongkan, maka icon kontak tersebut tidak akan muncul di aplikasi.</span></span></div>
+                            <div class="form-group-custom">
+                                <label for="supportEmail">Email Support <span style="color:#EF4444; margin-left: 2px;">*</span></label>
+                                <input type="email" id="supportEmail" class="form-input-custom" placeholder="support@brand.id">
+                            </div>
+                            <div class="form-group-custom">
+                                <label for="callCenter">Call Center</label>
+                                <input type="text" id="callCenter" class="form-input-custom" placeholder="1500xxx">
+                            </div>
+                            <div class="form-group-custom">
+                                <label for="whatsapp">WhatsApp Support</label>
+                                <input type="text" id="whatsapp" class="form-input-custom" placeholder="+6281xxxxxx">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unified Actions -->
+                    <button class="btn-save-fixed" onclick="saveConfig()">
+                        Simpan
+                    </button>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal-overlay" id="imagePreviewModal">
+        <div class="modal-dialog" style="max-width:500px">
+            <div class="modal-header">
+                <div class="modal-title" id="imagePreviewModalTitle">Preview Gambar</div>
+                <button class="modal-close" onclick="closeModal('imagePreviewModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align:center; padding: 20px;">
+                <img id="imagePreviewModalImg" src="" style="max-width:100%; max-height:400px; border-radius:8px; object-fit:contain; border: 1px solid #E2E8F0; padding: 4px;" alt="Preview">
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Success Modal -->
+    <div class="modal-overlay" id="saveSuccessModal">
+        <div class="modal-dialog" style="max-width:400px; text-align:center; padding: 32px 24px; background: #FFFFFF; border: 1px solid #E2E8F0;">
+            <div style="font-size: 4rem; color: #10B981; margin-bottom: 20px;">
+                <i class="fas fa-circle-check"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; color: #0F172A; margin-bottom: 12px; font-weight: 700; font-family: 'Inter', sans-serif;">Pengaturan Berhasil</h2>
+            <p style="font-size: 0.9rem; color: #64748B; line-height: 1.6; margin-bottom: 24px; font-family: 'Inter', sans-serif;">
+                Harap tunggu maksimal 1x24 jam untuk sinkronisasi pembaruan pada aplikasi Anda.
+            </p>
+            <button class="form-input-custom" onclick="closeModal('saveSuccessModal')" style="background: #EF6C00; color: #FFFFFF; font-weight: 700; border: none; padding: 12px 32px; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif; display: inline-block; width: auto; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(255, 152, 0, 0.25);">
+                Selesai
+            </button>
+        </div>
+    </div>
+
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+
+    <script src="../data-nusumma.js"></script>
+    <script src="../../shared/versions.js?v=1.0.0"></script>
+    <script src="partner.js?v=1.0.0"></script>
+    <script>
+        let currentConfig = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartner();
+            renderSidebar('whitelabel');
+            
+            // All Nusumma tenants have whitelabel enabled — no exclusion needed.
+            loadConfig();
+        });
+
+        // ── Color Syncer hex <-> input ──
+        document.getElementById('primaryColor').addEventListener('input', (e) => {
+            document.getElementById('primaryColorHex').value = e.target.value.toUpperCase();
+        });
+        document.getElementById('primaryColorHex').addEventListener('input', (e) => {
+            let v = e.target.value;
+            if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+                document.getElementById('primaryColor').value = v;
+            }
+        });
+
+        // ── Image Upload Handling (Validation & Base64 Reader) ──
+        function handleImageUpload(inputEl, infoId, viewBtnId) {
+            const file = inputEl.files[0];
+            const infoSpan = document.getElementById(infoId);
+            const viewBtn = document.getElementById(viewBtnId);
+            
+            if (!file) return;
+            
+            // Format validation: JPG, JPEG, PNG
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                showToast('Validasi Error', 'Format file harus JPG, JPEG, atau PNG.', 'error');
+                inputEl.value = '';
+                if (infoSpan) infoSpan.textContent = 'Format tidak didukung';
+                return;
+            }
+            
+            // Size validation (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('Validasi Error', 'Ukuran file maksimal 5MB.', 'error');
+                inputEl.value = '';
+                if (infoSpan) infoSpan.textContent = 'Ukuran melebihi 5MB';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                inputEl.dataset.base64 = base64Data;
+                inputEl.dataset.filename = file.name;
+                
+                if (infoSpan) {
+                    infoSpan.textContent = file.name;
+                    infoSpan.style.color = '#0F172A';
+                }
+                
+                if (viewBtn) {
+                    viewBtn.style.display = 'inline-flex';
+                    viewBtn.onclick = () => openImageModal('Preview: ' + file.name, base64Data);
+                }
+                
+                showToast('Berhasil', 'Gambar berhasil diunggah.', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openImageModal(title, base64OrUrl) {
+            if (!base64OrUrl) {
+                showToast('Error', 'Tidak ada gambar untuk ditampilkan.', 'error');
+                return;
+            }
+            let resolvedUrl = base64OrUrl;
+            if (window.location.protocol === 'file:' && typeof base64OrUrl === 'string' && base64OrUrl.startsWith('/app-preview/')) {
+                resolvedUrl = '..' + base64OrUrl;
+            }
+            document.getElementById('imagePreviewModalTitle').textContent = title;
+            document.getElementById('imagePreviewModalImg').src = resolvedUrl;
+            openModal('imagePreviewModal');
+        }
+
+        // ── Load/Init Image Field helper ──
+        function initImageUploadField(inputElId, infoId, viewBtnId, currentVal, labelText) {
+            const inputEl = document.getElementById(inputElId);
+            const infoSpan = document.getElementById(infoId);
+            const viewBtn = document.getElementById(viewBtnId);
+            
+            if (inputEl) {
+                inputEl.value = ''; // clear chosen file path
+            }
+            
+            if (currentVal) {
+                if (inputEl) {
+                    inputEl.dataset.base64 = currentVal;
+                }
+                if (infoSpan) {
+                    infoSpan.textContent = currentVal.startsWith('data:') ? 'Custom Image' : 'Default Image';
+                    infoSpan.style.color = '#E07B00';
+                }
+                if (viewBtn) {
+                    viewBtn.style.display = 'inline-flex';
+                    viewBtn.onclick = () => openImageModal(labelText, currentVal);
+                }
+            } else {
+                if (inputEl) {
+                    delete inputEl.dataset.base64;
+                }
+                if (infoSpan) {
+                    infoSpan.textContent = 'Belum ada file';
+                    infoSpan.style.color = '#64748B';
+                }
+                if (viewBtn) {
+                    viewBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // ── Load Config ──
+        function loadConfig() {
+            currentConfig = getConfig() || {};
+            
+            // TAMPILAN - Color Picker
+            document.getElementById('primaryColor').value = currentConfig.primaryColor || '#FF9800';
+            document.getElementById('primaryColorHex').value = (currentConfig.primaryColor || '#FF9800').toUpperCase();
+            
+            // Image Upload Fields initialization
+            initImageUploadField('logoFile', 'logoFileInfo', 'btnView_logo', currentConfig.logoUrl, 'Logo Aplikasi');
+            initImageUploadField('splashScreenFile', 'splashScreenFileInfo', 'btnView_splashScreen', currentConfig.splashScreenUrl, 'Splash Screen');
+
+            // Products
+            const features = currentConfig.features || {};
+            document.getElementById('feat_kirimUang').checked = features.kirimUang !== false;
+            document.getElementById('feat_mintaDana').checked = features.mintaDana !== false;
+            document.getElementById('feat_topUp').checked = features.topUp !== false;
+            document.getElementById('feat_qris').checked = features.qris !== false;
+            document.getElementById('feat_komunitas').checked = features.komunitas !== false;
+            document.getElementById('feat_pulsaPaket').checked = features.pulsaPaket !== false;
+            document.getElementById('feat_pln').checked = features.pln !== false;
+            document.getElementById('feat_pdam').checked = features.pdam !== false;
+            document.getElementById('feat_bpjs').checked = features.bpjs !== false;
+            document.getElementById('feat_tagihan').checked = features.tagihan !== false;
+            document.getElementById('feat_kasbon').checked = features.kasbon !== false;
+            document.getElementById('feat_internet').checked = features.internet !== false;
+            document.getElementById('feat_telkom').checked = features.telkom !== false;
+            document.getElementById('feat_transaksiFavorit').checked = features.transaksiFavorit !== false;
+
+            // Names & Icons (Features)
+            const icons = currentConfig.featureIcons || {};
+            const names = currentConfig.featureNames || {};
+            document.getElementById('name_kirimUang').value = names.kirimUang || 'Kirim Uang';
+            initImageUploadField('featIconFile_kirimUang', 'featIconFileInfo_kirimUang', 'btnView_featIcon_kirimUang', icons.kirimUang, 'Icon: Kirim Uang');
+            
+            document.getElementById('name_mintaDana').value = names.mintaDana || 'Minta Dana';
+            initImageUploadField('featIconFile_mintaDana', 'featIconFileInfo_mintaDana', 'btnView_featIcon_mintaDana', icons.mintaDana, 'Icon: Minta Dana');
+            
+            document.getElementById('name_topUp').value = names.topUp || 'Top Up Saldo';
+            initImageUploadField('featIconFile_topUp', 'featIconFileInfo_topUp', 'btnView_featIcon_topUp', icons.topUp, 'Icon: Top Up Saldo');
+            
+            document.getElementById('name_komunitas').value = names.komunitas || 'Komunitas';
+            initImageUploadField('featIconFile_komunitas', 'featIconFileInfo_komunitas', 'btnView_featIcon_komunitas', icons.komunitas, 'Icon: Komunitas');
+            
+            document.getElementById('name_pulsaPaket').value = names.pulsaPaket || 'Pulsa & Paket Data';
+            initImageUploadField('featIconFile_pulsaPaket', 'featIconFileInfo_pulsaPaket', 'btnView_featIcon_pulsaPaket', icons.pulsaPaket, 'Icon: Pulsa & Paket Data');
+            
+            document.getElementById('name_pln').value = names.pln || 'PLN';
+            initImageUploadField('featIconFile_pln', 'featIconFileInfo_pln', 'btnView_featIcon_pln', icons.pln, 'Icon: PLN');
+            
+            document.getElementById('name_pdam').value = names.pdam || 'PDAM';
+            initImageUploadField('featIconFile_pdam', 'featIconFileInfo_pdam', 'btnView_featIcon_pdam', icons.pdam, 'Icon: PDAM');
+            
+            document.getElementById('name_bpjs').value = names.bpjs || 'BPJS Kesehatan';
+            initImageUploadField('featIconFile_bpjs', 'featIconFileInfo_bpjs', 'btnView_featIcon_bpjs', icons.bpjs, 'Icon: BPJS Kesehatan');
+            
+            document.getElementById('name_tagihan').value = names.tagihan || 'Tagihan';
+            initImageUploadField('featIconFile_tagihan', 'featIconFileInfo_tagihan', 'btnView_featIcon_tagihan', icons.tagihan, 'Icon: Tagihan');
+            
+            document.getElementById('name_kasbon').value = names.kasbon || 'Kasbon';
+            initImageUploadField('featIconFile_kasbon', 'featIconFileInfo_kasbon', 'btnView_featIcon_kasbon', icons.kasbon, 'Icon: Kasbon');
+            
+            document.getElementById('name_internet').value = names.internet || 'Internet';
+            initImageUploadField('featIconFile_internet', 'featIconFileInfo_internet', 'btnView_featIcon_internet', icons.internet, 'Icon: Internet');
+            
+            document.getElementById('name_telkom').value = names.telkom || 'Telkom';
+            initImageUploadField('featIconFile_telkom', 'featIconFileInfo_telkom', 'btnView_featIcon_telkom', icons.telkom, 'Icon: Telkom');
+
+
+
+            document.getElementById('name_transaksiFavorit').value = names.transaksiFavorit || 'Transaksi Favorit';
+
+            // Banners (Promo URLs)
+            renderBannerInputs();
+
+            // Navbar items (Icons only — QRIS center button is fixed, not customizable)
+            const navbar = currentConfig.navbar || [];
+            const navLabels = ['Home', 'Transaksi Favorit', 'Riwayat Transaksi', 'Profil'];
+            for (let i = 0; i < 4; i++) {
+                const item = navbar[i] || {};
+                initImageUploadField('navIconFile_' + i, 'navIconFileInfo_' + i, 'btnView_navIcon_' + i, item.icon, 'Navbar: ' + navLabels[i]);
+            }
+
+            // Onboarding Screens
+            const onboarding = currentConfig.onboarding || [];
+            initImageUploadField('onboardingPinFile', 'onboardingPinFileInfo', 'btnView_onboardingPin', (onboarding[0]?.image || onboarding[0]?.imageUrl), 'Onboarding: Set PIN');
+            initImageUploadField('onboardingBioFile', 'onboardingBioFileInfo', 'btnView_onboardingBio', (onboarding[1]?.image || onboarding[1]?.imageUrl), 'Onboarding: Set Biometric');
+
+            // KONTEN
+            document.getElementById('tosText').value = currentConfig.tosText || '';
+            
+            const social = currentConfig.socialMedia || {};
+            document.getElementById('social_facebook').value = social.facebook || '';
+            document.getElementById('social_tiktok').value = social.tiktok || '';
+            document.getElementById('social_instagram').value = social.instagram || '';
+            document.getElementById('social_twitter').value = social.twitter || '';
+
+            document.getElementById('supportEmail').value = currentConfig.supportEmail || '';
+            document.getElementById('callCenter').value = currentConfig.callCenter || '';
+            document.getElementById('whatsapp').value = currentConfig.whatsapp || '';
+
+            // Blog
+            renderBlogInputs();
+        }
+
+        // ── Save Config ──
+        function saveConfig() {
+            const primaryColor = document.getElementById('primaryColor').value;
+            
+            // Image upload fields Base64 extraction
+            const logoUrl = document.getElementById('logoFile').dataset.base64 || currentConfig.logoUrl || '';
+            const splashScreenUrl = document.getElementById('splashScreenFile').dataset.base64 || currentConfig.splashScreenUrl || '';
+            const emptyStateUrl = currentConfig.emptyStateUrl || '';
+            const errorStateUrl = currentConfig.errorStateUrl || '';
+
+            const features = {
+                kirimUang: document.getElementById('feat_kirimUang').checked,
+                mintaDana: document.getElementById('feat_mintaDana').checked,
+                topUp: document.getElementById('feat_topUp').checked,
+                qris: document.getElementById('feat_qris').checked,
+                komunitas: document.getElementById('feat_komunitas').checked,
+                pulsaPaket: document.getElementById('feat_pulsaPaket').checked,
+                pln: document.getElementById('feat_pln').checked,
+                pdam: document.getElementById('feat_pdam').checked,
+                bpjs: document.getElementById('feat_bpjs').checked,
+                tagihan: document.getElementById('feat_tagihan').checked,
+                kasbon: document.getElementById('feat_kasbon').checked,
+                internet: document.getElementById('feat_internet').checked,
+                telkom: document.getElementById('feat_telkom').checked,
+                transaksiFavorit: document.getElementById('feat_transaksiFavorit').checked
+            };
+
+            // Enforce min 1 active feature
+            const activeCount = Object.values(features).filter(Boolean).length;
+            if (activeCount < 1) {
+                showToast('Peringatan', 'Minimal 1 fitur harus aktif.', 'warning');
+                return;
+            }
+
+            const featureNames = {
+                kirimUang: document.getElementById('name_kirimUang').value.trim(),
+                mintaDana: document.getElementById('name_mintaDana').value.trim(),
+                topUp: document.getElementById('name_topUp').value.trim(),
+                komunitas: document.getElementById('name_komunitas').value.trim(),
+                pulsaPaket: document.getElementById('name_pulsaPaket').value.trim(),
+                pln: document.getElementById('name_pln').value.trim(),
+                pdam: document.getElementById('name_pdam').value.trim(),
+                bpjs: document.getElementById('name_bpjs').value.trim(),
+                tagihan: document.getElementById('name_tagihan').value.trim(),
+                kasbon: document.getElementById('name_kasbon').value.trim(),
+                internet: document.getElementById('name_internet').value.trim(),
+                telkom: document.getElementById('name_telkom').value.trim(),
+                transaksiFavorit: document.getElementById('name_transaksiFavorit').value.trim()
+            };
+
+            const featureIcons = {
+                kirimUang: document.getElementById('featIconFile_kirimUang').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.kirimUang) || '',
+                mintaDana: document.getElementById('featIconFile_mintaDana').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.mintaDana) || '',
+                topUp: document.getElementById('featIconFile_topUp').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.topUp) || '',
+                komunitas: document.getElementById('featIconFile_komunitas').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.komunitas) || '',
+                pulsaPaket: document.getElementById('featIconFile_pulsaPaket').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.pulsaPaket) || '',
+                pln: document.getElementById('featIconFile_pln').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.pln) || '',
+                pdam: document.getElementById('featIconFile_pdam').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.pdam) || '',
+                bpjs: document.getElementById('featIconFile_bpjs').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.bpjs) || '',
+                tagihan: document.getElementById('featIconFile_tagihan').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.tagihan) || '',
+                kasbon: document.getElementById('featIconFile_kasbon').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.kasbon) || '',
+                internet: document.getElementById('featIconFile_internet').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.internet) || '',
+                telkom: document.getElementById('featIconFile_telkom').dataset.base64 || (currentConfig.featureIcons && currentConfig.featureIcons.telkom) || ''
+            };
+
+            saveCurrentBannerInputs();
+            const promos = currentConfig.promos || [];
+            const banners = (promos.map(p => p.imageUrl).filter(Boolean));
+
+            // Navbar items (Names are hidden, use fixed labels — QRIS center button is fixed, not customizable)
+            const navbar = [];
+            const navLabels = ['Home', 'Transaksi Favorit', 'Riwayat Transaksi', 'Profil'];
+            for (let i = 0; i < 4; i++) {
+                const icon = document.getElementById('navIconFile_' + i).dataset.base64 || (currentConfig.navbar && currentConfig.navbar[i] && currentConfig.navbar[i].icon) || '';
+                navbar.push({ name: navLabels[i], icon: icon });
+            }
+
+            // Onboarding Screens
+            const onboarding = [
+                {
+                    name: 'Set PIN',
+                    image: document.getElementById('onboardingPinFile').dataset.base64 || (currentConfig.onboarding && currentConfig.onboarding[0] && (currentConfig.onboarding[0].image || currentConfig.onboarding[0].imageUrl)) || '',
+                    imageUrl: document.getElementById('onboardingPinFile').dataset.base64 || (currentConfig.onboarding && currentConfig.onboarding[0] && (currentConfig.onboarding[0].image || currentConfig.onboarding[0].imageUrl)) || ''
+                },
+                {
+                    name: 'Set Biometric',
+                    image: document.getElementById('onboardingBioFile').dataset.base64 || (currentConfig.onboarding && currentConfig.onboarding[1] && (currentConfig.onboarding[1].image || currentConfig.onboarding[1].imageUrl)) || '',
+                    imageUrl: document.getElementById('onboardingBioFile').dataset.base64 || (currentConfig.onboarding && currentConfig.onboarding[1] && (currentConfig.onboarding[1].image || currentConfig.onboarding[1].imageUrl)) || ''
+                }
+            ];
+
+            const tosText = document.getElementById('tosText').value.trim();
+
+            const socialMedia = {
+                facebook: document.getElementById('social_facebook').value.trim(),
+                tiktok: document.getElementById('social_tiktok').value.trim(),
+                instagram: document.getElementById('social_instagram').value.trim(),
+                twitter: document.getElementById('social_twitter').value.trim()
+            };
+
+            const supportEmail = document.getElementById('supportEmail').value.trim();
+            const callCenter = document.getElementById('callCenter').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+
+            saveCurrentBlogInputs();
+            const blogs = currentConfig.blogs || [];
+
+            const updates = {
+                primaryColor,
+                secondaryColor: currentConfig.secondaryColor || '#FFCC80', // keep original fallback
+                logoUrl,
+                splashScreenUrl,
+                emptyStateUrl,
+                errorStateUrl,
+                features,
+                featureNames,
+                featureIcons,
+                promos,
+                banners,
+                navbar,
+                onboarding,
+                tosText,
+                socialMedia,
+                supportEmail,
+                callCenter,
+                whatsapp,
+                blogs
+            };
+
+            PaydiaData.updateConfig(getTenantId(), updates);
+
+            // Audit log trace
+            PaydiaData.writeAuditLog({
+                actor: getTenantInfo()?.emailPIC || 'partner',
+                actorRole: 'Partner',
+                action: 'update_config',
+                objectType: 'config',
+                objectId: getTenantId(),
+                tenantId: getTenantId(),
+                description: 'Kustomisasi Whitelabel diperbarui secara penuh oleh partner',
+                before: JSON.stringify(currentConfig),
+                after: JSON.stringify(updates)
+            });
+
+            currentConfig = getConfig();
+            openModal('saveSuccessModal');
+        }
+
+        // ── Dynamic Banners Helper Functions ──
+        function renderBannerInputs() {
+            const container = document.getElementById('banners-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const promos = currentConfig.promos || [];
+            if (promos.length === 0) {
+                // Try reading from old banners
+                const banners = currentConfig.banners || [];
+                if (banners.length > 0) {
+                    banners.forEach(b => {
+                        promos.push({ imageUrl: b, promoUrl: '' });
+                    });
+                } else {
+                    promos.push({ imageUrl: '', promoUrl: '' });
+                }
+                currentConfig.promos = promos;
+            }
+            
+            promos.forEach((promo, idx) => {
+                const card = document.createElement('div');
+                card.className = 'promo-editor-card';
+                card.style.cssText = 'border: 1px solid #E2E8F0; padding: 16px; border-radius: 8px; margin-bottom: 16px; background: #F8FAFC; position: relative;';
+                
+                // Delete button
+                let deleteBtnHtml = '';
+                if (promos.length >= 2) {
+                    deleteBtnHtml = `
+                        <button type="button" class="btn-delete-banner" style="position: absolute; top: 12px; right: 12px; background: none; border: none; color: #EF4444; cursor: pointer; font-size: 1.1rem;" onclick="removeBannerInput(${idx})">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    ${deleteBtnHtml}
+                    <div style="font-weight: 700; margin-bottom: 12px; font-size: 0.85rem; color: #1E293B;">Promo ${idx + 1}</div>
+                    <div class="form-group-custom" style="margin-bottom: 8px;">
+                        <label>Gambar Banner Promo</label>
+                        <div class="image-upload-wrapper">
+                            <button type="button" class="image-upload-btn" onclick="document.getElementById('promoFile_${idx}').click()">
+                                <i class="fas fa-upload"></i> Pilih Gambar
+                            </button>
+                            <span class="image-upload-info" id="promoFileInfo_${idx}">Belum ada file dipilih</span>
+                            <button type="button" class="btn-view-image" id="btnView_promo_${idx}" style="display:none;">Lihat</button>
+                            <input type="file" id="promoFile_${idx}" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'promoFileInfo_${idx}', 'btnView_promo_${idx}')">
+                        </div>
+                        <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                    </div>
+                    <div class="form-group-custom">
+                        <label>Judul Promo</label>
+                        <input type="text" class="form-input-custom promo-title-input" value="${promo.title || ''}" placeholder="Contoh: Promo Hari Kemerdekaan">
+                    </div>
+                    <div class="form-group-custom" style="margin-bottom: 0;">
+                        <label>Konten Promo</label>
+                        <textarea class="form-textarea-custom promo-content-input" placeholder="Deskripsi detail promo...">${promo.content || ''}</textarea>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                initImageUploadField('promoFile_' + idx, 'promoFileInfo_' + idx, 'btnView_promo_' + idx, promo.imageUrl, 'Promo Banner ' + (idx + 1));
+            });
+        }
+        
+        function addBannerInput() {
+            saveCurrentBannerInputs();
+            if (!currentConfig.promos) currentConfig.promos = [];
+            currentConfig.promos.push({ imageUrl: '', title: '', content: '' });
+            renderBannerInputs();
+        }
+        
+        function removeBannerInput(index) {
+            saveCurrentBannerInputs();
+            currentConfig.promos.splice(index, 1);
+            renderBannerInputs();
+        }
+        
+        function saveCurrentBannerInputs() {
+            const cards = document.querySelectorAll('.promo-editor-card');
+            const list = [];
+            cards.forEach((card, idx) => {
+                const fileInput = document.getElementById('promoFile_' + idx);
+                const imageUrl = fileInput ? (fileInput.dataset.base64 || (currentConfig.promos && currentConfig.promos[idx] && currentConfig.promos[idx].imageUrl) || '') : '';
+                const title = card.querySelector('.promo-title-input').value.trim();
+                const content = card.querySelector('.promo-content-input').value.trim();
+                list.push({ imageUrl, title, content });
+            });
+            currentConfig.promos = list;
+            currentConfig.banners = list.map(p => p.imageUrl).filter(Boolean);
+        }
+
+        // ── Dynamic Blogs Helper Functions ──
+        function renderBlogInputs() {
+            const container = document.getElementById('blogs-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const blogs = currentConfig.blogs || [];
+            if (blogs.length === 0) {
+                blogs.push({ imageUrl: '', blogUrl: '' });
+                currentConfig.blogs = blogs;
+            }
+            
+            blogs.forEach((blog, idx) => {
+                const card = document.createElement('div');
+                card.className = 'blog-editor-card';
+                card.style.cssText = 'border: 1px solid #E2E8F0; padding: 16px; border-radius: 8px; margin-bottom: 16px; background: #F8FAFC; position: relative;';
+                
+                // Delete button
+                let deleteBtnHtml = '';
+                if (blogs.length >= 2) {
+                    deleteBtnHtml = `
+                        <button type="button" class="btn-delete-blog" style="position: absolute; top: 12px; right: 12px; background: none; border: none; color: #EF4444; cursor: pointer; font-size: 1.1rem;" onclick="removeBlogInput(${idx})">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    ${deleteBtnHtml}
+                    <div style="font-weight: 700; margin-bottom: 12px; font-size: 0.85rem; color: #1E293B;">Blog ${idx + 1}</div>
+                    <div class="form-group-custom" style="margin-bottom: 8px;">
+                        <label>Gambar Banner Blog</label>
+                        <div class="image-upload-wrapper">
+                            <button type="button" class="image-upload-btn" onclick="document.getElementById('blogFile_${idx}').click()">
+                                <i class="fas fa-upload"></i> Pilih Gambar
+                            </button>
+                            <span class="image-upload-info" id="blogFileInfo_${idx}">Belum ada file dipilih</span>
+                            <button type="button" class="btn-view-image" id="btnView_blog_${idx}" style="display:none;">Lihat</button>
+                            <input type="file" id="blogFile_${idx}" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleImageUpload(this, 'blogFileInfo_${idx}', 'btnView_blog_${idx}')">
+                        </div>
+                        <div class="image-requirement-hint">JPG, JPEG, PNG (Maks 5MB)</div>
+                    </div>
+                    <div class="form-group-custom" style="margin-bottom: 0;">
+                        <label>Redirect URL Blog</label>
+                        <input type="text" class="form-input-custom blog-url-input" value="${blog.blogUrl || ''}" placeholder="Contoh: https://nusumma.id/blog-detail">
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                initImageUploadField('blogFile_' + idx, 'blogFileInfo_' + idx, 'btnView_blog_' + idx, blog.imageUrl, 'Blog Banner ' + (idx + 1));
+            });
+        }
+        
+        function addBlogInput() {
+            saveCurrentBlogInputs();
+            if (!currentConfig.blogs) currentConfig.blogs = [];
+            currentConfig.blogs.push({ imageUrl: '', blogUrl: '' });
+            renderBlogInputs();
+        }
+        
+        function removeBlogInput(index) {
+            saveCurrentBlogInputs();
+            currentConfig.blogs.splice(index, 1);
+            renderBlogInputs();
+        }
+        
+        function saveCurrentBlogInputs() {
+            const cards = document.querySelectorAll('.blog-editor-card');
+            const list = [];
+            cards.forEach((card, idx) => {
+                const fileInput = document.getElementById('blogFile_' + idx);
+                const imageUrl = fileInput ? (fileInput.dataset.base64 || (currentConfig.blogs && currentConfig.blogs[idx] && currentConfig.blogs[idx].imageUrl) || '') : '';
+                const blogUrl = card.querySelector('.blog-url-input').value.trim();
+                list.push({ imageUrl, blogUrl });
+            });
+            currentConfig.blogs = list;
+        }
+    </script>
+</body>
+</html>

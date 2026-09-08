@@ -1,0 +1,753 @@
+/* =============================================
+   Nusumma White Label — Shared Data Module
+   =============================================
+   Isolated data layer for the BPR Nusumma mockup.
+   All data persisted in localStorage with nusumma_wl_* keys.
+   Cross-tab sync via StorageEvent.
+   ============================================= */
+
+const PaydiaData = (() => {
+
+    // ── Storage Keys ──
+    const KEYS = {
+        TENANTS: 'nusumma_wl_tenants',
+        CONFIG_PREFIX: 'nusumma_wl_config_',
+        USERS_PREFIX: 'nusumma_wl_users_',
+        TRX_PREFIX: 'nusumma_wl_trx_',
+        REQUESTS: 'nusumma_wl_requests',
+        AUDIT_LOG: 'nusumma_wl_audit_log',
+        CURRENT_TENANT: 'nusumma_wl_current_tenant',
+        CURRENT_ROLE: 'nusumma_wl_current_role',
+        INITIALIZED: 'nusumma_wl_initialized',
+        PAYIN: 'nusumma_wl_payin',
+        QRIS_MPM: 'nusumma_wl_qris_mpm'
+    };
+
+    // ── Seed Data: Tenants ──
+    const SEED_TENANTS = [
+        {
+            id: 'NUS-001',
+            partnerName: 'PT BPR Nusumma Jombang',
+            appName: 'Nusumma Jombang',
+            emailPIC: 'partner@nusumma-jombang.id',
+            phonePIC: '+628123456801',
+            paket: 'Premium',
+            status: 'Aktif',
+            createdAt: '2026-01-15 10:00:00',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000001',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-28 09:00:00'
+        },
+        {
+            id: 'NUS-002',
+            partnerName: 'PT BPR Nusumma Kediri',
+            appName: 'Nusumma Kediri',
+            emailPIC: 'partner@nusumma-kediri.id',
+            phonePIC: '+628123456802',
+            paket: 'Standard',
+            status: 'Aktif',
+            createdAt: '2026-03-22 14:30:00',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000002',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-27 14:00:00'
+        },
+        {
+            id: 'NUS-003',
+            partnerName: 'PT BPR Nusumma Tulungagung',
+            appName: 'Nusumma Tulungagung',
+            emailPIC: 'partner@nusumma-tulungagung.id',
+            phonePIC: '+628123456803',
+            paket: 'Premium',
+            status: 'Aktif',
+            createdAt: '2026-05-25 15:20:40',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000003',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-25 15:25:46'
+        },
+        {
+            id: 'NUS-004',
+            partnerName: 'PT BPR Nusumma Malang',
+            appName: 'Nusumma Malang',
+            emailPIC: 'partner@nusumma-malang.id',
+            phonePIC: '+628123456804',
+            paket: 'Enterprise',
+            status: 'Aktif',
+            createdAt: '2026-05-19 15:08:05',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000004',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-20 17:00:17'
+        },
+        {
+            id: 'NUS-005',
+            partnerName: 'PT BPR Nusumma Sidoarjo',
+            appName: 'Nusumma Sidoarjo',
+            emailPIC: 'partner@nusumma-sidoarjo.id',
+            phonePIC: '+628123456805',
+            paket: 'Standard',
+            status: 'Aktif',
+            createdAt: '2026-05-19 14:58:18',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000005',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-20 18:00:58'
+        },
+        {
+            id: 'NUS-006',
+            partnerName: 'PT BPR Nusumma Gresik',
+            appName: 'Nusumma Gresik',
+            emailPIC: 'partner@nusumma-gresik.id',
+            phonePIC: '+628123456806',
+            paket: 'Basic',
+            status: 'Aktif',
+            createdAt: '2026-05-19 14:17:23',
+            passwordHash: 'nusumma1',
+            kategori: 'BPR',
+            mid: '200525100000006',
+            emailVerified: 'Yes',
+            aksesTransaksi: 'Active',
+            statusKYM: 'Approved',
+            statusDormant: 'In 11 month',
+            lastActivity: '2026-05-20 15:52:50'
+        }
+    ];
+
+    // ── Helper to generate default Configs for merchants ──
+    // Nusumma tenant ids reuse existing app-preview/icons/TNT-00X asset folders
+    // (no nusumma-specific icon folders exist on disk).
+    const ICON_FOLDER = {
+        'NUS-001': 'TNT-001',
+        'NUS-002': 'TNT-002',
+        'NUS-003': 'TNT-003',
+        'NUS-004': 'TNT-005',
+        'NUS-005': 'TNT-007',
+        'NUS-006': 'TNT-010'
+    };
+
+    const generateDefaultConfig = (id, appName) => {
+        const colors = {
+            'NUS-001': { primary: '#FF9800', secondary: '#FFCC80' },
+            'NUS-002': { primary: '#F57C00', secondary: '#FFB74D' },
+            'NUS-003': { primary: '#FB8C00', secondary: '#FFCC80' },
+            'NUS-004': { primary: '#EF6C00', secondary: '#FFB74D' },
+            'NUS-005': { primary: '#E65100', secondary: '#FF9800' },
+            'NUS-006': { primary: '#FFA726', secondary: '#FFCC80' }
+        };
+        const tenantColors = colors[id] || { primary: '#FF9800', secondary: '#FFCC80' };
+        const iconId = ICON_FOLDER[id] || id;
+
+        return {
+            tenantId: id,
+            primaryColor: tenantColors.primary,
+            secondaryColor: tenantColors.secondary,
+            appName: appName,
+            logoUrl: '',
+            features: {
+                kirimUang: true,
+                mintaDana: true,
+                topUp: true,
+                qris: true,
+                komunitas: true,
+                pulsaPaket: true,
+                pln: true,
+                pdam: true,
+                bpjs: true,
+                tagihan: true,
+                kasbon: true,
+                internet: true,
+                telkom: true,
+                transaksiFavorit: true
+            },
+            featureIcons: {
+                kirimUang: `/app-preview/icons/${iconId}/icon_kirim_uang.svg`,
+                mintaDana: `/app-preview/icons/${iconId}/icon_minta_dana.svg`,
+                topUp: `/app-preview/icons/${iconId}/icon_topup.svg`,
+                qris: '/app-preview/qris.png',
+                komunitas: `/app-preview/icons/${iconId}/icon_komunitas.svg`,
+                pulsaPaket: `/app-preview/icons/${iconId}/icon_pulsa_paket.svg`,
+                pln: `/app-preview/icons/${iconId}/icon_pln.svg`,
+                pdam: `/app-preview/icons/${iconId}/icon_pdam.svg`,
+                bpjs: `/app-preview/icons/${iconId}/icon_bpjs.svg`,
+                tagihan: `/app-preview/icons/${iconId}/icon_tagihan.svg`,
+                kasbon: `/app-preview/icons/${iconId}/icon_kasbon.svg`,
+                internet: `/app-preview/icons/${iconId}/icon_internet.svg`,
+                telkom: `/app-preview/icons/${iconId}/icon_telkom.svg`,
+                transaksiFavorit: `/app-preview/icons/${iconId}/nav_transaksi_favorit.svg`
+            },
+            featureNames: {
+                kirimUang: 'Kirim Uang',
+                mintaDana: 'Minta Dana',
+                topUp: 'Top Up',
+                qris: 'QRIS',
+                komunitas: 'Komunitas',
+                pulsaPaket: 'Pulsa & Paket Data',
+                pln: 'PLN',
+                pdam: 'PDAM',
+                bpjs: 'BPJS Kesehatan',
+                tagihan: 'Tagihan',
+                kasbon: 'Kasbon',
+                internet: 'Internet',
+                telkom: 'Telkom',
+                transaksiFavorit: 'Transaksi Favorit'
+            },
+            fontFamily: 'Inter',
+            fontSize: '14px',
+            banners: [
+                'https://placehold.co/600x250/FF9800/white?text=Banner+1',
+                'https://placehold.co/600x250/EF6C00/white?text=Banner+2'
+            ],
+            blogs: [
+                {
+                    imageUrl: `/app-preview/icons/${iconId}/blog_1.svg`,
+                    blogUrl: 'https://nusumma.id/blog/artikel-1'
+                },
+                {
+                    imageUrl: `/app-preview/icons/${iconId}/blog_2.svg`,
+                    blogUrl: 'https://nusumma.id/blog/artikel-2'
+                }
+            ],
+            promos: [
+                {
+                    imageUrl: `/app-preview/icons/${iconId}/promo_1.svg`,
+                    promoUrl: 'https://nusumma.id/promo/1'
+                },
+                {
+                    imageUrl: `/app-preview/icons/${iconId}/promo_2.svg`,
+                    promoUrl: 'https://nusumma.id/promo/2'
+                }
+            ],
+            splashScreenUrl: 'https://placehold.co/360x640/FF9800/white?text=Splash+Screen',
+            navbar: [
+                { name: 'Home', icon: `/app-preview/icons/${iconId}/nav_home.svg` },
+                { name: 'Favorite Transaction', icon: `/app-preview/icons/${iconId}/nav_transaksi_favorit.svg` },
+                { name: 'Riwayat Transaksi', icon: `/app-preview/icons/${iconId}/nav_riwayat.svg` },
+                { name: 'Profil', icon: `/app-preview/icons/${iconId}/nav_profil.svg` }
+            ],
+            emptyStateUrl: 'https://placehold.co/300x200/cccccc/333333?text=Empty+State',
+            errorStateUrl: 'https://placehold.co/300x200/ffcccc/990000?text=Error+State',
+            onboarding: [
+                { name: 'Set PIN', image: 'https://placehold.co/360x640/FF9800/white?text=Set+PIN+Screen' },
+                { name: 'Set Biometric', image: 'https://placehold.co/360x640/EF6C00/white?text=Biometric+Screen' }
+            ],
+            appId: 'APP-' + id.substring(4),
+            packageName: 'com.nusumma.' + appName.toLowerCase().replace(/\s+/g, ''),
+            appLogoUrl: '/nusumma/assets/logo-nusumma-mark.svg',
+            baseUrl: 'https://api.nusumma.id',
+            tosText: 'Syarat & Ketentuan Penggunaan Aplikasi Whitelabel BPR Nusumma ini diatur oleh BPR Nusumma. Dengan menggunakan aplikasi ini, Anda setuju untuk mematuhi seluruh hukum yang berlaku di Republik Indonesia serta batasan limit transaksi harian yang ditetapkan.',
+            socialMedia: {
+                facebook: 'https://facebook.com/nusumma',
+                tiktok: 'https://tiktok.com/@nusumma',
+                instagram: 'https://instagram.com/@nusumma',
+                twitter: 'https://twitter.com/@nusumma'
+            },
+            languages: ['Bahasa Indonesia', 'English'],
+            supportEmail: 'support@nusumma.id',
+            callCenter: '1500900',
+            whatsapp: '+6281234567800',
+            limits: {
+                perTransaction: 5000000,
+                perDay: 25000000,
+                maxBalance: 10000000
+            },
+            updatedAt: '2026-05-30 09:00:00'
+        };
+    };
+
+    const SEED_CONFIGS = {
+        'NUS-001': generateDefaultConfig('NUS-001', 'Nusumma Jombang'),
+        'NUS-002': generateDefaultConfig('NUS-002', 'Nusumma Kediri'),
+        'NUS-003': generateDefaultConfig('NUS-003', 'Nusumma Tulungagung'),
+        'NUS-004': generateDefaultConfig('NUS-004', 'Nusumma Malang'),
+        'NUS-005': generateDefaultConfig('NUS-005', 'Nusumma Sidoarjo'),
+        'NUS-006': generateDefaultConfig('NUS-006', 'Nusumma Gresik')
+    };
+
+    // ── Seed Data: Users per Tenant ──
+    const SEED_USERS = {
+        'NUS-001': [
+            { id: 'USR-001-001', name: 'AGUS PRASETYO WIBOWO', phone: '089632848301', email: 'agus.prasetyo@gmail.com', dob: '1990-05-15', status: 'Active', balance: 10000, totalTrx: 45, registeredAt: '2026-05-29 11:24:48', lastActivity: '2026-05-29 11:29:52', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ],
+        'NUS-002': [
+            { id: 'USR-002-001', name: 'Sri Wahyuni', phone: '082244274201', email: 'sri.wahyuni@gmail.com', dob: '1993-04-18', status: 'Active', balance: 484000, totalTrx: 120, registeredAt: '2026-05-26 16:00:59', lastActivity: '2026-05-28 14:28:41', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ],
+        'NUS-003': [
+            { id: 'USR-003-001', name: 'Nurul Hidayah', phone: '089667711301', email: 'nurul.hidayah@gmail.com', dob: '1995-05-15', status: 'Active', balance: 0, totalTrx: 12, registeredAt: '2026-05-25 14:16:05', lastActivity: '', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ],
+        'NUS-004': [
+            { id: 'USR-004-001', name: 'Slamet Riyadi', phone: '08988888301', email: 'slamet.riyadi@gmail.com', dob: '1995-05-15', status: 'Active', balance: 0, totalTrx: 0, registeredAt: '2026-05-25 14:11:12', lastActivity: '', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ],
+        'NUS-005': [
+            { id: 'USR-005-001', name: 'Wahyu Nugroho', phone: '08554941301', email: 'wahyu.nugroho@gmail.com', dob: '1995-05-15', status: 'Active', balance: 10000, totalTrx: 5, registeredAt: '2026-05-25 14:09:56', lastActivity: '2026-05-25 14:10:07', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ],
+        'NUS-006': [
+            { id: 'USR-006-001', name: 'Rini Kusumawati', phone: '085710915601', email: 'rini.kusumawati@gmail.com', dob: '1995-05-15', status: 'Active', balance: 0, totalTrx: 0, registeredAt: '2026-05-22 14:45:24', lastActivity: '', statusDormant: 'In 11 month', preKyc: true, userType: 'user' }
+        ]
+    };
+
+    // ── Seed Data: Transactions per Tenant ──
+    const SEED_TRX = {
+        'NUS-001': [
+            { id: 'TRX-001-0001', userId: 'USR-001-001', userName: 'AGUS PRASETYO WIBOWO', userPhone: '089632848301', type: 'transfer', nominal: 10000, fee: 0, status: 'Berhasil', recipientName: 'Siti Rahayu', recipientPhone: '081298765401', refNo: '260529100001', date: '2026-05-29 11:29:52', category: 'Uang Masuk - Transfer Bisnis', tenantId: 'NUS-001' }
+        ],
+        'NUS-002': [
+            { id: 'TRX-002-0001', userId: 'USR-002-001', userName: 'Sri Wahyuni', userPhone: '082244274201', type: 'qris', nominal: 2000, fee: 0, status: 'Berhasil', recipientName: '', recipientPhone: '', refNo: '260528100001', date: '2026-05-28 14:28:41', category: 'Merchant - Bayar Merchant', tenantId: 'NUS-002' }
+        ],
+        'NUS-003': [
+            { id: 'TRX-003-0001', userId: 'USR-003-001', userName: 'Nurul Hidayah', userPhone: '089667711301', type: 'qris', nominal: 9000, fee: 0, status: 'Berhasil', recipientName: '', recipientPhone: '', refNo: '260528100002', date: '2026-05-28 11:16:28', category: 'Merchant - Bayar Merchant', tenantId: 'NUS-003' }
+        ],
+        'NUS-004': [], 'NUS-005': [], 'NUS-006': []
+    };
+
+    // ── Generated filler users/transactions so every tenant has ≥12 of each ──
+    // (deterministic, index-based — no Math.random — appended after the named anchors above)
+    const FILLER_NAMES = [
+        'Budi Santoso', 'Siti Nurhaliza', 'Agus Wijaya', 'Dewi Lestari', 'Rudi Hartono',
+        'Ani Suryani', 'Bambang Setiawan', 'Fitri Handayani', 'Joko Susilo', 'Rina Marlina',
+        'Hendra Gunawan', 'Yuni Astuti', 'Andi Firmansyah', 'Lina Kartika', 'Wahyu Ramadhan', 'Putri Amelia'
+    ];
+    const TENANT_NUMS = ['001', '002', '003', '004', '005', '006'];
+    const TRX_TYPES = ['transfer', 'topup', 'qris', 'payment', 'biller'];
+    const TRX_CATEGORY = {
+        transfer: 'Uang Keluar - Transfer Bank', topup: 'Top Up Bank Transfer',
+        qris: 'Merchant - Bayar Merchant', payment: 'Payment', biller: 'Tagihan - Pembayaran Biller'
+    };
+    const pad3 = n => String(n).padStart(3, '0');
+    const maxSuffix = (list, re) => list.reduce((max, item) => {
+        const m = re.exec(item.id);
+        return m ? Math.max(max, parseInt(m[1], 10)) : max;
+    }, 0);
+
+    function ensureMinUsers(tenantId, tnum, minCount) {
+        const list = SEED_USERS[tenantId] || (SEED_USERS[tenantId] = []);
+        let seq = maxSuffix(list, /USR-\d+-(\d+)/) + 1, i = 0;
+        while (list.length < minCount) {
+            const round = Math.floor(i / FILLER_NAMES.length);
+            const name = FILLER_NAMES[i % FILLER_NAMES.length] + (round > 0 ? ' ' + (round + 1) : '');
+            const day = (seq * 3) % 28 + 1;
+            const active = seq % 4 !== 0;
+            list.push({
+                id: `USR-${tnum}-${pad3(seq)}`,
+                name,
+                phone: '08' + String(1000000000 + Number(tnum) * 7654321 + seq * 911).slice(-9),
+                email: name.toLowerCase().replace(/\s+/g, '.') + seq + '@mail.com',
+                dob: `199${seq % 10}-0${(seq % 9) + 1}-1${seq % 9}`,
+                status: active ? 'Active' : 'Nonaktif',
+                balance: (seq * 15000) % 750000,
+                totalTrx: (seq * 3) % 40,
+                registeredAt: `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 0${seq % 9}:${String((seq * 7) % 60).padStart(2, '0')}:00`,
+                lastActivity: active ? `2026-0${(seq % 5) + 1}-${String(day).padStart(2, '0')} 1${seq % 9}:${String((seq * 11) % 60).padStart(2, '0')}:00` : '',
+                statusDormant: 'In 11 month',
+                preKyc: true,
+                userType: 'user'
+            });
+            seq++; i++;
+        }
+    }
+
+    function ensureMinTransactions(tenantId, tnum, minCount) {
+        const list = SEED_TRX[tenantId] || (SEED_TRX[tenantId] = []);
+        const users = SEED_USERS[tenantId] || [];
+        if (users.length === 0) return;
+        let seq = maxSuffix(list, /TRX-\d+-(\d+)/) + 1, i = 0;
+        while (list.length < minCount) {
+            const user = users[i % users.length];
+            const type = TRX_TYPES[i % TRX_TYPES.length];
+            const day = (seq * 2) % 28 + 1;
+            const status = seq % 11 === 0 ? 'Diproses' : (seq % 7 === 0 ? 'Gagal' : 'Berhasil');
+            list.push({
+                id: `TRX-${tnum}-${String(seq).padStart(4, '0')}`,
+                userId: user.id,
+                userName: user.name,
+                userPhone: user.phone,
+                type,
+                nominal: (seq * 12345) % 900000 + 5000,
+                fee: type === 'transfer' ? 2500 : 0,
+                status,
+                recipientName: type === 'transfer' ? 'Bank Transfer Tujuan' : (type === 'biller' ? 'PLN Prepaid' : ''),
+                recipientPhone: '',
+                refNo: `2606${tnum}${String(seq).padStart(5, '0')}`,
+                date: `2026-06-${String(day).padStart(2, '0')} 1${seq % 9}:${String((seq * 13) % 60).padStart(2, '0')}:00`,
+                category: TRX_CATEGORY[type],
+                tenantId
+            });
+            seq++; i++;
+        }
+    }
+
+    TENANT_NUMS.forEach(tnum => {
+        const tid = `NUS-${tnum}`;
+        ensureMinUsers(tid, tnum, 12);
+        ensureMinTransactions(tid, tnum, 12);
+    });
+
+    // ── Seed Data: Requests ──
+    const SEED_REQUESTS = [
+        { id: 'REQ-001', tenantId: 'NUS-001', tenantName: 'Nusumma Jombang', type: 'Splash Screen', description: 'Ganti splash screen dengan desain baru sesuai brand guideline terbaru.', attachments: ['splash_v2.png'], status: 'Menunggu Review', createdAt: '2026-05-25 10:00:00', updatedAt: '2026-05-25 10:00:00', notes: '' },
+        { id: 'REQ-002', tenantId: 'NUS-002', tenantName: 'Nusumma Kediri', type: 'Nama Aplikasi', description: 'Ubah nama aplikasi dari Nusumma Kediri ke Nusumma Kediri Pro untuk versi premium.', attachments: [], status: 'Sedang Dikerjakan', createdAt: '2026-05-20 14:00:00', updatedAt: '2026-05-26 09:00:00', notes: 'Tim dev sedang update package name' }
+    ];
+
+    // ── Seed Data: Audit Log ──
+    const SEED_AUDIT_LOG = [
+        { id: 'AUD-001', timestamp: '2026-05-28 09:01:00', actor: 'admin@nusumma.id', actorRole: 'Admin Internal', action: 'login', objectType: 'session', objectId: '-', tenantId: '-', description: 'Login ke Dashboard Internal', before: null, after: null },
+        { id: 'AUD-002', timestamp: '2026-05-28 09:15:00', actor: 'partner@nusumma-jombang.id', actorRole: 'Partner', action: 'update_config', objectType: 'config', objectId: 'NUS-001', tenantId: 'NUS-001', description: 'Ubah warna primer tema', before: '#FF9800', after: '#EF6C00' },
+        { id: 'AUD-003', timestamp: '2026-05-25 15:25:46', actor: 'admin@nusumma.id', actorRole: 'Admin Internal', action: 'update_config', objectType: 'config', objectId: 'NUS-003', tenantId: 'NUS-003', description: 'Konfigurasi Whitelabel pertama kali disimpan', before: null, after: 'Warna: #FB8C00, App: Nusumma Tulungagung' },
+        { id: 'AUD-004', timestamp: '2026-05-25 11:55:34', actor: 'admin@nusumma.id', actorRole: 'Admin Internal', action: 'onboard_merchant', objectType: 'merchant', objectId: 'NUS-004', tenantId: 'NUS-004', description: 'Registrasi cabang baru: BPR Nusumma Malang', before: null, after: 'Waiting KYC' }
+    ];
+
+    // ── Seed Data: Payin Transactions ──
+    const SEED_PAYIN = [
+        { refNo: 'a1a2e6e6-9526-44ef-82c5-916b25370501', vendor: '', date: '2026-05-20 13:47:09', category: 'payin-topup', merchantMid: '200525100000001', merchantName: 'BPR Nusumma Jombang', nominal: 100000, adminFee: 0, total: 100016, status: 'Gagal' },
+        { refNo: 'b17cea0a-86f0-424b-b33d-c1e98cc1e902', vendor: '', date: '2026-05-19 11:01:44', category: 'payin-topup', merchantMid: '200525100000002', merchantName: 'BPR Nusumma Kediri', nominal: 1000000, adminFee: 0, total: 1000013, status: 'Sukses' },
+        { refNo: 'c2a86c4f-3165-460a-a433-70cc3fc30503', vendor: 'mitracomm', date: '2026-05-13 16:35:16', category: 'payin-payment', merchantMid: '200525100000003', merchantName: 'BPR Nusumma Tulungagung', nominal: 100000, adminFee: 0, total: 100012, status: 'Sukses' }
+    ];
+
+    // ── Seed Data: QRIS MPM Transactions ──
+    const SEED_QRIS_MPM = [
+        { id: 'TRX-MPM-001', refNo: '923456789001', date: '2026-05-31 14:22:05', merchantMid: '200525100000001', merchantName: 'BPR Nusumma Jombang', category: 'Bayar Merchant', status: 'Sukses', nominal: 150000, tip: 0, mdr: 1050, total: 151050, vendor: 'Nusumma', callbackStatus: 'Sukses' },
+        { id: 'TRX-MPM-002', refNo: '923456789002', date: '2026-05-31 15:30:12', merchantMid: '200525100000002', merchantName: 'BPR Nusumma Kediri', category: 'Bayar Merchant', status: 'Sukses', nominal: 50000, tip: 5000, mdr: 350, total: 55350, vendor: 'Nusumma', callbackStatus: 'Gagal' }
+    ];
+
+    // ── Initialize / Seed Database ──
+    function initialize(forceReset = false) {
+        const currentVersion = '1'; // Nusumma independent seed version counter
+        const seedVersion = localStorage.getItem('nusumma_wl_seed_version');
+        if (seedVersion !== currentVersion) {
+            forceReset = true;
+            localStorage.setItem('nusumma_wl_seed_version', currentVersion);
+        }
+
+        if (forceReset || localStorage.getItem(KEYS.INITIALIZED) !== 'true') {
+            localStorage.setItem(KEYS.TENANTS, JSON.stringify(SEED_TENANTS));
+
+            Object.entries(SEED_CONFIGS).forEach(([id, config]) => {
+                localStorage.setItem(KEYS.CONFIG_PREFIX + id, JSON.stringify(config));
+            });
+
+            Object.entries(SEED_USERS).forEach(([id, users]) => {
+                localStorage.setItem(KEYS.USERS_PREFIX + id, JSON.stringify(users));
+            });
+
+            Object.entries(SEED_TRX).forEach(([id, trx]) => {
+                localStorage.setItem(KEYS.TRX_PREFIX + id, JSON.stringify(trx));
+            });
+
+            localStorage.setItem(KEYS.REQUESTS, JSON.stringify(SEED_REQUESTS));
+            localStorage.setItem(KEYS.AUDIT_LOG, JSON.stringify(SEED_AUDIT_LOG));
+            localStorage.setItem(KEYS.PAYIN, JSON.stringify(SEED_PAYIN));
+            localStorage.setItem(KEYS.QRIS_MPM, JSON.stringify(SEED_QRIS_MPM));
+            localStorage.setItem(KEYS.INITIALIZED, 'true');
+        }
+    }
+
+    // ── Generic Read/Write Helpers ──
+    function read(key) {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : null;
+        } catch (e) {
+            console.error('PaydiaData.read error:', key, e);
+            return null;
+        }
+    }
+
+    function write(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    // ── Tenant CRUD ──
+    function getTenants() {
+        return read(KEYS.TENANTS) || [];
+    }
+
+    function getTenant(id) {
+        return getTenants().find(t => t.id === id) || null;
+    }
+
+    function addTenant(tenant) {
+        const tenants = getTenants();
+        tenants.push(tenant);
+        write(KEYS.TENANTS, tenants);
+        // Initialize empty config, users, trx
+        write(KEYS.CONFIG_PREFIX + tenant.id, {
+            ...generateDefaultConfig(tenant.id, tenant.appName),
+            updatedAt: formatDate(new Date())
+        });
+        write(KEYS.USERS_PREFIX + tenant.id, []);
+        write(KEYS.TRX_PREFIX + tenant.id, []);
+        return tenant;
+    }
+
+    function updateTenant(id, updates) {
+        const tenants = getTenants();
+        const idx = tenants.findIndex(t => t.id === id);
+        if (idx !== -1) {
+            Object.assign(tenants[idx], updates);
+            write(KEYS.TENANTS, tenants);
+        }
+        return tenants[idx] || null;
+    }
+
+    // ── Config CRUD ──
+    function getConfig(tenantId) {
+        return read(KEYS.CONFIG_PREFIX + tenantId);
+    }
+
+    function updateConfig(tenantId, updates) {
+        const config = getConfig(tenantId) || {};
+        Object.assign(config, updates, { updatedAt: formatDate(new Date()) });
+        write(KEYS.CONFIG_PREFIX + tenantId, config);
+        return config;
+    }
+
+    // ── Users CRUD ──
+    function getUsers(tenantId) {
+        return read(KEYS.USERS_PREFIX + tenantId) || [];
+    }
+
+    function getAllUsers() {
+        const tenants = getTenants();
+        let all = [];
+        tenants.forEach(t => {
+            const users = getUsers(t.id);
+            users.forEach(u => {
+                all.push({ ...u, tenantId: t.id, tenantName: t.appName });
+            });
+        });
+        return all;
+    }
+
+    function getAllTransactions() {
+        const tenants = getTenants();
+        let all = [];
+        tenants.forEach(t => {
+            const trx = getTransactions(t.id);
+            trx.forEach(tx => {
+                all.push({ ...tx, tenantId: t.id, tenantName: t.appName });
+            });
+        });
+        return all;
+    }
+
+    function updateUser(tenantId, userId, updates) {
+        const users = getUsers(tenantId);
+        const idx = users.findIndex(u => u.id === userId);
+        if (idx !== -1) {
+            Object.assign(users[idx], updates);
+            write(KEYS.USERS_PREFIX + tenantId, users);
+        }
+        return users[idx] || null;
+    }
+
+    // ── Transactions CRUD ──
+    function getTransactions(tenantId) {
+        return read(KEYS.TRX_PREFIX + tenantId) || [];
+    }
+
+    // ── Requests CRUD ──
+    function getRequests() {
+        return read(KEYS.REQUESTS) || [];
+    }
+
+    function addRequest(request) {
+        const requests = getRequests();
+        requests.unshift(request);
+        write(KEYS.REQUESTS, requests);
+        return request;
+    }
+
+    function updateRequest(id, updates) {
+        const requests = getRequests();
+        const idx = requests.findIndex(r => r.id === id);
+        if (idx !== -1) {
+            Object.assign(requests[idx], updates);
+            write(KEYS.REQUESTS, requests);
+        }
+        return requests[idx] || null;
+    }
+
+    // ── Audit Log ──
+    function getAuditLog() {
+        return read(KEYS.AUDIT_LOG) || [];
+    }
+
+    function writeAuditLog(entry) {
+        const logs = getAuditLog();
+        const id = 'AUD-' + String(logs.length + 1).padStart(3, '0');
+        const logEntry = {
+            id,
+            timestamp: formatDate(new Date()),
+            ...entry
+        };
+        logs.unshift(logEntry);
+        write(KEYS.AUDIT_LOG, logs);
+        return logEntry;
+    }
+
+    // ── Payin CRUD ──
+    function getPayin() {
+        return read(KEYS.PAYIN) || [];
+    }
+
+    function updatePayin(refNo, updates) {
+        const payin = getPayin();
+        const idx = payin.findIndex(p => p.refNo === refNo);
+        if (idx !== -1) {
+            Object.assign(payin[idx], updates);
+            write(KEYS.PAYIN, payin);
+        }
+        return payin[idx] || null;
+    }
+
+    // ── QRIS MPM CRUD ──
+    function getQrisMpm() {
+        return read(KEYS.QRIS_MPM) || [];
+    }
+
+    function updateQrisMpm(id, updates) {
+        const qris = getQrisMpm();
+        const idx = qris.findIndex(q => q.id === id);
+        if (idx !== -1) {
+            Object.assign(qris[idx], updates);
+            write(KEYS.QRIS_MPM, qris);
+        }
+        return qris[idx] || null;
+    }
+
+    // ── Session / Auth ──
+    function setCurrentRole(role) {
+        localStorage.setItem(KEYS.CURRENT_ROLE, role);
+    }
+
+    function getCurrentRole() {
+        return localStorage.getItem(KEYS.CURRENT_ROLE) || '';
+    }
+
+    function setCurrentTenant(tenantId) {
+        localStorage.setItem(KEYS.CURRENT_TENANT, tenantId);
+    }
+
+    function getCurrentTenant() {
+        return localStorage.getItem(KEYS.CURRENT_TENANT) || '';
+    }
+
+    // ── Cross-Tab Sync ──
+    function onStorageChange(callback) {
+        window.addEventListener('storage', (e) => {
+            if (e.key && e.key.startsWith('nusumma_wl_')) {
+                callback(e.key, e.newValue ? JSON.parse(e.newValue) : null, e.oldValue ? JSON.parse(e.oldValue) : null);
+            }
+        });
+    }
+
+    // ── Formatters ──
+    function formatCurrency(amount) {
+        return 'Rp' + Number(amount).toLocaleString('id-ID');
+    }
+
+    function formatDate(date) {
+        if (typeof date === 'string') return date;
+        const d = new Date(date);
+        const pad = n => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function formatPhone(phone) {
+        if (!phone) return '-';
+        return phone.replace(/^\+62/, '0');
+    }
+
+    function generateId(prefix) {
+        return prefix + '-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    }
+
+    // ── Stats Helpers ──
+    function getTenantStats(tenantId) {
+        const users = getUsers(tenantId);
+        const trx = getTransactions(tenantId);
+        const today = new Date().toISOString().substring(0, 10);
+
+        const activeUsers = users.filter(u => u.status === 'Active' || u.status === 'Aktif').length;
+        const totalUsers = users.length;
+        const todayTrx = trx.filter(t => t.date.startsWith(today));
+        const todayVolume = todayTrx.reduce((sum, t) => sum + t.nominal, 0);
+        const monthTrx = trx;
+        const monthVolume = monthTrx.reduce((sum, t) => sum + t.nominal, 0);
+
+        return { totalUsers, activeUsers, todayTrxCount: todayTrx.length, todayVolume, monthTrxCount: monthTrx.length, monthVolume };
+    }
+
+    function getGlobalStats() {
+        const tenants = getTenants();
+        let totalUsers = 0, totalTrx = 0, todayVolume = 0, totalActiveTenants = 0;
+        const today = new Date().toISOString().substring(0, 10);
+
+        tenants.forEach(t => {
+            if (t.status === 'Aktif') totalActiveTenants++;
+            const users = getUsers(t.id);
+            totalUsers += users.length;
+            const trx = getTransactions(t.id);
+            totalTrx += trx.length;
+            trx.filter(tx => tx.date.startsWith(today)).forEach(tx => {
+                todayVolume += tx.nominal;
+            });
+        });
+
+        return { totalActiveTenants, totalTenants: tenants.length, totalUsers, totalTrx, todayVolume };
+    }
+
+    // ── Public API ──
+    return {
+        KEYS,
+        initialize,
+        // Tenants
+        getTenants, getTenant, addTenant, updateTenant,
+        // Config
+        getConfig, updateConfig,
+        // Users
+        getUsers, getAllUsers, updateUser,
+        // Transactions
+        getTransactions, getAllTransactions,
+        // Requests
+        getRequests, addRequest, updateRequest,
+        // Audit
+        getAuditLog, writeAuditLog,
+        // Payin
+        getPayin, updatePayin,
+        // QRIS MPM
+        getQrisMpm, updateQrisMpm,
+        // Session
+        setCurrentRole, getCurrentRole,
+        setCurrentTenant, getCurrentTenant,
+        // Sync
+        onStorageChange,
+        // Helpers
+        formatCurrency, formatDate, formatPhone, generateId,
+        getTenantStats, getGlobalStats
+    };
+
+})();
+
+window.NusummaData = PaydiaData;

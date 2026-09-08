@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen User/Member — Dashboard Merchant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../shared/shared.css">
+    <link rel="stylesheet" href="partner.css?v=1.0.0">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar"></aside>
+
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-breadcrumb">
+                        Dashboard <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                        <span>Users / Members</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-btn" title="Notifikasi"><i class="fas fa-bell"></i><span class="badge-dot"></span></button>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <h1 class="page-title">Manajemen User / Member</h1>
+                <p class="page-subtitle">Kelola pengguna yang terdaftar di aplikasi Anda.</p>
+
+                <div class="table-container">
+                    <div class="table-toolbar">
+                        <div class="table-toolbar-left">
+                            <div class="table-search">
+                                <button><i class="fas fa-search"></i></button>
+                                <input type="text" id="searchInput" placeholder="Cari nama atau no HP..." oninput="applyFilters()">
+                            </div>
+                            <select class="form-select" id="filterStatus" style="width:140px;padding:8px 12px;font-size:0.8rem" onchange="applyFilters()">
+                                <option value="">Semua Status</option>
+                                <option value="Aktif">Aktif</option>
+                                <option value="Nonaktif">Nonaktif</option>
+                            </select>
+                        </div>
+                        <div class="table-toolbar-right">
+                            <span style="font-size:0.8rem;color:var(--text-muted)" id="userCountLabel">0 user</span>
+                        </div>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>No HP</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Saldo</th>
+                                    <th>Total Trx</th>
+                                    <th>Tanggal Daftar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <div id="usersPageInfo">-</div>
+                        <div class="table-pagination" id="usersPagination"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="userDetailModal">
+        <div class="modal-dialog modal-light" style="max-width:600px">
+            <div class="modal-header">
+                <div class="modal-title">Detail User</div>
+                <button class="modal-close" onclick="closeModal('userDetailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="userDetailBody"></div>
+        </div>
+    </div>
+
+    <!-- Confirm Toggle Modal -->
+    <div class="modal-overlay" id="confirmToggleModal">
+        <div class="modal-dialog" style="max-width:400px">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <div class="confirm-dialog-icon warning" id="confirmIcon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="confirm-dialog-title" id="confirmTitle">Konfirmasi</div>
+                    <div class="confirm-dialog-text" id="confirmText">Apakah Anda yakin?</div>
+                    <div class="confirm-dialog-actions">
+                        <button class="btn btn-secondary" onclick="closeModal('confirmToggleModal')">Batal</button>
+                        <button class="btn btn-danger" id="confirmAction" onclick="executeToggle()">Nonaktifkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../data-nusumma.js"></script>
+    <script src="../../shared/versions.js?v=1.0.0"></script>
+    <script src="partner.js?v=1.0.0"></script>
+    <script>
+        let allUsers = [];
+        let filteredUsers = [];
+        const PAGE_SIZE = 10;
+        let currentPage = 1;
+        let pendingToggle = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartner();
+            renderSidebar('members');
+            loadUsers();
+        });
+
+        function loadUsers() {
+            allUsers = PaydiaData.getUsers(getTenantId());
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value;
+
+            filteredUsers = allUsers.filter(u => {
+                if (search && !u.name.toLowerCase().includes(search) && !u.phone.includes(search)) return false;
+                if (status && u.status !== status) return false;
+                return true;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const pageData = filteredUsers.slice(start, start + PAGE_SIZE);
+            const tbody = document.getElementById('usersTableBody');
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="8">
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-users"></i></div>
+                            <div class="empty-state-title">Tidak ada user</div>
+                            <div class="empty-state-desc">Coba ubah kata kunci pencarian atau filter.</div>
+                        </div>
+                    </td></tr>
+                `;
+            } else {
+                tbody.innerHTML = pageData.map(u => `
+                    <tr>
+                        <td><strong>${u.name}</strong></td>
+                        <td>${u.phone}</td>
+                        <td style="font-size:0.8rem;color:var(--text-secondary)">${u.email}</td>
+                        <td>${statusBadge(u.status)}</td>
+                        <td style="font-weight:600">${PaydiaData.formatCurrency(u.balance)}</td>
+                        <td>${u.totalTrx}</td>
+                        <td style="font-size:0.8rem;color:var(--text-secondary)">${u.registeredAt.substring(0, 10)}</td>
+                        <td>
+                            <div style="display:flex;gap:6px">
+                                <button class="btn-icon" onclick="showUserDetail('${u.id}')" title="Detail">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-icon" onclick="confirmToggle('${u.id}')" title="${u.status === 'Aktif' ? 'Nonaktifkan' : 'Aktifkan'}">
+                                    <i class="fas ${u.status === 'Aktif' ? 'fa-user-slash' : 'fa-user-check'}"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            document.getElementById('userCountLabel').textContent = filteredUsers.length + ' user';
+            const totalPages = Math.ceil(filteredUsers.length / PAGE_SIZE);
+            document.getElementById('usersPageInfo').textContent = totalPages > 0 ? `Hal. ${currentPage} dari ${totalPages}` : '-';
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredUsers.length / PAGE_SIZE);
+            const container = document.getElementById('usersPagination');
+            if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+            let html = `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+            }
+            html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goPage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            container.innerHTML = html;
+        }
+
+        function goPage(p) {
+            const totalPages = Math.ceil(filteredUsers.length / PAGE_SIZE);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            renderTable();
+        }
+
+        function showUserDetail(id) {
+            const u = allUsers.find(usr => usr.id === id);
+            if (!u) return;
+
+            const trx = PaydiaData.getTransactions(getTenantId())
+                .filter(t => t.userId === id)
+                .sort((a, b) => b.date.localeCompare(a.date))
+                .slice(0, 5);
+
+            document.getElementById('userDetailBody').innerHTML = `
+                <dl class="detail-grid">
+                    <dt>ID User</dt><dd style="font-family:monospace">${u.id}</dd>
+                    <dt>Nama</dt><dd>${u.name}</dd>
+                    <dt>No HP</dt><dd>${u.phone}</dd>
+                    <dt>Email</dt><dd>${u.email}</dd>
+                    <dt>Tanggal Lahir</dt><dd>${u.dob || '-'}</dd>
+                    <dt>Status</dt><dd>${statusBadge(u.status)}</dd>
+                    <dt>Saldo</dt><dd style="font-weight:700">${PaydiaData.formatCurrency(u.balance)}</dd>
+                    <dt>Total Transaksi</dt><dd>${u.totalTrx}</dd>
+                    <dt>Tanggal Daftar</dt><dd>${u.registeredAt}</dd>
+                </dl>
+                <div style="margin-top:20px;">
+                    <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:10px;">Transaksi Terakhir</h4>
+                    ${trx.length > 0 ? `
+                        <table class="data-table" style="font-size:0.8rem;">
+                            <thead>
+                                <tr>
+                                    <th>Jenis</th>
+                                    <th>Nominal</th>
+                                    <th>Status</th>
+                                    <th>Waktu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${trx.map(t => `
+                                    <tr>
+                                        <td>${trxTypeLabel(t.type)}</td>
+                                        <td>${PaydiaData.formatCurrency(t.nominal)}</td>
+                                        <td>${statusBadge(t.status)}</td>
+                                        <td>${t.date}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    ` : '<p style="font-size:0.82rem;color:var(--text-muted)">Belum ada transaksi.</p>'}
+                </div>
+            `;
+            openModal('userDetailModal');
+        }
+
+        function confirmToggle(id) {
+            const u = allUsers.find(usr => usr.id === id);
+            if (!u) return;
+
+            pendingToggle = { userId: id, currentStatus: u.status };
+            const isActivating = u.status === 'Nonaktif';
+
+            document.getElementById('confirmIcon').className = 'confirm-dialog-icon ' + (isActivating ? 'warning' : 'danger');
+            document.getElementById('confirmIcon').innerHTML = `<i class="fas ${isActivating ? 'fa-user-check' : 'fa-user-slash'}"></i>`;
+            document.getElementById('confirmTitle').textContent = isActivating ? 'Aktifkan User?' : 'Nonaktifkan User?';
+            document.getElementById('confirmText').textContent = isActivating
+                ? `Akun ${u.name} akan diaktifkan kembali dan dapat menggunakan aplikasi.`
+                : `Akun ${u.name} akan dinonaktifkan dan tidak dapat menggunakan aplikasi.`;
+            document.getElementById('confirmAction').textContent = isActivating ? 'Aktifkan' : 'Nonaktifkan';
+            document.getElementById('confirmAction').className = 'btn ' + (isActivating ? 'btn-success' : 'btn-danger');
+
+            openModal('confirmToggleModal');
+        }
+
+        function executeToggle() {
+            if (!pendingToggle) return;
+            const { userId, currentStatus } = pendingToggle;
+            const newStatus = currentStatus === 'Aktif' ? 'Nonaktif' : 'Aktif';
+
+            PaydiaData.updateUser(getTenantId(), userId, { status: newStatus });
+            PaydiaData.writeAuditLog({
+                actor: getTenantInfo()?.emailPIC || 'partner',
+                actorRole: 'Partner',
+                action: newStatus === 'Aktif' ? 'activate_user' : 'deactivate_user',
+                objectType: 'user',
+                objectId: userId,
+                tenantId: getTenantId(),
+                description: `${newStatus === 'Aktif' ? 'Aktifkan' : 'Nonaktifkan'} akun user ${userId}`,
+                before: currentStatus,
+                after: newStatus
+            });
+
+            closeModal('confirmToggleModal');
+            pendingToggle = null;
+            loadUsers();
+            showToast('Berhasil', `User berhasil ${newStatus === 'Aktif' ? 'diaktifkan' : 'dinonaktifkan'}.`, 'success');
+        }
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

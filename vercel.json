@@ -3,7 +3,10 @@
   "rewrites": [
     { "source": "/internal", "destination": "/internal/index.html" },
     { "source": "/partner", "destination": "/partner/index.html" },
-    { "source": "/app-preview", "destination": "/app-preview/index.html" }
+    { "source": "/app-preview", "destination": "/app-preview/index.html" },
+    { "source": "/nusumma", "destination": "/nusumma/login.html" },
+    { "source": "/nusumma/partner", "destination": "/nusumma/partner/index.html" },
+    { "source": "/nusumma/app-preview", "destination": "/nusumma/app-preview/index.html" }
   ],
   "headers": [
     {

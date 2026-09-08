@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Konten — Dashboard Merchant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../shared/shared.css">
+    <link rel="stylesheet" href="partner.css?v=1.0.0">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar"></aside>
+
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-breadcrumb">
+                        Dashboard <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                        <span>Manajemen Konten</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-btn" title="Notifikasi"><i class="fas fa-bell"></i><span class="badge-dot"></span></button>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <h1 class="page-title">Manajemen Konten</h1>
+                <p class="page-subtitle">Kelola halaman legal, media sosial, dan informasi kontak support aplikasi Anda.</p>
+
+                <!-- Legal URLs -->
+                <div class="config-section">
+                    <div class="config-section-header">
+                        <div class="config-section-title">
+                            <i class="fas fa-scale-balanced icon-purple"></i>
+                            Halaman Legal
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL Syarat & Ketentuan</label>
+                        <div class="url-input-wrap">
+                            <input type="url" class="form-input" id="tosUrl" placeholder="https://example.com/terms" oninput="validateUrl(this)">
+                            <i class="fas url-validation-icon" id="tosUrlIcon" style="display:none"></i>
+                        </div>
+                        <div class="form-hint">Halaman Terms of Service / Syarat & Ketentuan penggunaan aplikasi.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL Kebijakan Privasi</label>
+                        <div class="url-input-wrap">
+                            <input type="url" class="form-input" id="privacyUrl" placeholder="https://example.com/privacy" oninput="validateUrl(this)">
+                            <i class="fas url-validation-icon" id="privacyUrlIcon" style="display:none"></i>
+                        </div>
+                        <div class="form-hint">Halaman Privacy Policy / Kebijakan Privasi pengguna.</div>
+                    </div>
+                </div>
+
+                <!-- HIDDEN: social media links disabled for this phase -->
+                <div class="config-section" style="display: none;">
+                    <div class="config-section-header">
+                        <div class="config-section-title">
+                            <i class="fas fa-share-nodes icon-blue"></i>
+                            Link Media Sosial
+                        </div>
+                    </div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;">Semua link bersifat opsional. Hanya yang diisi yang akan ditampilkan di aplikasi.</p>
+                    <div class="social-grid">
+                        <div class="social-item">
+                            <div class="social-icon ig"><i class="fab fa-instagram"></i></div>
+                            <input type="url" class="form-input" id="socialInstagram" placeholder="https://instagram.com/...">
+                        </div>
+                        <div class="social-item">
+                            <div class="social-icon fb"><i class="fab fa-facebook-f"></i></div>
+                            <input type="url" class="form-input" id="socialFacebook" placeholder="https://facebook.com/...">
+                        </div>
+                        <div class="social-item">
+                            <div class="social-icon tw"><i class="fab fa-x-twitter"></i></div>
+                            <input type="url" class="form-input" id="socialTwitter" placeholder="https://x.com/...">
+                        </div>
+                        <div class="social-item">
+                            <div class="social-icon yt"><i class="fab fa-youtube"></i></div>
+                            <input type="url" class="form-input" id="socialYoutube" placeholder="https://youtube.com/@...">
+                        </div>
+                        <div class="social-item">
+                            <div class="social-icon tt"><i class="fab fa-tiktok"></i></div>
+                            <input type="url" class="form-input" id="socialTiktok" placeholder="https://tiktok.com/@...">
+                        </div>
+                        <div class="social-item">
+                            <div class="social-icon li"><i class="fab fa-linkedin-in"></i></div>
+                            <input type="url" class="form-input" id="socialLinkedin" placeholder="https://linkedin.com/company/...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Contact -->
+                <div class="config-section">
+                    <div class="config-section-header">
+                        <div class="config-section-title">
+                            <i class="fas fa-headset icon-green"></i>
+                            Kontak Support
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Email Support</label>
+                            <input type="email" class="form-input" id="supportEmail" placeholder="support@example.com">
+                            <div class="form-hint">Email untuk layanan bantuan pengguna.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">No. WhatsApp Support</label>
+                            <input type="tel" class="form-input" id="supportWhatsapp" placeholder="+628xxxxxxxxxx">
+                            <div class="form-hint">Format internasional: +628xxxxxxxxxx</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                    <button class="btn btn-primary btn-lg" onclick="saveContent()">
+                        <i class="fas fa-save"></i> Simpan Semua Konten
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../data-nusumma.js"></script>
+    <script src="../../shared/versions.js?v=1.0.0"></script>
+    <script src="partner.js?v=1.0.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartner();
+            renderSidebar('konten');
+            loadContent();
+        });
+
+        function loadContent() {
+            const config = getConfig();
+            if (!config) return;
+
+            document.getElementById('tosUrl').value = config.tosUrl || '';
+            document.getElementById('privacyUrl').value = config.privacyUrl || '';
+
+            const sm = config.socialMedia || {};
+            document.getElementById('socialInstagram').value = sm.instagram || '';
+            document.getElementById('socialFacebook').value = sm.facebook || '';
+            document.getElementById('socialTwitter').value = sm.twitter || '';
+            document.getElementById('socialYoutube').value = sm.youtube || '';
+            document.getElementById('socialTiktok').value = sm.tiktok || '';
+            document.getElementById('socialLinkedin').value = sm.linkedin || '';
+
+            document.getElementById('supportEmail').value = config.supportEmail || '';
+            document.getElementById('supportWhatsapp').value = config.supportWhatsapp || '';
+
+            // Validate initial URLs
+            ['tosUrl', 'privacyUrl'].forEach(id => {
+                const inp = document.getElementById(id);
+                if (inp.value) validateUrl(inp);
+            });
+        }
+
+        function validateUrl(input) {
+            const iconId = input.id + 'Icon';
+            const icon = document.getElementById(iconId);
+            if (!icon) return;
+            if (!input.value) {
+                icon.style.display = 'none';
+                return;
+            }
+            icon.style.display = 'block';
+            if (isValidUrl(input.value)) {
+                icon.className = 'fas fa-check-circle url-validation-icon valid';
+            } else {
+                icon.className = 'fas fa-times-circle url-validation-icon invalid';
+            }
+        }
+
+        function saveContent() {
+            const tosUrl = document.getElementById('tosUrl').value.trim();
+            const privacyUrl = document.getElementById('privacyUrl').value.trim();
+
+            // Validate URLs if provided
+            if (tosUrl && !isValidUrl(tosUrl)) {
+                showToast('Validasi Error', 'URL Syarat & Ketentuan tidak valid.', 'error');
+                return;
+            }
+            if (privacyUrl && !isValidUrl(privacyUrl)) {
+                showToast('Validasi Error', 'URL Kebijakan Privasi tidak valid.', 'error');
+                return;
+            }
+
+            const updates = {
+                tosUrl,
+                privacyUrl,
+                socialMedia: {
+                    instagram: document.getElementById('socialInstagram').value.trim(),
+                    facebook: document.getElementById('socialFacebook').value.trim(),
+                    twitter: document.getElementById('socialTwitter').value.trim(),
+                    youtube: document.getElementById('socialYoutube').value.trim(),
+                    tiktok: document.getElementById('socialTiktok').value.trim(),
+                    linkedin: document.getElementById('socialLinkedin').value.trim(),
+                },
+                supportEmail: document.getElementById('supportEmail').value.trim(),
+                supportWhatsapp: document.getElementById('supportWhatsapp').value.trim(),
+            };
+
+            PaydiaData.updateConfig(getTenantId(), updates);
+            PaydiaData.writeAuditLog({
+                actor: getTenantInfo()?.emailPIC || 'partner',
+                actorRole: 'Partner',
+                action: 'update_config',
+                objectType: 'config',
+                objectId: getTenantId(),
+                tenantId: getTenantId(),
+                description: 'Ubah konten: halaman legal, media sosial, dan kontak support',
+                before: null,
+                after: JSON.stringify(updates)
+            });
+
+            showToast('Berhasil', 'Semua konten berhasil disimpan.', 'success');
+        }
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

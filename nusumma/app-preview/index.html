@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Aplikasi White Label — Nusumma</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/shared/shared.css">
+    <link rel="stylesheet" href="/nusumma/app-preview/app-preview.css">
+</head>
+<body>
+
+    <div class="preview-outer">
+
+        <!-- ── Sidebar (Title & Controls) ── -->
+        <div class="preview-sidebar">
+            <h1 class="preview-title">Preview Aplikasi White Label</h1>
+            <p class="preview-active-tenant-info" id="activeTenantInfo">Melihat Simulasi: <strong>PT BPR Nusumma Jombang</strong></p>
+            <div class="preview-controls topbar-right">
+                <a href="/nusumma/partner/index.html" class="preview-btn preview-btn-outline" id="btnDashboardPartner">
+                    <i class="fas fa-handshake"></i>
+                    Dashboard Merchant
+                </a>
+                <div class="preview-dropdown-container">
+                    <button class="preview-btn preview-btn-filled" id="btnSwitchTenant">
+                        <i class="fas fa-store"></i><span id="switchTenantLabel">Switch Tenant</span>
+                        <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:2px;"></i>
+                    </button>
+                    <div class="preview-dropdown-menu" id="previewTenantMenu"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Phone Frame ── -->
+        <div class="phone-frame">
+            <div class="phone-screen">
+
+                <!-- Notch -->
+                <div class="phone-notch"></div>
+
+                <!-- Status Bar -->
+                <div class="phone-status-bar">
+                    <span class="status-time">09:41</span>
+                    <span class="status-icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+
+                <!-- Per-Vendor Splash Screen -->
+                <div class="app-splash-screen" id="appSplashScreen">
+                    <div class="app-splash-logo-wrap" id="appSplashLogoWrap">
+                        <img src="" alt="" class="app-splash-logo" id="appSplashLogo" onerror="this.style.display='none'; this.closest('.app-splash-logo-wrap').style.display='none';">
+                    </div>
+                    <div class="app-splash-name" id="appSplashName"></div>
+                    <div class="app-splash-indicator"></div>
+                </div>
+
+                <!-- App Content -->
+                <div class="app-content">
+
+                    <!-- ═══════ HOME SCREEN ═══════ -->
+                    <div class="app-screen active" id="screenHome">
+
+                        <!-- New White App Header -->
+                        <div class="app-header-white">
+                            <!-- Row 1: Logo & Bell -->
+                            <div class="header-top-row">
+                                <div class="header-logo" id="appBarLogo">
+                                    <span class="app-bar-name" id="appBarName">AppName</span>
+                                </div>
+                                <button class="header-bell-btn" onclick="showToast('Notifikasi', 'Tidak ada notifikasi baru', 'warning')">
+                                    <i class="far fa-bell"></i>
+                                    <span class="bell-dot"></span>
+                                </button>
+                            </div>
+                            <!-- Row 2: User Name & KYC Gold Badge -->
+                            <div class="header-user-row">
+                                <span class="header-username" id="headerUsername">Dion</span>
+                                <span class="header-kyc-badge">
+                                    <i class="fas fa-shield-check" style="color: #E2E8F0; font-size: 0.65rem; margin-right: 2px;"></i>Gold
+                                </span>
+                            </div>
+                            <!-- Row 3: Censored Balance with Eye -->
+                            <div class="header-balance-row">
+                                <span class="header-balance-amount" id="balanceAmount">******</span>
+                                <button class="header-balance-toggle" id="balanceToggle">
+                                    <i class="fas fa-eye-slash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Service Bar (Quick Shortcuts) -->
+                        <div class="service-bar-container" id="serviceBar">
+                            <div class="service-bar-card">
+                                <div class="service-bar-item" id="serviceBar_topUp" onclick="showToast('Top Up', 'Membuka Halaman Top Up', 'success')">
+                                    <div class="service-bar-icon" id="serviceBarIcon_topUp">
+                                        <i class="fas fa-circle-plus"></i>
+                                    </div>
+                                    <span class="service-bar-label" id="serviceBarLabel_topUp">Top Up</span>
+                                </div>
+                                <div class="service-bar-item" id="serviceBar_kirimUang" onclick="showToast('Kirim Uang', 'Membuka Halaman Kirim Uang', 'success')">
+                                    <div class="service-bar-icon" id="serviceBarIcon_kirimUang">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                    <span class="service-bar-label" id="serviceBarLabel_kirimUang">Kirim Uang</span>
+                                </div>
+                                <div class="service-bar-item" id="serviceBar_mintaDana" onclick="showToast('Minta Dana', 'Membuka Halaman Minta Dana', 'success')">
+                                    <div class="service-bar-icon" id="serviceBarIcon_mintaDana">
+                                        <i class="fas fa-circle-down"></i>
+                                    </div>
+                                    <span class="service-bar-label" id="serviceBarLabel_mintaDana">Minta Dana</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Favorite Transaction and Promo Banner Row -->
+                        <div class="fav-promo-row" id="favPromoRow">
+                            <div class="fav-card" id="favCard" onclick="switchTab('transaksiFavorit')">
+                                <div class="fav-card-title" id="favCardTitle">Transaksi Favorit</div>
+                                <div class="fav-card-body">
+                                    <div class="fav-add-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <p class="fav-card-text">Anda belum memiliki transaksi favorit</p>
+                                </div>
+                            </div>
+                            
+                            <div class="promo-banner-container" id="promoBannerContainer">
+                                <div class="promo-banner-track" id="promoBannerTrack">
+                                    <!-- Populated by JS with promo slides -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Grid Carousel -->
+                        <div class="service-grid-section" id="serviceGridSection">
+                            <div class="service-grid-scroll" id="serviceGridScroll">
+                                <!-- JS will render .service-grid-page elements -->
+                            </div>
+                            <div class="service-grid-indicators" id="serviceGridIndicators">
+                                <!-- Render page dots -->
+                            </div>
+                        </div>
+
+                        <!-- Blog Section -->
+                        <div class="blog-banner-section" id="blogBannerSection">
+                            <div class="blog-banner-container" id="blogBannerContainer">
+                                <div class="blog-banner-track" id="blogBannerTrack">
+                                    <!-- Populated by JS with blog slides -->
+                                </div>
+                            </div>
+                            <div class="blog-banner-indicators" id="blogBannerIndicators"></div>
+                        </div>
+
+                        <!-- Riwayat Transaksi Section -->
+                        <div class="history-section-new" id="historySectionNew">
+                            <div class="history-section-header">
+                                <span class="history-section-title">Riwayat Transaksi</span>
+                                <button class="history-section-btn" onclick="switchTab('riwayat')">
+                                    Lihat Semua <i class="fas fa-chevron-right" style="font-size:0.7rem; margin-left:2px;"></i>
+                                </button>
+                            </div>
+                            <div class="history-list-new" id="historyListNew">
+                                <!-- Populated by JS with top 3 transactions -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ═══════ RIWAYAT SCREEN ═══════ -->
+                    <div class="app-screen" id="screenRiwayat">
+                        <div class="history-header">
+                            <div class="history-title">Riwayat Transaksi</div>
+                            <button class="history-filter-btn">
+                                <i class="fas fa-sliders-h"></i> Filter
+                            </button>
+                        </div>
+                        <div id="historyList">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- ═══════ DETAIL PROMO SCREEN ═══════ -->
+                    <div class="app-screen" id="screenDetailPromo">
+                        <div class="detail-promo-header">
+                            <button class="back-btn-new" onclick="switchTab('home')"><i class="fas fa-times"></i></button>
+                            <div class="detail-promo-title-bar">Detail Promo</div>
+                        </div>
+                        <div class="detail-promo-content" id="detailPromoContent">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- ═══════ BLOG DETAIL SCREEN ═══════ -->
+                    <div class="app-screen" id="screenBlogDetail">
+                        <div class="blog-detail-header">
+                            <button class="back-btn-new" onclick="switchTab('home')"><i class="fas fa-times"></i></button>
+                            <div class="blog-detail-title-bar">Blog</div>
+                        </div>
+                        <div class="blog-warning-bar">
+                            <i class="fas fa-triangle-exclamation"></i> layanan pembayaran Nusumma. Laporkan jika Anda menemukannya!
+                        </div>
+                        <div class="blog-detail-content" id="blogDetailContent">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- ═══════ TRANSAKSI FAVORIT SCREEN ═══════ -->
+                    <div class="app-screen" id="screenTransaksiFavorit">
+                        <div class="fav-header">
+                            <div class="fav-title">Favorite</div>
+                        </div>
+                        <div class="fav-content">
+                            <div class="fav-empty-state">
+                                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto;">
+                                  <path d="M40 90C40 60 70 40 100 45C130 50 160 60 160 90C160 120 140 150 110 155C80 160 40 120 40 90Z" fill="#E8EDF9" opacity="0.6"/>
+                                  <path d="M78 80L80 72L82 80L90 82L82 84L80 92L78 84L70 82L78 80Z" fill="#E07B00"/>
+                                  <path d="M128 60L130 50L132 60L142 62L132 64L130 74L128 64L118 62L128 60Z" fill="#E07B00"/>
+                                  <rect x="75" y="65" width="50" height="90" rx="8" fill="white" stroke="#E07B00" stroke-width="2.5"/>
+                                  <line x1="82" y1="80" x2="118" y2="80" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="88" x2="118" y2="88" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="96" x2="118" y2="96" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="104" x2="118" y2="104" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="112" x2="105" y2="112" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="120" x2="98" y2="120" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <line x1="82" y1="128" x2="94" y2="128" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+                                  <circle cx="115" cy="125" r="22" fill="url(#heartGrad)" stroke="white" stroke-width="2.5"/>
+                                  <path d="M115 133C115 133 125 127 125 120.5C125 116.5 122 114 119.5 114C117 114 115.5 116.5 115 117.5C114.5 116.5 113 114 110.5 114C108 114 105 116.5 105 120.5C105 127 115 133 115 133Z" fill="white"/>
+                                  <defs>
+                                    <linearGradient id="heartGrad" x1="93" y1="103" x2="137" y2="147" gradientUnits="userSpaceOnUse">
+                                      <stop stop-color="#FF9800"/>
+                                      <stop offset="1" stop-color="#EF6C00"/>
+                                    </linearGradient>
+                                  </defs>
+                                </svg>
+                                <div style="font-weight: 600; color: #E07B00; font-size: 0.95rem; margin-top: 20px; text-align: center; max-width: 90%;">Anda belum memiliki transaksi favorit</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ QRIS SCREEN ═══════ -->
+                    <div class="app-screen" id="screenQris">
+                        <div class="qris-screen">
+                            <div class="qris-header">
+                                <div class="qris-title">Scan QRIS</div>
+                                <div class="qris-subtitle">Arahkan kamera ke kode QR untuk membayar</div>
+                            </div>
+                            <div class="qris-camera">
+                                <i class="fas fa-camera qris-camera-icon"></i>
+                                <div class="qris-scan-line"></div>
+                            </div>
+                            <div class="qris-actions">
+                                <button class="qris-action-btn">
+                                    <i class="fas fa-image"></i>
+                                    Dari Galeri
+                                </button>
+                                <button class="qris-action-btn">
+                                    <i class="fas fa-qrcode"></i>
+                                    QR Saya
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ NOTIFIKASI SCREEN ═══════ -->
+                    <div class="app-screen" id="screenNotifikasi">
+                        <div class="notif-header">
+                            <div class="notif-title">Notifikasi</div>
+                        </div>
+                        <div class="notif-list" id="notifList">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- ═══════ PROFIL SCREEN ═══════ -->
+                    <div class="app-screen" id="screenProfil">
+                        <!-- Header -->
+                        <div style="height: 52px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #F1F5F9; background: #FFFFFF; flex-shrink: 0;">
+                            <span style="font-size: 15px; font-weight: 700; color: #1E293B; font-family: 'Plus Jakarta Sans', sans-serif;">Profile</span>
+                        </div>
+                        
+                        <!-- Scrollable Content -->
+                        <div style="flex: 1; overflow-y: auto; background: #F8FAFC; padding-bottom: 24px;">
+                            <!-- Segment 1: User Info -->
+                            <div style="background: #FFFFFF; border-radius: 16px; padding: 16px; margin: 16px 16px 12px; display: flex; flex-direction: column; gap: 16px; border: 1px solid #F1F5F9; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                                <!-- Full Name -->
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div class="profile-icon-circle">
+                                        <i class="far fa-user"></i>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Full Name</span>
+                                        <span id="profileFullNameVal" style="font-size: 0.85rem; color: #1E293B; font-weight: 600;">Dion</span>
+                                    </div>
+                                </div>
+                                <!-- Phone Number -->
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div class="profile-icon-circle">
+                                        <i class="fas fa-phone-alt" style="transform: rotate(90deg);"></i>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Phone Number</span>
+                                        <span id="profilePhoneVal" style="font-size: 0.85rem; color: #1E293B; font-weight: 600;">087885900280</span>
+                                    </div>
+                                </div>
+                                <!-- Email -->
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div class="profile-icon-circle">
+                                        <i class="far fa-envelope"></i>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        <span style="font-size: 0.75rem; color: #64748B; font-weight: 500;">Email</span>
+                                        <span id="profileEmailVal" style="font-size: 0.85rem; color: #1E293B; font-weight: 600;">dion.scholus@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Segment 2: Security & Preferences -->
+                            <div style="background: #FFFFFF; border-radius: 16px; padding: 16px; margin: 0 16px 12px; display: flex; flex-direction: column; gap: 16px; border: 1px solid #F1F5F9; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                                <!-- Change PIN -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="showToast('PIN', 'Membuka pengaturan PIN', 'success')">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="far fa-comment-dots"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change PIN</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right profile-chevron"></i>
+                                </div>
+                                <!-- Change Password -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="showToast('Password', 'Membuka pengaturan Password', 'success')">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="far fa-lock"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change Password</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right profile-chevron"></i>
+                                </div>
+                                <!-- Enter PIN to Sign In -->
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="fas fa-sign-in-alt"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Enter PIN to Sign In</span>
+                                    </div>
+                                    <label class="switch-toggle">
+                                        <input type="checkbox" id="toggleEnterPin" checked onchange="showToast('PIN Sign In', this.checked ? 'PIN untuk masuk diaktifkan' : 'PIN untuk masuk dinonaktifkan', 'success')">
+                                        <span class="slider-toggle"></span>
+                                    </label>
+                                </div>
+                                <!-- Use Biometric -->
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="fas fa-fingerprint"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Use Biometric</span>
+                                    </div>
+                                    <label class="switch-toggle">
+                                        <input type="checkbox" id="toggleUseBiometric" checked onchange="showToast('Biometrik', this.checked ? 'Autentikasi biometrik diaktifkan' : 'Autentikasi biometrik dinonaktifkan', 'success')">
+                                        <span class="slider-toggle"></span>
+                                    </label>
+                                </div>
+                                <!-- Change Language -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="showToast('Bahasa', 'Membuka pengaturan Bahasa', 'success')">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="fas fa-language" style="font-size: 1.1rem;"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Change Language</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right profile-chevron"></i>
+                                </div>
+                            </div>
+
+                            <!-- Segment 3: Support & Information -->
+                            <div style="background: #FFFFFF; border-radius: 16px; padding: 16px; margin: 0 16px 16px; display: flex; flex-direction: column; gap: 16px; border: 1px solid #F1F5F9; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                                <!-- Customer Support -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="switchTab('support')">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="far fa-question-circle" style="font-size: 1.1rem;"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Customer Support</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right profile-chevron"></i>
+                                </div>
+                                <!-- Terms & Conditions -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" id="btnTermsAndConditions">
+                                    <div style="display: flex; align-items: center; gap: 16px;">
+                                        <div class="profile-icon-circle">
+                                            <i class="far fa-file-alt"></i>
+                                        </div>
+                                        <span style="font-size: 0.85rem; color: #1E293B; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Terms & Conditions</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right profile-chevron"></i>
+                                </div>
+                            </div>
+
+                            <!-- Log Out Button -->
+                            <div style="padding: 0 16px; margin-bottom: 16px;">
+                                <button onclick="showToast('Logout', 'Anda telah keluar dari aplikasi', 'warning')" class="profile-btn-logout">
+                                    Log Out
+                                </button>
+                            </div>
+
+                            <!-- Version & Copyright -->
+                            <div style="font-size: 0.8rem; color: #64748B; text-align: center; margin-bottom: 4px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;">Version 5.3.0</div>
+                            <div id="profileCopyrightVal" style="font-size: 0.7rem; color: #94A3B8; text-align: center; padding: 0 20px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.4;">Copyright © 2026 PT. Datacell Infomedia. All right Reserved.</div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ CONTACT US SCREEN ═══════ -->
+                    <div class="app-screen" id="screenSupport">
+                        <!-- Header -->
+                        <div style="height: 52px; background: var(--app-primary); display: flex; align-items: center; padding: 0 16px; color: #FFFFFF; position: relative; flex-shrink: 0;">
+                            <button class="back-btn-new" onclick="switchTab('profil')"><i class="fas fa-arrow-left"></i></button>
+                            <div style="font-size: 15px; font-weight: 700; position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Plus Jakarta Sans', sans-serif;">Contact Us</div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="support-content" id="supportContent" style="flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; align-items: center; background: #F8FAFC;">
+                            <!-- Dynamically populated in app-preview.js -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Navigation -->
+                <div class="bottom-nav" id="bottomNav">
+                    <div class="bottom-nav-item active" data-screen="home" onclick="switchTab('home')">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="bottom-nav-item" data-screen="transaksiFavorit" onclick="switchTab('transaksiFavorit')">
+                        <i class="far fa-heart"></i>
+                    </div>
+                    <div class="bottom-nav-item qris-btn" data-screen="qris" onclick="switchTab('qris')">
+                        <div class="qris-center-icon">
+                            <img src="/app-preview/qris.png" alt="QRIS" class="qris-center-logo">
+                        </div>
+                    </div>
+                    <div class="bottom-nav-item" data-screen="riwayat" onclick="switchTab('riwayat')">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="bottom-nav-item" data-screen="profil" onclick="switchTab('profil')">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/nusumma/data-nusumma.js"></script>
+    <script src="/shared/versions.js?v=1.0.0"></script>
+    <script src="/nusumma/app-preview/app-preview.js?v=1.0.0"></script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

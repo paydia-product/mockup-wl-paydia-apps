@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPR Nusumma White Label</title>
+    <meta name="description" content="Masuk ke Dashboard BPR Nusumma White Label.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #E07E00 0%, #FF9800 50%, #FFFFFF 100%);
+            color: #1E293B;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+            padding: 0 24px;
+        }
+
+        .login-card {
+            background: #FFFFFF;
+            border: 1px solid #FDE1B8;
+            border-radius: 20px;
+            padding: 44px 36px;
+            box-shadow:
+                0 10px 25px -5px rgba(0, 0, 0, 0.05),
+                0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-card:hover {
+            border-color: #FFB74D;
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.07),
+                0 0 15px rgba(255, 152, 0, 0.08);
+        }
+
+        .login-logo {
+            width: auto;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .login-logo img { height: 100%; width: auto; }
+
+        .login-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+            color: #0F172A;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #64748B;
+            font-size: 0.85rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* Destination Selector Tabs */
+        .role-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .role-tab {
+            flex: 1;
+            padding: 14px 12px;
+            background: #FFF8EE;
+            border: 1.5px solid #FDE1B8;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-tab:hover {
+            background: #FFF1DA;
+            border-color: #FFB74D;
+        }
+
+        .role-tab.active {
+            background: #FFF1DA;
+            border-color: #FF9800;
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.12);
+        }
+
+        .role-tab-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+            background: rgba(255, 152, 0, 0.12);
+            color: #E07E00;
+        }
+
+        .role-tab.active .role-tab-icon {
+            background: rgba(255, 152, 0, 0.22);
+            color: #C56600;
+        }
+
+        .role-tab-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #64748B;
+            transition: color 0.25s ease;
+        }
+
+        .role-tab.active .role-tab-label {
+            color: #0F172A;
+        }
+
+        .role-tab-desc {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            line-height: 1.3;
+        }
+
+        .portal-desc-card {
+            background: #FFF8EE;
+            border: 1px solid #FDE1B8;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .portal-desc-card i {
+            color: #E07E00;
+            margin-right: 6px;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.78rem;
+            margin-top: 8px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .error-message.show { display: flex; }
+
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            background: #FFF1DA;
+            color: #C56600;
+            border: 1px solid #FFB74D;
+            border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.08);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            background: #FFE3B8;
+            border-color: #FF9800;
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.15);
+        }
+
+        .btn-login:active { transform: translateY(0); }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-login .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(197, 102, 0, 0.2);
+            border-top-color: #C56600;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        .btn-login.loading .btn-text { display: none; }
+        .btn-login.loading .spinner { display: inline-block; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+
+        .shake { animation: shake 0.5s ease-in-out; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #94A3B8;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #FDE1B8;
+        }
+
+        .preview-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: #FFF8EE;
+            border: 1px solid #FDE1B8;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .preview-link:hover {
+            background: #FFF1DA;
+            border-color: #FFB74D;
+            color: #C56600;
+        }
+
+        .preview-link i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 32px 24px; }
+            .role-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card" id="loginCard">
+            <div class="login-logo">
+                <img src="assets/logo-nusumma-mark.svg" alt="BPR Nusumma">
+            </div>
+            <h1 class="login-title">BPR Nusumma White Label</h1>
+            <p class="login-subtitle">Platform manajemen aplikasi white label BPR Nusumma</p>
+
+            <!-- Destination Selector -->
+            <div class="role-tabs" id="roleTabs">
+                <div class="role-tab active" data-role="partner" onclick="selectRole('partner')">
+                    <div class="role-tab-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="role-tab-label">Dashboard Merchant</div>
+                    <div class="role-tab-desc">Kelola konfigurasi merchant</div>
+                </div>
+                <div class="role-tab" data-role="preview" onclick="selectRole('preview')">
+                    <div class="role-tab-icon"><i class="fas fa-mobile-screen-button"></i></div>
+                    <div class="role-tab-label">Aplikasi Whitelabel</div>
+                    <div class="role-tab-desc">Preview aplikasi nasabah</div>
+                </div>
+            </div>
+
+            <div id="portalPortal">
+                <div class="error-message" id="errorMsg" style="margin-bottom: 16px;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Gagal masuk ke dashboard</span>
+                </div>
+
+                <div id="portalContent">
+                    <!-- Dynamic destination content goes here -->
+                </div>
+
+                <button type="button" class="btn-login" id="btnAction" onclick="submitPortal()">
+                    <span class="btn-text" id="btnActionText"><i class="fas fa-right-to-bracket"></i> Masuk Ke Dashboard</span>
+                    <span class="spinner" id="btnActionSpinner"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data-nusumma.js"></script>
+    <script>
+        // Initialize shared data (isolated nusumma_wl_ keys)
+        NusummaData.initialize();
+
+        let selectedRole = 'partner';
+        // Flagship Nusumma tenant used for the "Dashboard Merchant" destination.
+        const NUSUMMA_PARTNER_TENANT = 'NUS-001';
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.role === role);
+            });
+            renderPortal();
+        }
+
+        function renderPortal() {
+            const contentDiv = document.getElementById('portalContent');
+            const btnText = document.getElementById('btnActionText');
+            clearError();
+
+            if (selectedRole === 'partner') {
+                const tenant = NusummaData.getTenant(NUSUMMA_PARTNER_TENANT);
+                contentDiv.innerHTML = `
+                    <div class="portal-desc-card">
+                        <i class="fas fa-store"></i>
+                        Masuk sebagai <strong>${tenant ? tenant.partnerName : 'Merchant Nusumma'}</strong> untuk mengelola konfigurasi whitelabel, pengguna, dan transaksi.
+                    </div>
+                `;
+                btnText.innerHTML = '<i class="fas fa-handshake"></i> Masuk sebagai Merchant';
+            } else {
+                contentDiv.innerHTML = `
+                    <div class="portal-desc-card">
+                        <i class="fas fa-mobile-screen-button"></i>
+                        Lihat pratinjau aplikasi mobile whitelabel BPR Nusumma seperti yang dilihat nasabah — tidak memerlukan login.
+                    </div>
+                `;
+                btnText.innerHTML = '<i class="fas fa-mobile-screen-button"></i> Buka Preview Aplikasi';
+            }
+        }
+
+        // ── Mock auth token minting — same secret/format as the main portal's
+        // api/login.js createToken(), reused verbatim here client-side so the
+        // Nusumma portal keeps working without touching /api (out of scope). ──
+        const TOKEN_SECRET = 'pyd_s3cR3t_k3y_r3c0n_2026!xZ9';
+
+        async function sha256(message) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function createToken(email, role, tenantId) {
+            const payload = JSON.stringify({
+                email,
+                role,
+                tenantId: tenantId || '',
+                ts: Date.now()
+            });
+            const encoded = btoa(payload);
+            const signature = await sha256(encoded + ':' + TOKEN_SECRET);
+            return encoded + '.' + signature;
+        }
+
+        function setCookie(name, value, maxAgeSeconds) {
+            document.cookie = `${name}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Strict`;
+        }
+
+        async function submitPortal() {
+            const btn = document.getElementById('btnAction');
+            const btnText = document.getElementById('btnActionText');
+            const spinner = document.getElementById('btnActionSpinner');
+
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+            clearError();
+
+            // Simulate minor network delay for feedback
+            await new Promise(r => setTimeout(r, 500));
+
+            try {
+                if (selectedRole === 'preview') {
+                    window.location.replace('app-preview/index.html');
+                    return;
+                }
+
+                // Mint a role: partner token for the flagship Nusumma tenant
+                const tenant = NusummaData.getTenant(NUSUMMA_PARTNER_TENANT);
+                const email = tenant ? tenant.emailPIC : 'partner@nusumma-jombang.id';
+                const token = await createToken(email, 'partner', NUSUMMA_PARTNER_TENANT);
+
+                setCookie('dsh_auth', token, 86400);
+                setCookie('dsh_role', 'partner', 86400);
+                setCookie('dsh_tenant', NUSUMMA_PARTNER_TENANT, 86400);
+
+                NusummaData.setCurrentRole('partner');
+                NusummaData.setCurrentTenant(NUSUMMA_PARTNER_TENANT);
+
+                window.location.replace('partner/index.html');
+            } catch (err) {
+                showError('Gagal terhubung ke server');
+                resetButton();
+            }
+
+            function resetButton() {
+                btn.disabled = false;
+                btnText.style.display = 'inline-flex';
+                spinner.style.display = 'none';
+            }
+        }
+
+        const errorMsg = document.getElementById('errorMsg');
+        const errorText = document.getElementById('errorText');
+        const card = document.getElementById('loginCard');
+
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorMsg.classList.add('show');
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
+        }
+
+        function clearError() {
+            errorMsg.classList.remove('show');
+        }
+
+        // Initialize portal on load
+        renderPortal();
+    </script>
+    <!-- Watermark -->
+    <div style="position: fixed; bottom: 8px; right: 8px; font-size: 0.9rem; color: #000000; text-align: right; pointer-events: none; z-index: 99999; line-height: 1.2; font-family: 'Inter', sans-serif;">
+        Mockup Prototype - Final Display May Different<br>
+        Confidential | Do Not Share Without Permission
+    </div>
+</body>
+</html>

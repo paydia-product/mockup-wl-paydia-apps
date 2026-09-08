@@ -158,6 +158,20 @@
                     'Tema warna dinamis per tenant'
                 ]
             }
+        ],
+        nusumma: [
+            {
+                version: 'v1.0.0',
+                date: '2026-09-08',
+                deployed: true,
+                latest: true,
+                summary: 'Peluncuran mockup white label BPR Nusumma.',
+                changes: [
+                    'Dashboard Merchant Nusumma dengan 6 kantor cabang BPR Nusumma',
+                    'Preview aplikasi whitelabel bertema oranye Nusumma',
+                    'Data tersimpan terpisah dari mockup Paydia'
+                ]
+            }
         ]
     };
 
@@ -261,7 +275,8 @@
         const selectors = {
             admin: ['.topbar-right'],
             partner: ['.pb-topbar-right', '.topbar-right'],
-            app: ['.preview-controls']
+            app: ['.preview-controls'],
+            nusumma: ['.pb-topbar-right', '.topbar-right']
         };
         const list = selectors[scope] || [];
         for (let i = 0; i < list.length; i++) {

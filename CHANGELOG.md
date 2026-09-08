@@ -6,6 +6,29 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.5.0] - 2026-09-08
+
+Mockup khusus **BPR Nusumma** di prefix `/nusumma`. Versi surface: **Nusumma v1.0.0**.
+
+### Added
+- **Mockup BPR Nusumma** pada URL yang sama dengan prefix `/nusumma`, berisi
+  **Dashboard Merchant** (`/nusumma/partner/`) dan **Aplikasi Whitelabel**
+  (`/nusumma/app-preview/`) — fungsionalitas sama dengan mockup utama. Tidak ada
+  dashboard internal di sisi Nusumma.
+- Portal `/nusumma/login.html` dengan dua tujuan (Dashboard Merchant & Aplikasi
+  Whitelabel). Akses tetap lewat gerbang kata sandi yang sama (`!Paydia1`) dan
+  tampilan gerbangnya tidak diubah.
+- Tema warna BPR Nusumma: oranye **#FF9800** (primer), **#E07E00**/#EF6C00 untuk
+  status aktif, aksen hijau **#006838** — diverifikasi dari situs resmi nusumma.co.id.
+- Logo BPR Nusumma (lockup & mark) di `nusumma/assets/`.
+- 6 merchant cabang Nusumma (Jombang, Kediri, Tulungagung, Malang, Sidoarjo,
+  Gresik), masing-masing 12 pengguna & 12 transaksi contoh.
+- Registry versi surface baru `nusumma` pada widget riwayat versi.
+
+### Catatan
+- Data Nusumma **terisolasi** dengan prefix penyimpanan `nusumma_wl_` sehingga
+  mockup utama tidak pernah menampilkan merchant Nusumma, dan sebaliknya.
+
 ## [1.4.0] - 2026-07-21
 
 Dashboard Partner: modal detail dibuat terang. Versi surface: **Partner v2.6.0**.
