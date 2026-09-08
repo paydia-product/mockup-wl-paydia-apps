@@ -1,6 +1,6 @@
 {
   "name": "paydia-white-label-recon",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Recreated Paydia Auto Reconcile Mockup",
   "scripts": {
     "start": "vercel dev"

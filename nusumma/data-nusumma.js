@@ -300,7 +300,7 @@ const PaydiaData = (() => {
 
     // ── Initialize / Seed Database ──
     function initialize(forceReset = false) {
-        const currentVersion = '4'; // Nusumma independent seed version counter
+        const currentVersion = '5'; // Nusumma independent seed version counter
         const seedVersion = localStorage.getItem('nusumma_wl_seed_version');
         if (seedVersion !== currentVersion) {
             forceReset = true;
@@ -337,6 +337,35 @@ const PaydiaData = (() => {
         if (tenants.length > 0 && (!current || !tenants.find(t => t.id === current))) {
             localStorage.setItem(KEYS.CURRENT_TENANT, tenants[0].id);
         }
+
+        purgeOrphanTenantData(tenants);
+    }
+
+    // ── Purge orphan per-tenant data (config/users/trx) for tenants that no
+    // longer exist. Runs on every initialize(), not only on a seed-version
+    // bump, so an already-polluted browser self-cleans. Only touches
+    // nusumma_wl_{config,users,trx}_* keys scoped to a tenant id — never
+    // touches non-tenant-scoped Nusumma keys (seed version, current tenant,
+    // etc.) and never touches paydia_wl_* keys from the main mockup.
+    function purgeOrphanTenantData(tenants) {
+        const validIds = new Set((tenants || []).map(t => t.id));
+        const scopedPrefixes = [KEYS.CONFIG_PREFIX, KEYS.USERS_PREFIX, KEYS.TRX_PREFIX];
+        const keysToRemove = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key || !key.startsWith('nusumma_wl_')) continue;
+
+            const prefix = scopedPrefixes.find(p => key.startsWith(p));
+            if (!prefix) continue;
+
+            const tenantId = key.slice(prefix.length);
+            if (!validIds.has(tenantId)) {
+                keysToRemove.push(key);
+            }
+        }
+
+        keysToRemove.forEach(key => localStorage.removeItem(key));
     }
 
     // ── Generic Read/Write Helpers ──

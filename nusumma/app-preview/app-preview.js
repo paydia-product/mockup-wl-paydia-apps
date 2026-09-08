@@ -102,6 +102,11 @@
         return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
     }
 
+    // Canonical fallback logo used whenever a tenant's configured logo path
+    // fails to load (stale config, deleted asset, etc.) so a bad appLogoUrl
+    // can never again silently blank the splash/header logo.
+    const FALLBACK_LOGO_URL = '/nusumma/assets/logo-nusummadark.png';
+
     // ── Per-Vendor Splash Screen ──
     let splashHideTimer = null;
     function showSplash(config) {
@@ -120,6 +125,17 @@
         if (logoEl) {
             logoEl.style.display = '';
             if (logoWrapEl) logoWrapEl.style.display = '';
+            const fallbackUrl = resolvePath(FALLBACK_LOGO_URL);
+            logoEl.onerror = function () {
+                if (this.src.endsWith(fallbackUrl)) {
+                    // Fallback itself failed to load — degrade to hiding, as before.
+                    this.onerror = null;
+                    this.style.display = 'none';
+                    if (logoWrapEl) logoWrapEl.style.display = 'none';
+                    return;
+                }
+                this.src = fallbackUrl;
+            };
             logoEl.src = resolvePath(config.appLogoUrl || '');
         }
         if (nameEl) nameEl.textContent = config.appName || '';
@@ -160,10 +176,10 @@
         
         // App Logo
         if (logoEl) {
-            if (config.logoUrl) {
-                logoEl.innerHTML = `<img src="${resolvePath(config.logoUrl)}" alt="Logo">`;
-            } else if (config.appLogoUrl) {
-                logoEl.innerHTML = `<img src="${resolvePath(config.appLogoUrl)}" alt="Logo">`;
+            const headerLogoSrc = config.logoUrl || config.appLogoUrl;
+            if (headerLogoSrc) {
+                const fallbackUrl = resolvePath(FALLBACK_LOGO_URL);
+                logoEl.innerHTML = `<img src="${resolvePath(headerLogoSrc)}" alt="Logo" onerror="if(this.src.endsWith('${fallbackUrl}')){this.onerror=null;this.style.display='none';}else{this.src='${fallbackUrl}';}">`;
             } else {
                 logoEl.textContent = (config.appName || 'A').charAt(0).toUpperCase();
             }
