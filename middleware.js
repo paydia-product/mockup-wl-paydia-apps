@@ -1,6 +1,12 @@
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'pyd_s3cR3t_k3y_r3c0n_2026!xZ9';
 const UNLOCK_SECRET = 'pyd_g4t3_s1gn_k3y_2026!mX7';
 
+// ── Kill switch: mockup BPR Nusumma (/nusumma) ──
+// Set ke true untuk menyalakan kembali seluruh path /nusumma.
+// Saat false, setiap permintaan ke /nusumma* dijawab 404 sebelum
+// pemeriksaan gerbang, sehingga tidak bisa diakses sama sekali.
+const NUSUMMA_ENABLED = false;
+
 async function sha256(message) {
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
@@ -60,6 +66,14 @@ function parseCookies(cookieHeader) {
 export default async function middleware(request) {
     const url = new URL(request.url);
     const pathname = url.pathname;
+
+    // 0. Nusumma dimatikan sementara — tutup seluruh path sebelum cek apa pun
+    if (!NUSUMMA_ENABLED && (pathname === '/nusumma' || pathname.startsWith('/nusumma/'))) {
+        return new Response('Not Found', {
+            status: 404,
+            headers: { 'content-type': 'text/plain; charset=utf-8' }
+        });
+    }
 
     // 1. Bypass check for assets/endpoints needed to unlock the mockup
     if (pathname === '/gate.html' ||

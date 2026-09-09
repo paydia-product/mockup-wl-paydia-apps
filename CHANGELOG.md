@@ -6,6 +6,19 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.8.1] - 2026-09-09
+
+Mockup BPR Nusumma dinonaktifkan sementara di production.
+
+### Changed
+- Seluruh path **`/nusumma`** dimatikan: setiap permintaan (portal, dashboard
+  merchant, aplikasi whitelabel, aset, dan berkas data) dijawab **404** sebelum
+  pemeriksaan gerbang, sehingga tidak bisa diakses sama sekali.
+- Berkasnya **tidak dihapus**. Untuk menyalakan kembali, ubah satu sakelar di
+  `middleware.js`: `const NUSUMMA_ENABLED = false;` menjadi `true`, lalu deploy.
+- Mockup utama (Dashboard Internal, Dashboard Partner, Aplikasi White Label)
+  tidak terpengaruh.
+
 ## [1.8.0] - 2026-09-09
 
 Dashboard merchant BPR Nusumma kembali bertema biru. Versi surface: **Nusumma v1.3.0**.
