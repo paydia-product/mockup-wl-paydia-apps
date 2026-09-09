@@ -6,6 +6,48 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini. Format mengiku
 Registry versi in-app (yang tampil di UI) ada di `shared/versions.js`; nomor di bawah
 (`1.1.0`) adalah versi repo keseluruhan.
 
+## [1.8.0] - 2026-09-09
+
+Dashboard merchant BPR Nusumma kembali bertema biru. Versi surface: **Nusumma v1.3.0**.
+
+### Changed
+- **Dashboard merchant Nusumma** dan **portal** kini memakai tema **biru** yang
+  sama dengan dashboard merchant utama: topbar, menu aktif, kartu, banner promo,
+  tombol, dan cincin fokus.
+- Warna khas BPR Nusumma (oranye) kini **hanya** dipakai pada **tampilan aplikasi
+  whitelabel** (`/nusumma/app-preview/`) — bagian itu tidak diubah.
+- Logo BPR Nusumma tetap dipakai di portal, dashboard, dan aplikasi.
+- Nilai default pemilih warna di halaman Kustomisasi tetap oranye, karena itu
+  warna brand aplikasi whitelabel yang sedang dikonfigurasi, bukan warna dashboard.
+
+## [1.7.1] - 2026-09-08
+
+Perbaikan logo yang hilang bagi pengguna lama. Versi surface: **Nusumma v1.2.0**.
+
+### Fixed
+- Logo pada splash dan header aplikasi whitelabel sempat hilang bagi pengguna
+  yang sudah pernah membuka mockup: konfigurasi tersimpan di browser masih
+  menunjuk berkas logo lama yang sudah dihapus. Versi data dinaikkan agar
+  konfigurasi ikut diperbarui.
+- Sisa data merchant cabang lama (mis. NUS-006) kini dibersihkan otomatis,
+  tanpa menyentuh data mockup utama.
+- Logo yang gagal dimuat kini jatuh ke berkas logo resmi, tidak lagi hilang diam-diam.
+
+## [1.7.0] - 2026-09-08
+
+Memakai berkas logo resmi BPR Nusumma. Versi surface: **Nusumma v1.2.0**.
+
+### Changed
+- Seluruh logo di portal, dashboard merchant, dan aplikasi whitelabel memakai
+  berkas resmi `nusumma/assets/logo-nusummadark.png`.
+- Slot berbentuk kotak (tile sidebar, ikon aplikasi & splash) memakai berkas yang
+  sama, dipotong lewat CSS ke bagian mark "V".
+- Pada latar oranye, logo dirender putih agar tetap terbaca.
+
+### Removed
+- Berkas logo sementara (SVG) dan dua halaman duplikat yang sudah tidak tertaut
+  (Manajemen Akun, Riwayat Transaksi) dihapus.
+
 ## [1.6.0] - 2026-09-08
 
 BPR Nusumma diperlakukan sebagai satu institusi + pembersihan menyeluruh. Versi surface: **Nusumma v1.1.0**.

@@ -189,7 +189,7 @@ function renderTopbarNavigation() {
 
     navContainer.innerHTML = `
         <!-- White Label App Button -->
-        <button id="btn-whitelabel-app" class="btn" onclick="window.open('/nusumma/app-preview/', '_blank')" style="border: 1px solid #E07B00; color: #E07B00; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: none;">
+        <button id="btn-whitelabel-app" class="btn" onclick="window.open('/nusumma/app-preview/', '_blank')" style="border: 1px solid #2c37b7; color: #2c37b7; background: #fff; padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: none;">
             <i class="fas fa-mobile-screen-button"></i><span>White Label App</span>
         </button>
     `;

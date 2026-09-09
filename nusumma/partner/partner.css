@@ -2,18 +2,6 @@
    Nusumma Partner Dashboard — Additional Styles
    ============================================= */
 
-/* ── Override shared.css purple brand vars with Nusumma orange ──
-   shared.css defines --primary/--primary-light/--primary-dark as Paydia
-   purple in :root; this file loads after shared.css, so redefining them
-   here re-themes every shared component (.btn-primary, focus rings, etc.)
-   without touching shared/shared.css. ── */
-:root {
-    --primary: #FF9800;
-    --primary-light: #FFB74D;
-    --primary-dark: #E07E00;
-    --primary-glow: rgba(255, 152, 0, 0.15);
-}
-
 /* ── Customize Page: Split Layout ── */
 .customize-layout {
     display: flex;
@@ -44,7 +32,7 @@
 }
 
 .config-section:hover {
-    border-color: rgba(255, 152, 0, 0.15);
+    border-color: rgba(108, 60, 225, 0.15);
 }
 
 .config-section-header {
@@ -72,9 +60,9 @@
     font-size: 0.85rem;
 }
 
-.config-section-title .icon-purple { background: rgba(255, 152, 0, 0.12); color: #E07B00; }
+.config-section-title .icon-purple { background: rgba(108, 60, 225, 0.12); color: #8B5CF6; }
 .config-section-title .icon-green { background: rgba(16, 185, 129, 0.12); color: #10B981; }
-.config-section-title .icon-blue { background: rgba(255, 152, 0, 0.12); color: #E07B00; }
+.config-section-title .icon-blue { background: rgba(59, 130, 246, 0.12); color: #3B82F6; }
 .config-section-title .icon-yellow { background: rgba(245, 158, 11, 0.12); color: #F59E0B; }
 .config-section-title .icon-cyan { background: rgba(6, 182, 212, 0.12); color: #06B6D4; }
 
@@ -110,7 +98,7 @@
 
 .color-picker-control:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.1);
 }
 
 .color-picker-control input[type="color"] {
@@ -168,14 +156,14 @@
 .dropzone:hover,
 .dropzone.dragover {
     border-color: var(--primary);
-    background: rgba(255, 152, 0, 0.04);
+    background: rgba(108, 60, 225, 0.04);
 }
 
 .dropzone-icon {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: rgba(255, 152, 0, 0.08);
+    background: rgba(108, 60, 225, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,8 +230,8 @@
 }
 
 .feature-toggle-card:hover {
-    border-color: rgba(255, 152, 0, 0.2);
-    background: rgba(255, 152, 0, 0.03);
+    border-color: rgba(108, 60, 225, 0.2);
+    background: rgba(108, 60, 225, 0.03);
 }
 
 .feature-toggle-card.disabled {
@@ -254,7 +242,7 @@
     width: 36px;
     height: 36px;
     border-radius: var(--radius-sm);
-    background: rgba(255, 152, 0, 0.1);
+    background: rgba(108, 60, 225, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -302,7 +290,7 @@
 }
 
 .banner-card:hover {
-    border-color: rgba(255, 152, 0, 0.15);
+    border-color: rgba(108, 60, 225, 0.15);
 }
 
 .banner-preview {
@@ -371,7 +359,7 @@
 }
 
 .onboarding-card:hover {
-    border-color: rgba(255, 152, 0, 0.15);
+    border-color: rgba(108, 60, 225, 0.15);
 }
 
 .onboarding-card.dragging {
@@ -382,7 +370,7 @@
 
 .onboarding-card.drag-over {
     border-color: var(--primary);
-    background: rgba(255, 152, 0, 0.06);
+    background: rgba(108, 60, 225, 0.06);
 }
 
 .onboarding-drag-handle {
@@ -777,7 +765,7 @@
 
 .attachment-area:hover {
     border-color: var(--primary);
-    background: rgba(255, 152, 0, 0.03);
+    background: rgba(108, 60, 225, 0.03);
 }
 
 .attachment-area input[type="file"] {
@@ -799,7 +787,7 @@
     align-items: center;
     gap: 6px;
     padding: 5px 10px;
-    background: rgba(255, 152, 0, 0.1);
+    background: rgba(108, 60, 225, 0.1);
     border-radius: 20px;
     font-size: 0.75rem;
     color: var(--primary-light);
@@ -901,7 +889,7 @@
 
 .bar-chart-bar:hover {
     background: linear-gradient(180deg, var(--primary-light), var(--primary));
-    box-shadow: 0 0 12px rgba(255, 152, 0, 0.3);
+    box-shadow: 0 0 12px rgba(108, 60, 225, 0.3);
 }
 
 .bar-chart-bar .bar-tooltip {
@@ -1260,7 +1248,7 @@
 .pb-sidebar-brand { display: flex; align-items: center; gap: 10px; }
 .pb-sidebar-logo {
     width: 38px; height: 38px; border-radius: 8px;
-    background: #EF6C00; color: #fff; font-weight: 800;
+    background: #1E40AF; color: #fff; font-weight: 800;
     display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
     flex-shrink: 0;
 }
@@ -1270,10 +1258,10 @@
     background-size: auto 130%;
     background-position: left center;
     background-repeat: no-repeat;
-    border: 1px solid #F1D9BF;
+    border: 1px solid #DBEAFE;
 }
 .pb-sidebar-name { font-size: 0.85rem; font-weight: 700; color: #1E293B; }
-.pb-sidebar-mid { font-size: 0.7rem; color: #E07B00; margin-top: 1px; font-weight: 500; }
+.pb-sidebar-mid { font-size: 0.7rem; color: #3B82F6; margin-top: 1px; font-weight: 500; }
 
 .pb-nav { flex: 1; padding: 8px 0; overflow-y: auto; }
 
@@ -1285,11 +1273,11 @@
 }
 .pb-nav-item:hover { background: #F1F5F9; color: #1E293B; }
 .pb-nav-item.active {
-    background: #EF6C00; color: #FFFFFF !important;
+    background: #2563EB; color: #FFFFFF !important;
     border-radius: 6px; margin: 2px 8px; padding: 8px 12px;
     width: calc(100% - 16px);
 }
-.pb-nav-item.active:hover { background: #E07B00; }
+.pb-nav-item.active:hover { background: #1D4ED8; }
 .pb-nav-item i { width: 16px; font-size: 0.8rem; color: #64748B; flex-shrink: 0; }
 .pb-nav-item.active i { color: #FFFFFF; }
 
@@ -1299,8 +1287,8 @@
     cursor: pointer; user-select: none;
 }
 .pb-nav-group-header:hover { background: #F1F5F9; }
-.pb-nav-group-header-active .pb-nav-group-left span { color: #E07B00; font-weight: 600; }
-.pb-nav-group-header-active .pb-nav-group-left i { color: #E07B00; }
+.pb-nav-group-header-active .pb-nav-group-left span { color: #2563EB; font-weight: 600; }
+.pb-nav-group-header-active .pb-nav-group-left i { color: #2563EB; }
 .pb-nav-group-left { display: flex; align-items: center; gap: 10px; }
 .pb-nav-group-left i { width: 16px; font-size: 0.8rem; color: #64748B; }
 .pb-nav-chevron { font-size: 0.62rem; color: #94A3B8; transition: transform 0.2s; }
@@ -1309,14 +1297,14 @@
 .pb-nav-children .pb-nav-item {
     padding-left: 42px; font-size: 0.78rem; color: #64748B;
 }
-.pb-nav-children .pb-nav-item:hover { color: #E07B00; }
+.pb-nav-children .pb-nav-item:hover { color: #2563EB; }
 
 .pb-sidebar-footer {
     padding: 12px 16px; border-top: 1px solid #E2E8F0;
     font-size: 0.72rem; color: #94A3B8;
 }
 .pb-sidebar-footer a { color: #94A3B8; text-decoration: none; }
-.pb-sidebar-footer a:hover { color: #E07B00; }
+.pb-sidebar-footer a:hover { color: #2563EB; }
 
 /* ── Global Topbar CSS from index.html ── */
 .pb-topbar {
@@ -1332,7 +1320,7 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #EF6C00;
+    background: #1E40AF;
     color: #fff;
     font-weight: 900;
     display: flex;
@@ -1358,7 +1346,7 @@
     font-family: inherit;
     transition: border-color 0.15s;
 }
-.pb-btn-panduan:hover { border-color: #E07B00; color: #E07B00; }
+.pb-btn-panduan:hover { border-color: #2563EB; color: #2563EB; }
 
 .pb-topbar-icon {
     background: none;

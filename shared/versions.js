@@ -161,10 +161,22 @@
         ],
         nusumma: [
             {
-                version: 'v1.2.0',
-                date: '2026-09-08',
+                version: 'v1.3.0',
+                date: '2026-09-09',
                 deployed: true,
                 latest: true,
+                summary: 'Dashboard merchant kembali bertema biru; oranye Nusumma khusus tampilan whitelabel.',
+                changes: [
+                    'Dashboard merchant & portal memakai tema biru yang sama dengan dashboard merchant utama',
+                    'Warna khas BPR Nusumma kini hanya dipakai di tampilan aplikasi whitelabel',
+                    'Logo BPR Nusumma tetap dipakai di seluruh tampilan'
+                ]
+            },
+            {
+                version: 'v1.2.0',
+                date: '2026-09-08',
+                deployed: false,
+                latest: false,
                 summary: 'Memakai berkas logo resmi BPR Nusumma di seluruh tampilan.',
                 changes: [
                     'Logo resmi BPR Nusumma dipakai di portal, dashboard merchant, dan aplikasi whitelabel',
